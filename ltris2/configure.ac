@@ -76,7 +76,8 @@ else
 fi
 
 # Makefiles
-AC_CONFIG_FILES([Makefile 
+AC_CONFIG_FILES([Makefile
+po/Makefile.in
 src/Makefile 
 ])
 AC_OUTPUT
