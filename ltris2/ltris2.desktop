@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=LTris2
+Comment=A tetris clone with nice graphics.
+Exec=ltris2
+Icon=ltris2
+Type=Application
+Categories=Game;
