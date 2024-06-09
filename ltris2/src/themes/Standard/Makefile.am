@@ -1,8 +1,8 @@
 EXTRA_DIST = CREDITS SIL-OFL.txt theme.ini \
-small.otf f_normal.otf \
-menu.png \
-s_menuclick.wav s_menumotion.wav \
-wallpaper1.png
+	f_normal.otf f_bold.otf \
+	menu.png \
+	s_menuclick.wav s_menumotion.wav \
+	wallpaper1.jpg
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datdir)/themes/Standard
