@@ -1,6 +1,10 @@
 bin_PROGRAMS = ltris2
-ltris2_SOURCES = main.cpp
+ltris2_SOURCES = main.cpp config.h config.cpp sdl.h sdl.cpp mixer.h \
+	game.h tools.h tools.cpp theme.h theme.cpp view.h view.cpp \
+	menu.h menu.cpp
 	
+SUBDIRS = themes
+
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)/$(datadir)/ltris2
 
