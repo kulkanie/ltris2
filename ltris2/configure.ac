@@ -37,9 +37,9 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memset strchr strdup strrchr])
 
 # config dir
-configdir=.ltris2
+configdir="~/.local/share/ltris2"
 AC_ARG_WITH( configdir,
-[  --with-configdir=CONFIGDIR       Set directory for config/data files in home directory (default: .ltris2).],
+[  --with-configdir=CONFIGDIR       Set config directory (default: ~/.local/share/ltris2).],
 configdir="$withval",)
 
 # debug flags
@@ -79,6 +79,8 @@ fi
 AC_CONFIG_FILES([Makefile
 po/Makefile.in
 src/Makefile 
+src/themes/Makefile
+src/themes/Standard/Makefile
 ])
 AC_OUTPUT
 
