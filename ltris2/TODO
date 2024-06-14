@@ -1,0 +1,24 @@
+von lbrhd:
+- mainwindow mit flickerschutz
+- tasten für menüsteuerung
+- confirmation keys mit gettext
+- 16:9 viewport?
+
+- pot datei generieren?
+- config überarbeiten
+- fps 50/60
+- SDL_CONFIG setzen
+
+VConfig
+- übersetzt bowl stuff in alte config?
+
+VGame 
+- state
+- update() mit controls und ms
+- translate controls for bowl.c
+- render() renders bowls
+- start copies vconfig to config for bowl.c
+
+VBowl
+- update() übersetzt SDL_events/states in controls
+- render() rendert bowl (+ player info?)

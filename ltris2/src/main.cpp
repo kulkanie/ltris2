@@ -21,6 +21,9 @@ using namespace std;
 #include "menu.h"
 #include "view.h"
 
+Renderer renderer;
+VConfig config;
+
 int main(int argc, char **argv)
 {
 	/* i18n */
@@ -37,8 +40,6 @@ int main(int argc, char **argv)
 
 	srand(time(NULL));
 
-	Renderer renderer;
-	Config config;
 	View view(renderer, config);
 	view.run();
 	return 0;

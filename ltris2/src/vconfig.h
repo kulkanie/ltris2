@@ -12,14 +12,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SRC_CONFIG_H_
-#define SRC_CONFIG_H_
+#ifndef SRC_VCONFIG_H_
+#define SRC_VCONFIG_H_
 
 enum {
-	MAXCONFIGPLAYERNAMES = 4
+	GAME_DEMO = 0,
+	GAME_CLASSIC,
+	GAME_FIGURES,
+	GAME_VS_HUMAN,
+	GAME_VS_CPU,
+	GAME_VS_HUMAN_HUMAN,
+	GAME_VS_HUMAN_CPU,
+	GAME_VS_CPU_CPU,
+	GAME_TRAINING,
+	GAME_TYPENUM,
+
+	CS_DEFENSIVE = 0,
+	CS_NORMAL,
+	CS_AGGRESSIVE,
+
+	MAXCONFIGPLAYERNAMES = 3
 };
 
-class Config {
+class VConfig {
 public:
 	string dname;
 	string fname;
@@ -50,9 +65,9 @@ public:
 	int themeid; /* 0 == default theme */
 	int themecount; /* to check and properly reset id if number of themes changed */
 
-	Config();
-	~Config() { save(); }
+	VConfig();
+	~VConfig() { save(); }
 	void save();
 };
 
-#endif /* SRC_CONFIG_H_ */
+#endif /* SRC_VCONFIG_H_ */

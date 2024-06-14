@@ -35,7 +35,7 @@ enum {
 class View {
 	/* general */
 	Renderer &renderer;
-	Config &config;
+	VConfig &config;
 	Theme theme;
 	Mixer mixer;
 
@@ -67,7 +67,7 @@ class View {
 	void handleMenuEvent(SDL_Event &ev);
 	void changeWallpaper();
 public:
-	View(Renderer &r, Config &cfg);
+	View(Renderer &r, VConfig &cfg);
 	void init(string t, uint f);
 	void run();
 	void render();

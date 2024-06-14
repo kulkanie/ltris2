@@ -21,7 +21,7 @@
 
 extern SDL_Renderer *mrc;
 
-View::View(Renderer &r, Config &cfg)
+View::View(Renderer &r, VConfig &cfg)
 	: renderer(r), config(cfg), menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
 	  noGameYet(true),

@@ -15,7 +15,7 @@
 #include "tools.h"
 #include "sdl.h"
 
-Config::Config()
+VConfig::VConfig()
 {
 	/* game */
 	playercount = 1;
@@ -81,7 +81,7 @@ Config::Config()
 	fp.get( "themecount", themecount );
 }
 
-void Config::save()
+void VConfig::save()
 {
 	ofstream ofs(fname);
 	if (!ofs.is_open()) {
