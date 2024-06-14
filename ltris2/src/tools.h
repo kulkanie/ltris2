@@ -35,7 +35,7 @@ using namespace std;
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-#include "config.h"
+#include "vconfig.h"
 
 /* i18n */
 #ifdef HAVE_CONFIG_H
