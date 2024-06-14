@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 	srand(time(NULL));
 
 	Renderer renderer;
-	VConfig config;
-	View view(renderer, config);
+	VConfig vconfig;
+	View view(renderer, vconfig);
 	view.run();
 	return 0;
 }

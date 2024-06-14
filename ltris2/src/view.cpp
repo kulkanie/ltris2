@@ -107,12 +107,12 @@ void View::run()
 	fpsStart = SDL_GetTicks();
 	fpsCycles = 0;
 
-	if (config.fps == 1)
-		maxDelay = 5;
-	else if (config.fps == 2)
-		maxDelay = 10;
+	if (config.fps == FPS_50)
+		maxDelay = 20;
+	else if (config.fps == FPS_60)
+		maxDelay = 17;
 	else
-		maxDelay = 0;
+		maxDelay = 5;
 
 	render();
 
