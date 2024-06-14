@@ -31,12 +31,12 @@ class Theme {
 	Texture menuBackground;
 	uint menuX, menuY, menuItemWidth, menuItemHeight;
 	Font fMenuNormal, fMenuFocus;
+	Sound sMenuClick, sMenuMotion;
 
+	Font fSmall, fNormal, fNormalHighlighted;
 	Texture wallpapers[MAXWALLPAPERS];
 	uint numWallpapers;
-	Font fSmall, fNormal, fNormalHighlighted;
-
-	Sound sMenuClick, sMenuMotion;
+	Texture blocks;
 
 	const string &testRc(const string &path, const string &fname) {
 		static string fpath; /* not thread safe */
