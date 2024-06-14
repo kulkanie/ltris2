@@ -265,12 +265,10 @@ bool View::showInfo(const vector<string> &text, int type)
 void View::createMenus()
 {
 	Menu *mNewGame, *mAudio, *mGraphics;
-	const char *diffNames[] = {_("Tiny"),_("Small"),_("Medium"),_("Large"),_("Huge") } ;
-	const char *fpsLimitNames[] = {_("No Limit"),_("200 FPS"),_("100 FPS") } ;
+	const char *fpsLimitNames[] = {_("50 FPS"),_("60 FPS"),_("200 FPS") } ;
 	const int bufSizes[] = { 256, 512, 1024, 2048, 4096 };
 	const int channelNums[] = { 8, 16, 32 };
-	const char *modeNames[] = {_("Solo"), _("Vs CPU"), _("Vs Human"), _("Survivor")};
-	const char *captionModeNames[] = {_("Off"),_("On Shift"),_("Always")};
+	const char *typeNames[] = {_("Demo"), _("Normal"), _("Figures"), _("Vs CPU")};
 
 	/* XXX too lazy to set fonts for each and every item...
 	 * use static pointers instead */
@@ -290,21 +288,17 @@ void View::createMenus()
 
 	mNewGame->add(new MenuItem(_("Start Game"),"",AID_STARTGAME));
 	mNewGame->add(new MenuItemSep());
-	mNewGame->add(new MenuItemList(_("Mode"),
-			_("You can play alone or against a human or CPU opponent.\n\nIn Survivor you play endlessly with increasing set sizes until you made too many mistakes. In Survivor you always match pairs so the match size option below is ignored."),
-			AID_NONE,config.gamemode,modeNames,4));
-	mNewGame->add(new MenuItemList(_("Set Size"),
-			_("Tiny=4x4, Small=6x4, Medium=8x4, Large=10x5, Huge=12x6.\nNote, that it's slightly different in window mode to match the different ratio."),
-			AID_NONE,config.setsize,diffNames,5));
-	mNewGame->add(new MenuItemRange(_("Match Size"),
-			"2 = Pairs, 3 = Triplets, 4 = Quadruplets\nNote that you always have to turn over that many cards regardless of a mismatch.",
-			AID_NONE,config.matchsize,2,4,1));
-	mNewGame->add(new MenuItemRange(_("Close Delay"),
-			"Time in seconds until opened cards are turned over again.",
-			AID_NONE,config.closedelay,1,5,1));
-	mNewGame->add(new MenuItemList(_("Captions"),
-			_("Display caption of open card if mouse pointer is on it. With 'On Shift' a shift key must additionally be pressed."),
-			AID_NONE,config.motifcaption,captionModeNames,3));
+	mNewGame->add(new MenuItemList(_("Game Type"),
+			_("You can play alone or against a human or CPU opponent."),
+			AID_NONE,config.gametype,typeNames,4));
+	mNewGame->add(new MenuItemList(_("Game Style"),
+			_("Modern or classic."),
+			AID_NONE,config.modern,_("Classic"),_("Modern")));
+	mNewGame->add(new MenuItemRange(_("Starting Level"),
+			"Starting level between 0 and 19.",
+			AID_NONE,config.startinglevel,0,19,1));
+	mNewGame->add(new MenuItemEdit(_("Player Name"),config.playernames[0]));
+
 	mNewGame->add(new MenuItemSep());
 /*	mNewGame->add(new MenuItemRange(_("Players"),
 			_("Number and names of players. Players alternate whenever a life is lost."),

@@ -18,21 +18,16 @@
 VConfig::VConfig()
 {
 	/* game */
-	playercount = 1;
+	gametype = GAME_CLASSIC; /* demo, classic, ... */
+	modern = 1; /* ghost piece, 3-piece-preview, ... */
+	startinglevel = 0;
 	playernames[0] = "Michael";
-	playernames[1] = "Mr.X";
-	playernames[2] = "Mr.Y";
-	playernames[3] = "Mr.Z";
-	gamemode = 0;
-	setsize = 1;
-	matchsize = 2;
-	closedelay = 3;
-	motifcaption = 1; /* on shift is default */
+	playernames[1] = "Mr. X";
+	playernames[2] = "Mr. Y";
 
 	/* sounds */
 	sound = 1;
 	volume = 50;
-	speech = 1;
 	audiobuffersize = 1024;
 	channels = 16;
 
@@ -58,27 +53,22 @@ VConfig::VConfig()
 	_loginfo("Loading configuration %s\n",fname.c_str());
 	FileParser fp(fname);
 
-	fp.get( "playercount", playercount );
-	fp.get( "player0", playernames[0] );
-	fp.get( "player1", playernames[1] );
-	fp.get( "player2", playernames[2] );
-	fp.get( "player3", playernames[3] );
-	fp.get( "gamemode", gamemode );
-	fp.get( "setsize", setsize );
-	fp.get( "matchsize", matchsize );
-	fp.get( "closedelay", closedelay );
-	fp.get( "motifcaption", motifcaption );
-	fp.get( "sound", sound );
-	fp.get( "volume", volume );
-	fp.get( "speech", speech );
-	fp.get( "audiobuffersize", audiobuffersize );
-	fp.get( "channels", channels );
-	fp.get( "animations", animations );
-	fp.get( "fullscreen", fullscreen );
-	fp.get( "fps", fps );
-	fp.get( "showfps", showfps );
-	fp.get( "themeid", themeid );
-	fp.get( "themecount", themecount );
+	fp.get("gametype", gametype);
+	fp.get("modern", modern);
+	fp.get("startinglevel", startinglevel);
+	fp.get("player0", playernames[0]);
+	fp.get("player1", playernames[1]);
+	fp.get("player2", playernames[2]);
+	fp.get("sound", sound);
+	fp.get("volume", volume);
+	fp.get("audiobuffersize", audiobuffersize);
+	fp.get("channels", channels);
+	fp.get("animations", animations);
+	fp.get("fullscreen", fullscreen);
+	fp.get("fps", fps);
+	fp.get("showfps", showfps);
+	fp.get("themeid", themeid);
+	fp.get("themecount", themecount);
 }
 
 void VConfig::save()
@@ -89,19 +79,14 @@ void VConfig::save()
 		return;
 	}
 
-	ofs << "playercount=" << playercount << "\n";
+	ofs << "gametype=" << gametype << "\n";
+	ofs << "modern=" << modern << "\n";
+	ofs << "startinglevel=" << startinglevel << "\n";
 	ofs << "player0=" << playernames[0] << "\n";
 	ofs << "player1=" << playernames[1] << "\n";
 	ofs << "player2=" << playernames[2] << "\n";
-	ofs << "player3=" << playernames[3] << "\n";
-	ofs << "gamemode=" << gamemode << "\n";
-	ofs << "setsize=" << setsize << "\n";
-	ofs << "matchsize=" << matchsize << "\n";
-	ofs << "closedelay=" << closedelay << "\n";
-	ofs << "motifcaption=" << motifcaption << "\n";
 	ofs << "sound=" << sound << "\n";
 	ofs << "volume=" << volume << "\n";
-	ofs << "speech=" << speech << "\n";
 	ofs << "audiobuffersize=" << audiobuffersize << "\n";
 	ofs << "channels=" << channels << "\n";
 	ofs << "animations=" << animations << "\n";

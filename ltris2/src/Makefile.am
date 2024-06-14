@@ -1,5 +1,5 @@
 bin_PROGRAMS = ltris2
-ltris2_SOURCES = main.cpp config.h config.cpp sdl.h sdl.cpp mixer.h \
+ltris2_SOURCES = main.cpp vconfig.h vconfig.cpp sdl.h sdl.cpp mixer.h \
 	tools.h tools.cpp theme.h theme.cpp view.h view.cpp \
 	menu.h menu.cpp
 	

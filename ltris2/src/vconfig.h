@@ -31,7 +31,11 @@ enum {
 	CS_NORMAL,
 	CS_AGGRESSIVE,
 
-	MAXCONFIGPLAYERNAMES = 3
+	MAXCONFIGPLAYERNAMES = 3,
+
+	FPS_50 = 0,
+	FPS_60,
+	FPS_200
 };
 
 class VConfig {
@@ -40,18 +44,15 @@ public:
 	string fname;
 
 	/* game */
-	int playercount;
+	int gametype; /* demo, classic, ... */
+	int modern; /* ghost piece, 3-piece-preview, ... */
+	int startinglevel;
 	string playernames[MAXCONFIGPLAYERNAMES];
-	int gamemode;
-	int setsize;
-	int matchsize;
-	int closedelay;
-	int motifcaption;
+	//TODO Controls controls[MAXCONFIGPLAYERNAMES]; from libgame/config.h
 
 	/* sound */
 	int sound;
 	int volume; /* 1 - 8 */
-	int speech; /* enable speech? */
 	int audiobuffersize;
 	int channels; /* number of mix channels */
 
