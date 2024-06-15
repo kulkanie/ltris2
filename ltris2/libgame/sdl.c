@@ -362,23 +362,23 @@ void get_full_font_path( char *path, char *file_name )
 /*
     load a font using the width values in the file
 */
-Font* load_font(char *fname)
+OldFont* load_font(char *fname)
 {
-	return (Font*)(calloc(1,sizeof(Font)));
+	return (OldFont*)(calloc(1,sizeof(OldFont)));
 }
 
 /*
     load a font with fixed size
 */
-Font *load_fixed_font(char *f, int off, int len, int w)
+OldFont *load_fixed_font(char *f, int off, int len, int w)
 {
-	return (Font*)(calloc(1,sizeof(Font)));
+	return (OldFont*)(calloc(1,sizeof(OldFont)));
 }
 
 /*
     free memory
 */
-void free_font(Font **fnt)
+void free_font(OldFont **fnt)
 {
 	if (*fnt)
 		free(*fnt);
@@ -388,7 +388,7 @@ void free_font(Font **fnt)
 /*
     write something with transparency
 */
-int write_text(Font *fnt, SDL_Surface *dest, int x, int y, char *str, int alpha)
+int write_text(OldFont *fnt, SDL_Surface *dest, int x, int y, char *str, int alpha)
 {
     return 0;
 }
@@ -396,21 +396,21 @@ int write_text(Font *fnt, SDL_Surface *dest, int x, int y, char *str, int alpha)
 /*
     lock font surface
 */
-void lock_font(Font *fnt)
+void lock_font(OldFont *fnt)
 {
 }
 
 /*
     unlock font surface
 */
-void unlock_font(Font *fnt)
+void unlock_font(OldFont *fnt)
 {
 }
 	
 /*
     return last update region
 */
-SDL_Rect last_write_rect(Font *fnt)
+SDL_Rect last_write_rect(OldFont *fnt)
 {
     SDL_Rect    rect={0,0,0,0};
     return rect;
@@ -419,7 +419,7 @@ SDL_Rect last_write_rect(Font *fnt)
 /*
     return the text width in pixels
 */
-int text_width(Font *fnt, char *str)
+int text_width(OldFont *fnt, char *str)
 {
     return 0;
 }

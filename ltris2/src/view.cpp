@@ -17,7 +17,9 @@
 #include "mixer.h"
 #include "theme.h"
 #include "menu.h"
+#include "vconfig.h"
 #include "vcharts.h"
+#include "../libgame/bowl.h"
 #include "vgame.h"
 #include "view.h"
 
@@ -81,12 +83,9 @@ void View::init(string t, uint f)
 	background.create(sw,sh);
 	background.setBlendMode(0);
 
-	/* game */
-	if (noGameYet) {
-		changeWallpaper();
-		// TODO init demo game here
-	} else
-		;// TODO start regular game
+	/* start demo game */
+	changeWallpaper();
+	game.init(vconfig, true);
 }
 
 /** Main game loop. Handle events, update game and render view.

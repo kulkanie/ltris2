@@ -64,7 +64,7 @@ typedef struct {
     int mute; /* if mute no sounds are played */
     int blind; /* if this is true all graphical stuff called in a function not 
                   ending with hide/show is disabled. */
-    Font *font;
+    OldFont *font;
     int sx, sy; /* screen position of very first block tile */
     int sw, sh; /* screen size */
     int w, h; /* measurements in blocks */
@@ -221,7 +221,7 @@ void bowl_use_hold(Bowl *bowl);
 Play an optimized mute game. (used for stats)
 ====================================================================
 */
-void bowl_quick_game( Bowl *bowl, CPU_ScoreSet *bscores, int llimit );
+//void bowl_quick_game( Bowl *bowl, CPU_ScoreSet *bscores, int llimit );
 
 /*
 ====================================================================

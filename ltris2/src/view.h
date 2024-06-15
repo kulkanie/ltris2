@@ -17,13 +17,7 @@
 
 enum {
 	/* general */
-
-	/* game states */
 	VS_IDLE = 0,
-
-	/* mixer */
-	MIX_CHANNELNUM = 16,
-	MIX_CUNKSIZE = 2048,
 
 	/* waitForKey types */
 	WT_ANYKEY = 0,

@@ -19,7 +19,9 @@ using namespace std;
 #include "mixer.h"
 #include "theme.h"
 #include "menu.h"
+#include "vconfig.h"
 #include "vcharts.h"
+#include "../libgame/bowl.h"
 #include "vgame.h"
 #include "view.h"
 

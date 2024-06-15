@@ -149,12 +149,14 @@ public:
 	int createShadow(Texture &img);
 };
 
-#define ALIGN_X_LEFT	1
-#define ALIGN_X_CENTER	2
-#define ALIGN_X_RIGHT	4
-#define ALIGN_Y_TOP	8
-#define ALIGN_Y_CENTER	16
-#define ALIGN_Y_BOTTOM	32
+#ifndef ALIGN_X_LEFT
+	#define ALIGN_X_LEFT	1
+	#define ALIGN_X_CENTER	2
+	#define ALIGN_X_RIGHT	4
+	#define ALIGN_Y_TOP	8
+	#define ALIGN_Y_CENTER	16
+	#define ALIGN_Y_BOTTOM	32
+#endif
 
 class Font {
 protected:

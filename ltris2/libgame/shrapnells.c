@@ -82,7 +82,9 @@ void shrapnells_init()
 }
 void shrapnells_delete()
 {
-    list_delete( shrapnells );
+	if (shrapnells)
+		list_delete( shrapnells );
+	shrapnells = 0;
 }
 /*
 ====================================================================

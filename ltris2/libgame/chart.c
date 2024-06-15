@@ -29,7 +29,7 @@ int chart_w, chart_h; /* size of higscore chart */
 int chart_gap = 10;
 int chart_level_offset = 0; /* level offset (name's left aligned, score's right aligned) */
 char cheader[128];
-Font *cfont = 0, *chfont = 0, *ccfont = 0; /* normal, highlight and caption font */
+OldFont *cfont = 0, *chfont = 0, *ccfont = 0; /* normal, highlight and caption font */
 extern Config config;
 extern Sdl sdl;
 extern char gametype_ids[8][64];
@@ -329,7 +329,7 @@ void chart_show( Set_Chart *chart, int x, int y, int w, int h )
 {
     char number_buffer[24];
     int entry_offset; /* y offset of entries */
-    Font *font;
+    OldFont *font;
     int i;
     char *cname;
     

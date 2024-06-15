@@ -18,7 +18,15 @@
 #ifndef SDL_H
 #define SDL_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+
+/** Define dummy SDL1 macros for compatibility */
+#define SDLK_LAST SDL_NUM_SCANCODES
+#define SDL_FULLSCREEN 0
+#define SDL_SRCCOLORKEY 0
+#define SDL_NOEVENT 0
+#define SDL_GetKeyState SDL_GetKeyboardState
+
 #ifdef WIN32
   #include <stdint.h>
   typedef uint32_t uint;
@@ -60,14 +68,14 @@ void draw_3dframe( SDL_Surface *surf, int cx, int cy, int w, int h, int border )
 enum {
     OPAQUE = 0
 };
-enum {
-    ALIGN_X_LEFT	= (1L<<1),
-    ALIGN_X_CENTER	= (1L<<2),
-    ALIGN_X_RIGHT	= (1L<<3),
-    ALIGN_Y_TOP	    = (1L<<4),
-    ALIGN_Y_CENTER	= (1L<<5),
-    ALIGN_Y_BOTTOM	= (1L<<6)
-};
+#ifndef ALIGN_X_LEFT
+	#define ALIGN_X_LEFT	(1L<<1)
+	#define ALIGN_X_CENTER	(1L<<2)
+	#define ALIGN_X_RIGHT	(1L<<3)
+	#define ALIGN_Y_TOP	(1L<<4)
+	#define ALIGN_Y_CENTER	(1L<<5)
+	#define ALIGN_Y_BOTTOM	(1L<<6)
+#endif
 
 typedef struct {
     SDL_Surface *pic;
@@ -85,15 +93,15 @@ typedef struct {
     int         last_y;
     int	        last_width;
     int	        last_height;
-} Font;
-Font* load_font(char *fname);
-Font* load_fixed_font(char *fname, int off, int len, int w);
-void free_font(Font **sfnt);
-int  write_text(Font *sfnt, SDL_Surface *dest, int x, int y, char *str, int alpha);
-void lock_font(Font *sfnt);
-void unlock_font(Font *sfnt);
-SDL_Rect last_write_rect(Font *fnt);
-int  text_width(Font *fnt, char *str);
+} OldFont;
+OldFont* load_font(char *fname);
+OldFont* load_fixed_font(char *fname, int off, int len, int w);
+void free_font(OldFont **sfnt);
+int  write_text(OldFont *sfnt, SDL_Surface *dest, int x, int y, char *str, int alpha);
+void lock_font(OldFont *sfnt);
+void unlock_font(OldFont *sfnt);
+SDL_Rect last_write_rect(OldFont *fnt);
+int  text_width(OldFont *fnt, char *str);
 
 /* mouse buttons */
 enum {

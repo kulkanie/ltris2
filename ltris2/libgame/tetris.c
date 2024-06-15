@@ -26,7 +26,7 @@
 SDL_Surface *blocks = 0;
 SDL_Surface *previewpieces = 0;
 SDL_Surface *logo = 0;
-Font *font = 0, *large_font = 0;
+OldFont *font = 0, *large_font = 0;
 SDL_Surface *qmark = 0; /* question mark */
 SDL_Surface *bkgnd = 0; /* background + 3dframes */
 SDL_Surface *offscreen = 0; /* offscreen: background + blocks */
@@ -70,14 +70,14 @@ Request confirmation.
 ====================================================================
 */
 enum{ CONFIRM_YES_NO, CONFIRM_ANY_KEY, CONFIRM_PAUSE };
-void draw_confirm_screen( Font *font, SDL_Surface *buffer, char *str )
+void draw_confirm_screen( OldFont *font, SDL_Surface *buffer, char *str )
 {
     FULL_DEST(sdl.screen);
     fill_surf(0x0);
     font->align = ALIGN_X_CENTER | ALIGN_Y_CENTER;
     write_text(font, sdl.screen, sdl.screen->w / 2, sdl.screen->h / 2, str, 0);
 }
-int confirm( Font *font, char *str, int type )
+int confirm( OldFont *font, char *str, int type )
 {
     SDL_Event event;
     int go_on = 1;
@@ -128,7 +128,7 @@ int confirm( Font *font, char *str, int type )
                         ret = 0;					
                     } else {
                         // check pressed key against yes/no letters
-                        char *keyName = SDL_GetKeyName(event.key.keysym.sym);
+                        const char *keyName = SDL_GetKeyName(event.key.keysym.sym);
                         char *yesLetter = _("y");
                         char *noLetter = _("n");
                         if (strcmp(keyName, yesLetter) == 0) {
@@ -735,7 +735,7 @@ double tetris_test_cpu_single(Bowl *bowl, CPU_ScoreSet *bscores, int verbose)
 
 	for (int i = 0; i < numgames; i++) {
 		/* check if quit requested (SDL2) */
-		unsigned char *keys = SDL_GetKeyboardState(NULL);
+		const unsigned char *keys = SDL_GetKeyState(NULL);
 		SDL_PumpEvents();
 		if (keys[SDLK_ESCAPE])
 			return 0;

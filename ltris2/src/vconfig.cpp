@@ -18,7 +18,7 @@
 VConfig::VConfig()
 {
 	/* game */
-	gametype = GAME_CLASSIC; /* demo, classic, ... */
+	gametype = 1; /* demo, classic, ... */
 	modern = 1; /* ghost piece, 3-piece-preview, ... */
 	startinglevel = 0;
 	playernames[0] = "Michael";
