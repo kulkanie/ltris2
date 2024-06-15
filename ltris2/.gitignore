@@ -6,7 +6,6 @@ libgame.a
 Makefile.in
 Makefile
 
-src/themes/Standard/blocks.xcf
 libgame/.deps
 .cproject
 .project
@@ -22,3 +21,5 @@ po/remove-potcdate.sed
 src/.deps/
 src/ltris2
 src/ltris2.conf
+src/ltris2.hscr
+src/themes/Standard/blocks.xcf

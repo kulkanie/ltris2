@@ -41,7 +41,7 @@ int last_generated_block = -1; /* block id of last block generated when filling 
 extern Sdl sdl;
 extern int keystate[SDLK_LAST];
 extern Config config;
-extern int term_game;
+int term_game = 0;
 extern char gametype_ids[8][64];
 
 /*
@@ -734,9 +734,9 @@ double tetris_test_cpu_single(Bowl *bowl, CPU_ScoreSet *bscores, int verbose)
 		printf("  ");
 
 	for (int i = 0; i < numgames; i++) {
-		/* check if quit requested */
+		/* check if quit requested (SDL2) */
+		unsigned char *keys = SDL_GetKeyboardState(NULL);
 		SDL_PumpEvents();
-		unsigned char *keys = SDL_GetKeyState(NULL);
 		if (keys[SDLK_ESCAPE])
 			return 0;
 

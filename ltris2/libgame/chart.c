@@ -203,7 +203,7 @@ void chart_load()
 	charts = list_create( LIST_AUTO_DELETE, chart_set_delete );
     /* load highscore */
     if ( !chart_load_from_path( HI_DIR ) ) {
-        fprintf( stderr, "Unable to access highscore chart in '%s'.\n", HI_DIR );
+        fprintf( stderr, "Unable to access highscores in '%s'.\n", HI_DIR );
         fprintf( stderr, "Trying to use config directory '%s'.\n", config.dir_name );
         if ( !chart_load_from_path( config.dir_name ) ) {
             fprintf( stderr, "Unable to access highscore chart in config directory... won't be "
@@ -211,7 +211,7 @@ void chart_load()
             return;
         }
     }
-    printf( "Saving highscore chart in: %s\n", chart_path );
+    printf( "Saving highscores in: %s/%s\n", chart_path, CHART_FILE_NAME );
     /* load resources */
     cfont = load_fixed_font( "f_small_yellow.bmp", 32, 96, 8 );
     chfont = load_fixed_font( "f_small_white.bmp", 32, 96, 8 );
