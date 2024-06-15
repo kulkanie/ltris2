@@ -1,7 +1,7 @@
 bin_PROGRAMS = ltris2
 ltris2_SOURCES = main.cpp vconfig.h vconfig.cpp sdl.h sdl.cpp mixer.h \
 	tools.h tools.cpp theme.h theme.cpp view.h view.cpp \
-	menu.h menu.cpp
+	menu.h menu.cpp vcharts.h vcharts.cpp
 ltris2_LDADD = ../libgame/libgame.a
 	
 EXTRA_DIST = empty.hscr figures

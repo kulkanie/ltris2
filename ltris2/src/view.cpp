@@ -17,6 +17,7 @@
 #include "mixer.h"
 #include "theme.h"
 #include "menu.h"
+#include "vcharts.h"
 #include "view.h"
 
 extern SDL_Renderer *mrc;

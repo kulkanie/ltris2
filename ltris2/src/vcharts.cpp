@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * vcharts.h
  * (C) 2024 by Michael Speck
  */
 
@@ -12,35 +12,15 @@
  *                                                                         *
  ***************************************************************************/
 
-using namespace std;
-
-#include "sdl.h"
-#include "tools.h"
-#include "mixer.h"
-#include "theme.h"
-#include "menu.h"
+#include "../libgame/chart.h"
 #include "vcharts.h"
-#include "view.h"
 
-int main(int argc, char **argv)
-{
-	/* i18n */
-#ifdef ENABLE_NLS
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	textdomain (PACKAGE);
-#endif
+/** Create chart wrapper and load all highscore charts. */
+VCharts::VCharts() {
+	chart_load();
+}
 
-	printf("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-	printf("Copyright 2024 Michael Speck\n");
-	printf("Published under GNU GPL\n");
-	printf("---\n");
-
-	srand(time(NULL));
-
-	Renderer renderer;
-	VConfig vconfig;
-	View view(renderer, vconfig);
-	view.run();
-	return 0;
+/** Destroy chart wrapper and save all highscore charts. */
+VCharts::~VCharts() {
+	chart_save();
 }

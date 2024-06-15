@@ -48,6 +48,7 @@ class View {
 	bool noGameYet;
 
 	/* game */
+	VCharts charts;
 	int state;
 	bool quitReceived;
 	uint curWallpaperId;
