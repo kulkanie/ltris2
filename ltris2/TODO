@@ -18,6 +18,10 @@ VGame
 - render() renders bowls
 - start copies vconfig to config for bowl.c
 
-VBowl
+VBowl (?)
 - update() übersetzt SDL_events/states in controls
 - render() rendert bowl (+ player info?)
+
+single player: 
+bowl centered, preview attached right, hold attached left, score below
+blocksize = screenheight / 25

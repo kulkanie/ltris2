@@ -78,6 +78,7 @@ fi
 # Makefiles
 AC_CONFIG_FILES([Makefile
 po/Makefile.in
+libgame/Makefile
 src/Makefile 
 src/themes/Makefile
 src/themes/Standard/Makefile
