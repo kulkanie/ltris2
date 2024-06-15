@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * vgame.h
  * (C) 2024 by Michael Speck
  */
 
@@ -12,35 +12,15 @@
  *                                                                         *
  ***************************************************************************/
 
-using namespace std;
+#ifndef __VGAME_H_
+#define __VGAME_H_
 
-#include "sdl.h"
-#include "tools.h"
-#include "mixer.h"
-#include "theme.h"
-#include "menu.h"
-#include "vcharts.h"
-#include "vgame.h"
-#include "view.h"
+/** Wrapper for libgame's tetris.c stuff. */
+class VGame {
+public:
+	VGame();
+	~VGame();
+};
 
-int main(int argc, char **argv)
-{
-	/* i18n */
-#ifdef ENABLE_NLS
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	textdomain (PACKAGE);
 #endif
 
-	printf("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-	printf("Copyright 2024 Michael Speck\n");
-	printf("Published under GNU GPL\n");
-	printf("---\n");
-
-	srand(time(NULL));
-
-	Renderer renderer;
-	View view(renderer);
-	view.run();
-	return 0;
-}

@@ -17,7 +17,6 @@
 
 enum {
 	/* general */
-	MAX_PLAYERS = 4,
 
 	/* game states */
 	VS_IDLE = 0,
@@ -35,7 +34,7 @@ enum {
 class View {
 	/* general */
 	Renderer &renderer;
-	VConfig &config;
+	VConfig vconfig; // v for view, as libgame uses old config struct
 	Theme theme;
 	Mixer mixer;
 
@@ -48,11 +47,12 @@ class View {
 	bool noGameYet;
 
 	/* game */
-	VCharts charts;
+	VCharts charts; // wrapper for libgame/chart.c
+	VGame game;  // wrapper for libgame/tetris.c
 	int state;
 	bool quitReceived;
 	uint curWallpaperId;
-	Texture imgBackground;
+	Texture background;
 
 	/* stats */
 	Uint32 fpsCycles, fpsStart;
@@ -68,7 +68,7 @@ class View {
 	void handleMenuEvent(SDL_Event &ev);
 	void changeWallpaper();
 public:
-	View(Renderer &r, VConfig &cfg);
+	View(Renderer &r);
 	void init(string t, uint f);
 	void run();
 	void render();

@@ -18,6 +18,10 @@
 #ifndef __BOWL_H
 #define __BOWL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "ltris.h"
 
 /* control states */
@@ -231,5 +235,9 @@ void bowl_insert_block( Bowl *bowl );
 void bowl_draw_stats(Bowl *bowl);
 
 void bowl_toggle_gravity(Bowl *bowl);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif

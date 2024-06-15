@@ -271,7 +271,8 @@ void get_full_bmp_path( char *full_path, char *file_name )
 */
 SDL_Surface* load_surf(char *fname, int f)
 {
-	return 0;
+	/** create small dummy surface to allow access of surface->w/h */
+	return SDL_CreateRGBSurface(0,10,10,24,0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
 }
 
 /*
@@ -280,15 +281,18 @@ SDL_Surface* load_surf(char *fname, int f)
 */
 SDL_Surface* create_surf(int w, int h, int f)
 {
-    return 0;
+	/** create small dummy surface to allow access of surface->w/h */
+	return SDL_CreateRGBSurface(0,10,10,24,0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
 }
 
 /*
  * Free a surface if != NULL and set pointer to NULL
  */
-void free_surf( SDL_Surface **surf )
+void free_surf(SDL_Surface **surf)
 {
-    *surf = 0;
+	if (*surf)
+		SDL_FreeSurface(*surf);
+	*surf = 0;
 }
 /*
     lock surface
@@ -427,8 +431,9 @@ int text_width(Font *fnt, char *str)
 */
 void init_sdl( int f )
 {
-    sdl.screen = 0;
-    video_surface = 0;
+	/* create dummy surface for "screen" access by libgame */
+	sdl.screen = SDL_CreateRGBSurface(0,10,10,24,0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
+	video_surface = sdl.screen;
 }
 
 /*
@@ -436,6 +441,8 @@ void init_sdl( int f )
 */
 void quit_sdl()
 {
+	/* free dummy surface for "screen" access by libgame */
+	free_surf(&sdl.screen);
 }
 
 /*

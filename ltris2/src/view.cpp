@@ -18,29 +18,30 @@
 #include "theme.h"
 #include "menu.h"
 #include "vcharts.h"
+#include "vgame.h"
 #include "view.h"
 
 extern SDL_Renderer *mrc;
 
-View::View(Renderer &r, VConfig &cfg)
-	: renderer(r), config(cfg), menuActive(true),
+View::View(Renderer &r)
+	: renderer(r), menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
 	  noGameYet(true),
 	  state(VS_IDLE),
 	  quitReceived(false),
 	  fpsCycles(0), fpsStart(0), fps(0)
 {
-	mixer.open(config.channels, config.audiobuffersize);
-	mixer.setVolume(config.volume);
-	mixer.setMute(!config.sound);
+	mixer.open(vconfig.channels, vconfig.audiobuffersize);
+	mixer.setVolume(vconfig.volume);
+	mixer.setMute(!vconfig.sound);
 
 	/* load theme names */
 	readDir(string(DATADIR)+"/themes", RD_FOLDERS, themeNames);
-	if ((uint)config.themeid >= themeNames.size())
-		config.themeid = 0;
-	config.themecount = themeNames.size();
+	if ((uint)vconfig.themeid >= themeNames.size())
+		vconfig.themeid = 0;
+	vconfig.themecount = themeNames.size();
 
-	init(themeNames[config.themeid], config.fullscreen);
+	init(themeNames[vconfig.themeid], vconfig.fullscreen);
 }
 
 /** (Re)Initialize window, theme and menu.
@@ -77,8 +78,8 @@ void View::init(string t, uint f)
 	lblCredits2.setText(theme.fSmall, string("v")+PACKAGE_VERSION);
 
 	/* create render images and positions */
-	imgBackground.create(sw,sh);
-	imgBackground.setBlendMode(0);
+	background.create(sw,sh);
+	background.setBlendMode(0);
 
 	/* game */
 	if (noGameYet) {
@@ -108,9 +109,9 @@ void View::run()
 	fpsStart = SDL_GetTicks();
 	fpsCycles = 0;
 
-	if (config.fps == FPS_50)
+	if (vconfig.fps == FPS_50)
 		maxDelay = 20;
-	else if (config.fps == FPS_60)
+	else if (vconfig.fps == FPS_60)
 		maxDelay = 17;
 	else
 		maxDelay = 5;
@@ -129,7 +130,7 @@ void View::run()
 				switch (ev.key.keysym.scancode) {
 				case SDL_SCANCODE_F:
 					if (!menuActive)
-						config.showfps = !config.showfps;
+						vconfig.showfps = !vconfig.showfps;
 					break;
 				case SDL_SCANCODE_R:
 					if (!menuActive)
@@ -192,7 +193,7 @@ void View::run()
 void View::render()
 {
 	/* background */
-	imgBackground.copy();
+	background.copy();
 
 	/* menu */
 	if (menuActive) {
@@ -205,7 +206,7 @@ void View::render()
 	}
 
 	/* stats */
-	if (config.showfps) {
+	if (vconfig.showfps) {
 		theme.fSmall.setAlign(ALIGN_X_LEFT | ALIGN_Y_TOP);
 		theme.fSmall.write(0,0,to_string((int)fps));
 	}
@@ -291,14 +292,14 @@ void View::createMenus()
 	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemList(_("Game Type"),
 			_("You can play alone or against a human or CPU opponent."),
-			AID_NONE,config.gametype,typeNames,4));
+			AID_NONE,vconfig.gametype,typeNames,4));
 	mNewGame->add(new MenuItemList(_("Game Style"),
 			_("Modern or classic."),
-			AID_NONE,config.modern,_("Classic"),_("Modern")));
+			AID_NONE,vconfig.modern,_("Classic"),_("Modern")));
 	mNewGame->add(new MenuItemRange(_("Starting Level"),
 			"Starting level between 0 and 19.",
-			AID_NONE,config.startinglevel,0,19,1));
-	mNewGame->add(new MenuItemEdit(_("Player Name"),config.playernames[0]));
+			AID_NONE,vconfig.startinglevel,0,19,1));
+	mNewGame->add(new MenuItemEdit(_("Player Name"),vconfig.playernames[0]));
 
 	mNewGame->add(new MenuItemSep());
 /*	mNewGame->add(new MenuItemRange(_("Players"),
@@ -313,30 +314,30 @@ void View::createMenus()
 
 	mGraphics->add(new MenuItemList(_("Theme"),
 			_("Select theme. (not applied yet)"),
-			AID_NONE,config.themeid,themeNames));
+			AID_NONE,vconfig.themeid,themeNames));
 	mGraphics->add(new MenuItemList(_("Mode"),
 			_("Select mode. (not applied yet)"),
-			AID_NONE,config.fullscreen,_("Window"),_("Fullscreen")));
+			AID_NONE,vconfig.fullscreen,_("Window"),_("Fullscreen")));
 	mGraphics->add(new MenuItem(_("Apply Theme&Mode"),
 			_("Apply the above settings."),AID_APPLYTHEMEMODE));
 	mGraphics->add(new MenuItemSep());
 	mGraphics->add(new MenuItemSwitch(_("Animations"),"",AID_NONE,
-			config.animations));
+			vconfig.animations));
 	mGraphics->add(new MenuItemList(_("Frame Limit"),
 			"Maximum number of frames per second.",
-			AID_NONE,config.fps,fpsLimitNames,3));
+			AID_NONE,vconfig.fps,fpsLimitNames,3));
 	mGraphics->add(new MenuItemSep());
 	mGraphics->add(new MenuItemBack(rootMenu.get()));
 
-	mAudio->add(new MenuItemSwitch(_("Sound"),"",AID_SOUND,config.sound));
-	mAudio->add(new MenuItemRange(_("Volume"),"",AID_VOLUME,config.volume,0,100,10));
+	mAudio->add(new MenuItemSwitch(_("Sound"),"",AID_SOUND,vconfig.sound));
+	mAudio->add(new MenuItemRange(_("Volume"),"",AID_VOLUME,vconfig.volume,0,100,10));
 	//mAudio->add(new MenuItemSwitch(_("Speech"),"",AID_NONE,config.speech));
 	mAudio->add(new MenuItemSep());
 	mAudio->add(new MenuItemIntList(_("Buffer Size"),
 			_("Reduce buffer size if you experience sound delays. Might have more CPU impact though. (not applied yet)"),
-			config.audiobuffersize,bufSizes,5));
+			vconfig.audiobuffersize,bufSizes,5));
 	mAudio->add(new MenuItemIntList(_("Channels"),
-			_("More channels gives more sound variety, less channels less (not applied yet)"),config.channels,
+			_("More channels gives more sound variety, less channels less (not applied yet)"),vconfig.channels,
 			channelNums,3));
 	mAudio->add(new MenuItem(_("Apply Size&Channels"),
 			_("Apply above settings"),AID_APPLYAUDIO));
@@ -478,21 +479,21 @@ void View::handleMenuEvent(SDL_Event &ev)
 				_logerr("Oops, last menu not found...\n");
 			break;
 		case AID_SOUND:
-			mixer.setMute(!config.sound);
+			mixer.setMute(!vconfig.sound);
 			break;
 		case AID_VOLUME:
-			mixer.setVolume(config.volume);
+			mixer.setVolume(vconfig.volume);
 			break;
 		case AID_APPLYAUDIO:
 			mixer.close();
-			mixer.open(config.channels, config.audiobuffersize);
+			mixer.open(vconfig.channels, vconfig.audiobuffersize);
 			break;
 		case AID_APPLYTHEMEMODE:
 			/* XXX workaround for SDL bug: clear event
 			 * loop otherwise left mouse button event is
 			 * screwed for the first click*/
 			waitForInputRelease();
-			init(themeNames[config.themeid],config.fullscreen);
+			init(themeNames[vconfig.themeid],vconfig.fullscreen);
 			curMenu = graphicsMenu;
 			break;
 		case AID_HELP:
@@ -510,7 +511,7 @@ void View::handleMenuEvent(SDL_Event &ev)
 void View::changeWallpaper()
 {
 	curWallpaperId = rand() % theme.numWallpapers;
-	renderer.setTarget(imgBackground);
+	renderer.setTarget(background);
 	theme.wallpapers[curWallpaperId].copy();
 	renderer.clearTarget();
 }

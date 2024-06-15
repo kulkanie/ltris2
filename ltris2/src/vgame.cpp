@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * vgame.cpp
  * (C) 2024 by Michael Speck
  */
 
@@ -12,35 +12,16 @@
  *                                                                         *
  ***************************************************************************/
 
-using namespace std;
-
-#include "sdl.h"
-#include "tools.h"
-#include "mixer.h"
-#include "theme.h"
-#include "menu.h"
-#include "vcharts.h"
+#include "../libgame/sdl.h"
+#include "../libgame/tetris.h"
 #include "vgame.h"
-#include "view.h"
 
-int main(int argc, char **argv)
-{
-	/* i18n */
-#ifdef ENABLE_NLS
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	textdomain (PACKAGE);
-#endif
+VGame::VGame() {
+	init_sdl(0); // needed to create dummy sdl.screen
+	tetris_create(); // loads figures and inits block masks
+}
 
-	printf("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-	printf("Copyright 2024 Michael Speck\n");
-	printf("Published under GNU GPL\n");
-	printf("---\n");
-
-	srand(time(NULL));
-
-	Renderer renderer;
-	View view(renderer);
-	view.run();
-	return 0;
+VGame::~VGame() {
+	quit_sdl();
+	tetris_delete();
 }

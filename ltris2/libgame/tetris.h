@@ -18,6 +18,10 @@
 #ifndef __TETRIS_H
 #define __TETRIS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
 ====================================================================
 Load/delete all tetris resources.
@@ -51,5 +55,9 @@ or rocks!
 ====================================================================
 */
 void tetris_test_cpu_algorithm(int type);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif
