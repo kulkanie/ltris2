@@ -31,9 +31,9 @@ Global includes.
 //#include <SDL_mixer.h>
 //#include "audio.h"
 #endif
-//#include "sdl.h"
+#include "sdl.h"
 #include "tools.h"
-//#include "config.h"
+#include "config.h"
 
 /* i18n */
 #ifdef HAVE_CONFIG_H

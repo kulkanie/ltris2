@@ -176,8 +176,7 @@ public:
 
 void strprintf(string& str, const char *fmt, ... );
 
-/** Simple vector object. There is already struct Vector in libgame
- * so we call it just Vec. */
+/** Simple vector object. */
 class Vector {
 	double x,y;
 public:

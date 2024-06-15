@@ -1,10 +1,13 @@
 *.o
 *~
 *.tar.gz
+libgame.a
 
 Makefile.in
 Makefile
 
+src/themes/Standard/blocks.xcf
+libgame/.deps
 .cproject
 .project
 .settings/
