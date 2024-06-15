@@ -20,6 +20,7 @@ using namespace std;
 #include "theme.h"
 #include "menu.h"
 #include "view.h"
+#include "../libgame/chart.h"
 
 int main(int argc, char **argv)
 {
@@ -36,6 +37,9 @@ int main(int argc, char **argv)
 	printf("---\n");
 
 	srand(time(NULL));
+
+	/* XXX for testing purposes to make libgame useable */
+	chart_load();
 
 	Renderer renderer;
 	VConfig vconfig;

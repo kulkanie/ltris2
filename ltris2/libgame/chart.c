@@ -19,7 +19,7 @@
 #include "chart.h"
 #include "list.h"
 
-#define CHART_FILE_NAME "ltris.hscr"
+#define CHART_FILE_NAME "ltris2.hscr"
 
 List *charts = 0; /* list of all loaded level set charts */
 

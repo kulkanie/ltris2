@@ -15,6 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef __CHART_H
+#define __CHART_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
 ====================================================================
 Highscore chart entry
@@ -96,3 +103,9 @@ Query chart by id. If id is invalid return 0.
 ====================================================================
 */
 Set_Chart* chart_set_query_id( int id );
+
+#ifdef __cplusplus
+};
+#endif
+
+#endif
