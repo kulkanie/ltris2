@@ -15,14 +15,6 @@
 #ifndef __VGAME_H_
 #define __VGAME_H_
 
-/** Wrapper for libgame's bowl.c */
-class VBowl {
-	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */
-public:
-	VBowl() : bowl(NULL) {};
-	void connect(Bowl *b);
-};
-
 /** Wrapper for libgame's tetris.c stuff. */
 class VGame {
 	VBowl vbowls[MAXNUMPLAYERS];

@@ -20,6 +20,7 @@
 #include "vconfig.h"
 #include "vcharts.h"
 #include "../libgame/bowl.h"
+#include "vbowl.h"
 #include "vgame.h"
 #include "view.h"
 

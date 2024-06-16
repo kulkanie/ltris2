@@ -16,15 +16,11 @@
 #include "../libgame/tetris.h"
 #include "tools.h"
 #include "vconfig.h"
+#include "vbowl.h"
 #include "vgame.h"
 
+extern SDL_Renderer *mrc;
 extern Config config;
-extern Bowl *bowls[];
-
-void VBowl::connect(Bowl *b) {
-	bowl = b;
-	_loginfo("Connected bowl at %d,%d\n",b->sx,b->sy);
-}
 
 VGame::VGame() {
 	init_sdl(0); // needed to create dummy sdl.screen
@@ -45,6 +41,9 @@ void VGame::init(VConfig &vcfg, bool demo) {
 	/* set default config values */
 	config_reset();
 
+	/* XXX only allow single player for now */
+	vcfg.gametype = GAME_CLASSIC;
+
 	/* transfer existing vconfig settings */
 	if (demo)
 		config.gametype = GAME_DEMO;
@@ -57,7 +56,6 @@ void VGame::init(VConfig &vcfg, bool demo) {
 	/* initialize actual game context */
 	tetris_init();
 
-	for (int i = 0; i < MAXNUMPLAYERS; i++)
-		if (bowls[i])
-			vbowls[i].connect(bowls[i]);
+	/* XXX initialize single vbowl wrapper, TODO do all game types */
+	vbowls[0].init(0,720,20,42);
 }

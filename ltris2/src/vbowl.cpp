@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * vbowl.cpp
  * (C) 2024 by Michael Speck
  */
 
@@ -12,37 +12,28 @@
  *                                                                         *
  ***************************************************************************/
 
-using namespace std;
-
-#include "sdl.h"
-#include "tools.h"
-#include "mixer.h"
-#include "theme.h"
-#include "menu.h"
-#include "vconfig.h"
-#include "vcharts.h"
 #include "../libgame/bowl.h"
+#include "../libgame/tetris.h"
+#include "tools.h"
+#include "vconfig.h"
 #include "vbowl.h"
-#include "vgame.h"
-#include "view.h"
 
-int main(int argc, char **argv)
-{
-	/* i18n */
-#ifdef ENABLE_NLS
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	textdomain (PACKAGE);
-#endif
+extern Bowl *bowls[];
 
-	printf("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-	printf("Copyright 2024 Michael Speck\n");
-	printf("Published under GNU GPL\n");
-	printf("---\n");
-
-	srand(time(NULL));
-
-	View view(renderer);
-	view.run();
-	return 0;
+VBowl::VBowl() {
+	bowl = NULL;
+	w = h = tileSize = sx = sy = px = py = hx = hy = 0;
 }
+
+void VBowl::init(uint id, int _sx, int _sy, int _tsize) {
+	if (id >= MAXNUMPLAYERS || !bowls[id]) {
+		_logerr("VBowl init: libgame bowl %d does not exist\n",id);
+		return;
+	}
+	bowl = bowls[id];
+	sx = _sx;
+	sy = _sy;
+	tileSize = _tsize;
+	_loginfo("set vbowl %d at (%d,%d), tilesize=%d\n",id,sx,sy,tileSize);
+}
+

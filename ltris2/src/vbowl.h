@@ -1,5 +1,5 @@
 /*
- * main.cpp
+ * vbowl.h
  * (C) 2024 by Michael Speck
  */
 
@@ -12,37 +12,20 @@
  *                                                                         *
  ***************************************************************************/
 
-using namespace std;
+#ifndef __VBOWL_H_
+#define __VBOWL_H_
 
-#include "sdl.h"
-#include "tools.h"
-#include "mixer.h"
-#include "theme.h"
-#include "menu.h"
-#include "vconfig.h"
-#include "vcharts.h"
-#include "../libgame/bowl.h"
-#include "vbowl.h"
-#include "vgame.h"
-#include "view.h"
+/** Wrapper for libgame's bowl.c */
+class VBowl {
+	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */
+	int w, h; /* width/height of bowl (tiles) */
+	int tileSize; /* size of a single tile */
+	int sx, sy; /* screen position of bowl */
+	int px, py; /* screen preview piece position */
+	int hx, hy; /* screen hold piece position */
+public:
+	VBowl();
+	void init(uint id, int _sx, int _sy, int tsize);
+};
 
-int main(int argc, char **argv)
-{
-	/* i18n */
-#ifdef ENABLE_NLS
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE, LOCALEDIR);
-	textdomain (PACKAGE);
 #endif
-
-	printf("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-	printf("Copyright 2024 Michael Speck\n");
-	printf("Published under GNU GPL\n");
-	printf("---\n");
-
-	srand(time(NULL));
-
-	View view(renderer);
-	view.run();
-	return 0;
-}
