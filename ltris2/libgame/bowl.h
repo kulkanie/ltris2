@@ -236,6 +236,8 @@ void bowl_draw_stats(Bowl *bowl);
 
 void bowl_toggle_gravity(Bowl *bowl);
 
+int bowl_piece_can_drop(Bowl *bowl);
+
 #ifdef __cplusplus
 };
 #endif

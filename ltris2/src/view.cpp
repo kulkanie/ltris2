@@ -507,9 +507,10 @@ void View::handleMenuEvent(SDL_Event &ev)
 			//showHelp();
 			break;
 		case AID_STARTGAME:
-			// TODO start game
 			menuActive = false;
 			waitForInputRelease();
+			changeWallpaper();
+			game.init(false);
 			break;
 		}
 	}
