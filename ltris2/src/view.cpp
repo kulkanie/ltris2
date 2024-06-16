@@ -87,7 +87,7 @@ void View::init(string t, uint f)
 
 	/* start demo game */
 	changeWallpaper();
-	game.init(vconfig, true);
+	game.init(true);
 }
 
 /** Main game loop. Handle events, update game and render view.

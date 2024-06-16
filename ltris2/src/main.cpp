@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 
 	srand(time(NULL));
 
-	View view(renderer);
+	View view;
 	view.run();
 	return 0;
 }

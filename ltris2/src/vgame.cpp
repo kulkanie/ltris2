@@ -45,20 +45,22 @@ void VGame::init(bool demo) {
 	config_reset();
 
 	/* XXX only allow single player for now */
-	vcfg.gametype = GAME_CLASSIC;
+	vconfig.gametype = GAME_CLASSIC;
 
 	/* transfer existing vconfig settings */
 	if (demo)
 		config.gametype = GAME_DEMO;
 	else
-		config.gametype = vcfg.gametype;
-	config.modern = vcfg.modern;
-	config.starting_level = vcfg.startinglevel;
-	snprintf(config.player1.name,32,"%s",vcfg.playernames[0].c_str());
+		config.gametype = vconfig.gametype;
+	config.modern = vconfig.modern;
+	config.starting_level = vconfig.startinglevel;
+	snprintf(config.player1.name,32,"%s",vconfig.playernames[0].c_str());
 
 	/* initialize actual game context */
 	tetris_init();
 
 	/* XXX initialize single vbowl wrapper, TODO do all game types */
-	vbowls[0].init(0,720,20,42);
+	int tsize = (int)(renderer.getHeight() / 50)*2; /* get nearest even value to 25 tiles */
+	int x = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
+	vbowls[0].init(0,x,0,tsize);
 }
