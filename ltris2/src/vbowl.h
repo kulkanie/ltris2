@@ -15,8 +15,12 @@
 #ifndef __VBOWL_H_
 #define __VBOWL_H_
 
+class VGame;
+
 /** Wrapper for libgame's bowl.c */
 class VBowl {
+	friend VGame;
+
 	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */
 	int w, h; /* width/height of bowl (tiles) */
 	int tileSize; /* size of a single tile */
@@ -28,7 +32,7 @@ public:
 	void init(uint id, int _sx, int _sy, int tsize);
 	bool initialized() { return (bowl != NULL); }
 	void render();
-	void update(uint ms);
+	void update(uint ms, BowlControls &bc);
 };
 
 #endif

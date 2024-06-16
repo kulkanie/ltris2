@@ -46,7 +46,7 @@ void VBowl::init(uint id, int _sx, int _sy, int _tsize) {
 	sx = _sx;
 	sy = _sy;
 	tileSize = _tsize;
-	_loginfo("set vbowl %d at (%d,%d), tilesize=%d\n",id,sx,sy,tileSize);
+	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,sx,sy,tileSize);
 }
 
 /** Render bowl by drawing pieces, preview, hold, score, ... */
@@ -74,28 +74,28 @@ void VBowl::render() {
 
 	/* current piece: block.id is the index in block_masks and
 	 * block_masks[].blockid is the picture id */
-	pid = block_masks[bowl->block.id].blockid;
-	x = sx + bowl->block.x*tileSize;
-        if (bowl->ldelay_cur > 0 || config.block_by_block ||
-        				!bowl_piece_can_drop(bowl))
-        	y = sy + bowl->block.y*tileSize;
-        else
-        	y = sy + bowl->block.cur_y / bowl->block_size * tileSize;
-	for (int j = 0; j < 4; j++) {
-		for (int i = 0; i < 4; i++) {
-			if (block_masks[bowl->block.id].mask[bowl->block.rot_id][i][j])
-				theme.blocks.copy(pid*osize,0,osize,osize,
-							x,y,tileSize,tileSize);
-			x += tileSize;
-		}
+	if (bowl->are == 0) {
+		pid = block_masks[bowl->block.id].blockid;
 		x = sx + bowl->block.x*tileSize;
-		y += tileSize;
+		if (bowl->ldelay_cur > 0 || config.block_by_block ||
+				!bowl_piece_can_drop(bowl))
+			y = sy + bowl->block.y*tileSize;
+		else
+			y = sy + bowl->block.cur_y / bowl->block_size * tileSize;
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 4; i++) {
+				if (block_masks[bowl->block.id].mask[bowl->block.rot_id][i][j])
+					theme.blocks.copy(pid*osize,0,osize,osize,
+							x,y,tileSize,tileSize);
+				x += tileSize;
+			}
+			x = sx + bowl->block.x*tileSize;
+			y += tileSize;
+		}
 	}
 }
 
 /** Update bowl according to passed time @ms in milliseconds and input. */
-void VBowl::update(uint ms) {
-	BowlControls bc;
-	memset(&bc,0,sizeof(bc));
+void VBowl::update(uint ms, BowlControls &bc) {
 	bowl_update(bowl, ms, &bc, 0);
 }

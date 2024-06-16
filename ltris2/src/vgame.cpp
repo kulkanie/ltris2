@@ -28,6 +28,83 @@ extern Theme theme;
 extern SDL_Renderer *mrc;
 extern Config config;
 
+/** Translate current event/input states into bowl controls for human player. */
+void VGame::setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl)
+{
+	/* get key state */
+	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
+	/* clear input state */
+	memset(&bc,0,sizeof(bc));
+
+	if (keystate[pctrl.lshift])
+		bc.lshift = CS_PRESSED;
+	if (keystate[pctrl.rshift])
+		bc.rshift = CS_PRESSED;
+	if (keystate[pctrl.sdrop])
+		bc.sdrop = CS_PRESSED;
+
+	if (ev.type == SDL_KEYDOWN) {
+		if (ev.key.keysym.scancode == pctrl.lshift)
+			bc.lshift = CS_DOWN;
+		if (ev.key.keysym.scancode == pctrl.rshift)
+			bc.rshift = CS_DOWN;
+		if (ev.key.keysym.scancode == pctrl.lrot)
+			bc.lrot = CS_DOWN;
+		if (ev.key.keysym.scancode == pctrl.rrot)
+			bc.rrot = CS_DOWN;
+		if (ev.key.keysym.scancode == pctrl.hdrop)
+			bc.hdrop = CS_DOWN;
+		if (ev.key.keysym.scancode == pctrl.hold)
+			bc.hold = CS_DOWN;
+	}
+
+	/* XXX fix gamepad support
+	 * allow gamepad for bowl 0
+	if (i == 0 && config.gp_enabled) {
+		if (gamepad_ctrl_isdown(GPAD_LEFT))
+			bc.lshift = CS_DOWN;
+		else if (gamepad_ctrl_ispressed(GPAD_LEFT))
+			bc.lshift = CS_PRESSED;
+		if (gamepad_ctrl_isdown(GPAD_RIGHT))
+			bc.rshift = CS_DOWN;
+		else if (gamepad_ctrl_ispressed(GPAD_RIGHT))
+			bc.rshift = CS_PRESSED;
+		if (gamepad_ctrl_isactive(GPAD_DOWN))
+			bc.sdrop = CS_PRESSED;
+
+		if (ev.type == SDL_JOYBUTTONDOWN) {
+			if (ev.jbutton.button == config.gp_lrot)
+				bc.lrot = CS_DOWN;
+			if (ev.jbutton.button == config.gp_rrot)
+				bc.rrot = CS_DOWN;
+			if (ev.jbutton.button == config.gp_hdrop)
+				bc.hdrop = CS_DOWN;
+			if (ev.jbutton.button == config.gp_hold)
+				bc.hold = CS_DOWN;
+		}
+	} */
+}
+
+/** Fake bowl controls for a CPU player. */
+void VGame::setBowlControlsCPU(BowlControls &bc, VBowl &bowl)
+{
+	Bowl *b = bowl.bowl;
+
+	/* clear input state */
+	memset(&bc,0,sizeof(bc));
+
+	/* left/right shift */
+	if (b->cpu_dest_x > b->block.x)
+		bc.rshift = CS_PRESSED;
+	else if (b->cpu_dest_x < b->block.x)
+		bc.lshift = CS_PRESSED;
+
+	/* rotation */
+	if (b->cpu_dest_rot != b->block.rot_id)
+		bc.lrot = CS_DOWN;
+}
+
 VGame::VGame() : state(VGS_NOINIT) {
 	init_sdl(0); // needed to create dummy sdl.screen
 	tetris_create(); // loads figures and init block masks
@@ -49,9 +126,6 @@ void VGame::init(bool demo) {
 	/* set default config values */
 	config_reset();
 
-	/* XXX only allow single player for now */
-	vconfig.gametype = GAME_CLASSIC;
-
 	/* transfer existing vconfig settings */
 	if (demo)
 		config.gametype = GAME_DEMO;
@@ -60,6 +134,8 @@ void VGame::init(bool demo) {
 	config.modern = vconfig.modern;
 	config.starting_level = vconfig.startinglevel;
 	snprintf(config.player1.name,32,"%s",vconfig.playernames[0].c_str());
+
+	_loginfo("Initializing game (type=%d)\n",config.gametype);
 
 	/* initialize actual game context */
 	tetris_init();
@@ -83,11 +159,18 @@ void VGame::render() {
 }
 
 /** Update bowls according to passed time @ms in milliseconds and input. */
-void VGame::update(uint ms) {
+void VGame::update(uint ms, SDL_Event &ev) {
+	BowlControls bc;
+
 	if (state == VGS_NOINIT)
 		return;
 
-	for (auto b : vbowls)
-		if (b.initialized())
-			b.update(ms);
+	for (int i = 0; i < MAXNUMPLAYERS; i++)
+		if (vbowls[i].initialized()) {
+			if (vbowls[i].bowl->cpu_player)
+				setBowlControlsCPU(bc,vbowls[i]);
+			else
+				setBowlControls(bc, ev, vconfig.controls[i]);
+			vbowls[i].update(ms,bc);
+		}
 }

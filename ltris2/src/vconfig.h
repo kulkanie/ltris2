@@ -23,6 +23,16 @@ enum {
 	FPS_200
 };
 
+typedef struct {
+    int lshift; /* left shift */
+    int rshift; /* right shift */
+    int lrot; /* left rotation */
+    int rrot; /* right rotation */
+    int sdrop; /* soft drop */
+    int hdrop; /* hard drop */
+    int hold; /* switch hold piece */
+} PControls;
+
 class VConfig {
 public:
 	string dname;
@@ -33,7 +43,7 @@ public:
 	int modern; /* ghost piece, 3-piece-preview, ... */
 	int startinglevel;
 	string playernames[MAXNUMPLAYERS];
-	//TODO Controls controls[MAXCONFIGPLAYERNAMES]; from libgame/config.h
+	PControls controls[MAXNUMPLAYERS];
 
 	/* sound */
 	int sound;

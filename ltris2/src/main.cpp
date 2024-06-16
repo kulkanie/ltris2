@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 	textdomain (PACKAGE);
 #endif
 
+	printf("---\n");
 	printf("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
 	printf("Copyright 2024 Michael Speck\n");
 	printf("Published under GNU GPL\n");

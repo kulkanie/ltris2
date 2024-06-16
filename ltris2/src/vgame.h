@@ -26,12 +26,15 @@ enum {
 class VGame {
 	VBowl vbowls[MAXNUMPLAYERS];
 	int state;
+
+	void setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl);
+	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
 public:
 	VGame();
 	~VGame();
 	void init(bool demo);
 	void render();
-	void update(uint ms);
+	void update(uint ms, SDL_Event &ev);
 };
 
 #endif

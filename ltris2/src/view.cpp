@@ -156,9 +156,6 @@ void View::run()
 			}
 		}
 
-		/* get key state */
-		const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-
 		/* get passed time */
 		ms = ticks.get();
 
@@ -167,7 +164,7 @@ void View::run()
 			curMenu->update(ms);
 
 		/* update game */
-		game.update(ms);
+		game.update(ms,ev);
 
 		/* render */
 		render();
