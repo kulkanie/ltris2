@@ -195,6 +195,15 @@ void Texture::copy(int sx, int sy, int sw, int sh, int dx, int dy) {
 	SDL_RenderCopy(mrc, tex, &srect, &drect);
 }
 
+void Texture::copy(int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh) {
+	if (tex == NULL)
+		return;
+
+	SDL_Rect srect = {sx, sy, sw, sh};
+	SDL_Rect drect = {dx , dy , dw, dh};
+	SDL_RenderCopy(mrc, tex, &srect, &drect);
+}
+
 void Texture::fill(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	SDL_Texture *old = SDL_GetRenderTarget(mrc);
 	SDL_SetRenderTarget(mrc,tex);

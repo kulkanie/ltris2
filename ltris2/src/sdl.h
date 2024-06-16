@@ -133,6 +133,7 @@ public:
 	void copy(int dx, int dy);
 	void copy(int dx, int dy, int dw, int dh);
 	void copy(int sx, int sy, int sw, int sh, int dx, int dy);
+	void copy(int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
 	int getWidth() {return w;}
 	int getHeight() {return h;}
 	void setAlpha(int alpha) { SDL_SetTextureAlphaMod(tex, alpha); }

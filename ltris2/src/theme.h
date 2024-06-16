@@ -16,6 +16,8 @@
 #define SRC_THEME_H_
 
 class View;
+class VGame;
+class VBowl;
 class Menu;
 
 enum {
@@ -24,6 +26,8 @@ enum {
 
 class Theme {
 	friend View;
+	friend VGame;
+	friend VBowl;
 	friend Menu;
 
 	string stdPath; /* path to standard theme for fallbacks */

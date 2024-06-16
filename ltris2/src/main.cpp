@@ -26,8 +26,10 @@ using namespace std;
 #include "vgame.h"
 #include "view.h"
 
+/* global resources for easier access across all objects */
 Renderer renderer;
 VConfig vconfig;
+Theme theme;
 
 int main(int argc, char **argv)
 {

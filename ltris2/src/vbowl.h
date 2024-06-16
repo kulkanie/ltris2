@@ -26,6 +26,9 @@ class VBowl {
 public:
 	VBowl();
 	void init(uint id, int _sx, int _sy, int tsize);
+	bool initialized() { return (bowl != NULL); }
+	void render();
+	void update(uint ms);
 };
 
 #endif

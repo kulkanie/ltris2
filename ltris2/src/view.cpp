@@ -27,6 +27,7 @@
 extern SDL_Renderer *mrc;
 extern Renderer renderer;
 extern VConfig vconfig;
+extern Theme theme;
 
 View::View() : menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
@@ -88,6 +89,7 @@ void View::init(string t, uint f)
 	/* start demo game */
 	changeWallpaper();
 	game.init(true);
+	noGameYet = false;
 }
 
 /** Main game loop. Handle events, update game and render view.
@@ -164,7 +166,8 @@ void View::run()
 		if (menuActive)
 			curMenu->update(ms);
 
-		/* TODO update game */
+		/* update game */
+		game.update(ms);
 
 		/* render */
 		render();
@@ -195,6 +198,9 @@ void View::render()
 {
 	/* background */
 	background.copy();
+
+	/* game */
+	game.render();
 
 	/* menu */
 	if (menuActive) {

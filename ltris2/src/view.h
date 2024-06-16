@@ -27,7 +27,6 @@ enum {
 
 class View {
 	/* general */
-	Theme theme;
 	Mixer mixer;
 
 	/* menu */

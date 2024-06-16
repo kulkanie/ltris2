@@ -15,13 +15,23 @@
 #ifndef __VGAME_H_
 #define __VGAME_H_
 
+enum {
+	VGS_NOINIT = -1,
+	VGS_RUNNING,
+	VGS_PAUSED,
+	VGS_GAMEOVER
+};
+
 /** Wrapper for libgame's tetris.c stuff. */
 class VGame {
 	VBowl vbowls[MAXNUMPLAYERS];
+	int state;
 public:
 	VGame();
 	~VGame();
 	void init(bool demo);
+	void render();
+	void update(uint ms);
 };
 
 #endif
