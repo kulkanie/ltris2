@@ -25,9 +25,10 @@
 #include "view.h"
 
 extern SDL_Renderer *mrc;
+extern Renderer renderer;
+extern VConfig vconfig;
 
-View::View(Renderer &r)
-	: renderer(r), menuActive(true),
+View::View() : menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
 	  noGameYet(true),
 	  state(VS_IDLE),

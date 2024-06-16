@@ -14,11 +14,14 @@
 
 #include "../libgame/bowl.h"
 #include "../libgame/tetris.h"
+#include "sdl.h"
 #include "tools.h"
 #include "vconfig.h"
 #include "vbowl.h"
 #include "vgame.h"
 
+extern Renderer renderer;
+extern VConfig vconfig;
 extern SDL_Renderer *mrc;
 extern Config config;
 
@@ -34,7 +37,7 @@ VGame::~VGame() {
 }
 
 /** Initialize a new game. If @demo is true, start a demo game. */
-void VGame::init(VConfig &vcfg, bool demo) {
+void VGame::init(bool demo) {
 	/* clear game context */
 	tetris_clear();
 

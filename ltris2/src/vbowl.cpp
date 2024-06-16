@@ -14,10 +14,13 @@
 
 #include "../libgame/bowl.h"
 #include "../libgame/tetris.h"
+#include "sdl.h"
 #include "tools.h"
 #include "vconfig.h"
 #include "vbowl.h"
 
+extern Renderer renderer;
+extern VConfig vconfig;
 extern Bowl *bowls[];
 
 VBowl::VBowl() {

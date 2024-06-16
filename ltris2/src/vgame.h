@@ -21,7 +21,7 @@ class VGame {
 public:
 	VGame();
 	~VGame();
-	void init(VConfig &vcfg, bool demo);
+	void init(bool demo);
 };
 
 #endif

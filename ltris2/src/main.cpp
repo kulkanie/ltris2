@@ -26,6 +26,9 @@ using namespace std;
 #include "vgame.h"
 #include "view.h"
 
+Renderer renderer;
+VConfig vconfig;
+
 int main(int argc, char **argv)
 {
 	/* i18n */

@@ -27,8 +27,6 @@ enum {
 
 class View {
 	/* general */
-	Renderer &renderer;
-	VConfig vconfig; // v for view, as libgame uses old config struct
 	Theme theme;
 	Mixer mixer;
 
@@ -62,7 +60,7 @@ class View {
 	void handleMenuEvent(SDL_Event &ev);
 	void changeWallpaper();
 public:
-	View(Renderer &r);
+	View();
 	void init(string t, uint f);
 	void run();
 	void render();
