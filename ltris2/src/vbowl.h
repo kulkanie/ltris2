@@ -24,12 +24,13 @@ class VBowl {
 	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */
 	int w, h; /* width/height of bowl (tiles) */
 	int tileSize; /* size of a single tile */
-	int sx, sy; /* screen position of bowl */
-	int px, py; /* screen preview piece position */
-	int hx, hy; /* screen hold piece position */
+	SDL_Rect rBowl; /* screen region for bowl content */
+	SDL_Rect rPreview; /* screen region for preview pieces */
+	SDL_Rect rHold; /* screen region for hold piece */
+	SDL_Rect rScore; /* screen region for score */
 public:
 	VBowl();
-	void init(uint id, int _sx, int _sy, int tsize);
+	void init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp, SDL_Rect &rh, SDL_Rect &rs);
 	bool initialized() { return (bowl != NULL); }
 	void render();
 	void update(uint ms, BowlControls &bc);

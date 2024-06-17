@@ -1,26 +1,20 @@
 von lbrhd:
 - mainwindow mit flickerschutz
 - tasten für menüsteuerung
-- confirmation keys mit gettext
-
 - pot datei generieren?
-- config überarbeiten
 - SDL_CONFIG setzen
 
-VGame 
-- state
-- update() mit controls und ms
-- translate controls for bowl.c
-- render() renders bowls
-- start copies vconfig to config for bowl.c
-
-VBowl (?)
-- update() übersetzt SDL_events/states in controls
-- render() rendert bowl (+ player info?)
-
-single player: 
-bowl centered, preview attached right, hold attached left, score below
-blocksize = screenheight / 25
+VGame & VBowl
+- pause game on menu, gameover
+- finalize single player layout
+  * ghost piece/preview/hold
+  * score/charts/stats
+- frames/backgrounds
+- add and translate all menu options
+- multiplayer layout
+- shrapnells
+- undim (?)
+- sounds
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h

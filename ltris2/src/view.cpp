@@ -82,12 +82,7 @@ void View::init(string t, uint f)
 	lblCredits1.setText(theme.fSmall, "http://lgames.sf.net");
 	lblCredits2.setText(theme.fSmall, string("v")+PACKAGE_VERSION);
 
-	/* create render images and positions */
-	background.create(sw,sh);
-	background.setBlendMode(0);
-
 	/* start demo game */
-	changeWallpaper();
 	game.init(true);
 	noGameYet = false;
 }
@@ -193,9 +188,6 @@ void View::run()
 /** Render current game state. */
 void View::render()
 {
-	/* background */
-	background.copy();
-
 	/* game */
 	game.render();
 
@@ -506,17 +498,8 @@ void View::handleMenuEvent(SDL_Event &ev)
 		case AID_STARTGAME:
 			menuActive = false;
 			waitForInputRelease();
-			changeWallpaper();
 			game.init(false);
 			break;
 		}
 	}
-}
-
-void View::changeWallpaper()
-{
-	curWallpaperId = rand() % theme.numWallpapers;
-	renderer.setTarget(background);
-	theme.wallpapers[curWallpaperId].copy();
-	renderer.clearTarget();
 }

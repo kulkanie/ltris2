@@ -140,10 +140,28 @@ void VGame::init(bool demo) {
 	/* initialize actual game context */
 	tetris_init();
 
+	/* create background with wallpaper */
+	background.create(renderer.getWidth(),renderer.getHeight());
+	background.setBlendMode(0);
+	renderer.setTarget(background);
+	theme.wallpapers[0].copy();
+	renderer.clearTarget();
+
 	/* XXX initialize single vbowl wrapper, TODO do all game types */
-	int tsize = (int)(renderer.getHeight() / 50)*2; /* get nearest even value to 25 tiles */
+	int tsize = (int)(renderer.getHeight() / 44)*2; /* get nearest even value to 22 tiles */
 	int x = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
-	vbowls[0].init(0,x,0,tsize);
+	SDL_Rect rBowl, rPreview, rHold, rScore;
+
+	rBowl = {x, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+
+	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
+
+	/* and frames to background XXX for all game types, too! */
+	SDL_Color clr = {0,0,0,192};
+	background.fill(rBowl,clr);
+	//background.fill(rPreview,clr);
+	//background.fill(rHold,clr);
+	//background.fill(rScore,clr);
 
 	state = VGS_RUNNING;
 }
@@ -152,6 +170,9 @@ void VGame::init(bool demo) {
 void VGame::render() {
 	if (state == VGS_NOINIT)
 		return;
+
+	/* background */
+	background.copy();
 
 	for (auto b : vbowls)
 		if (b.initialized())

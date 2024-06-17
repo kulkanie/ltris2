@@ -26,6 +26,7 @@ enum {
 class VGame {
 	VBowl vbowls[MAXNUMPLAYERS];
 	int state;
+	Texture background;
 
 	void setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl);
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
