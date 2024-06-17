@@ -142,15 +142,17 @@ public:
 		SDL_SetTextureBlendMode(tex,
 				on?SDL_BLENDMODE_BLEND:SDL_BLENDMODE_NONE);
 	}
-	void fill(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255);
-	void fill(const SDL_Color &c) {
-		fill(c.r,c.g,c.b,c.a);
+	void fill(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255) {
+		fill(0,0,w,h,r,g,b,a);
 	}
-	void fill(int x, int y, int w, int h,
-			Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void fill(const SDL_Color &c) {
+		fill(0,0,w,h,c.r,c.g,c.b,c.a);
+	}
 	void fill(SDL_Rect &r, SDL_Color &c) {
 		fill(r.x,r.y,r.w,r.h,c.r,c.g,c.b,c.a);
 	}
+	void fill(int x, int y, int w, int h,
+			Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void scale(int nw, int nh);
 	int createShadow(Texture &img);
 };

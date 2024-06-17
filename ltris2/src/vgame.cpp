@@ -158,10 +158,14 @@ void VGame::init(bool demo) {
 
 	/* and frames to background XXX for all game types, too! */
 	SDL_Color clr = {0,0,0,192};
+	/* since we don't want to set alpha but apply it to texture to darken it
+	 * we need to enable blending */
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
 	background.fill(rBowl,clr);
 	//background.fill(rPreview,clr);
 	//background.fill(rHold,clr);
 	//background.fill(rScore,clr);
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 
 	state = VGS_RUNNING;
 }

@@ -204,23 +204,13 @@ void Texture::copy(int sx, int sy, int sw, int sh, int dx, int dy, int dw, int d
 	SDL_RenderCopy(mrc, tex, &srect, &drect);
 }
 
-void Texture::fill(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	SDL_Texture *old = SDL_GetRenderTarget(mrc);
-	SDL_SetRenderTarget(mrc,tex);
-	SDL_SetRenderDrawColor(mrc,r,g,b,a);
-	SDL_RenderClear(mrc);
-	SDL_SetRenderTarget(mrc,old);
-}
-
 void Texture::fill(int x, int y, int w, int h,
 		Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	SDL_Rect rect = {x,y,w,h};
 	SDL_Texture *old = SDL_GetRenderTarget(mrc);
 	SDL_SetRenderTarget(mrc,tex);
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(mrc,r,g,b,a);
 	SDL_RenderFillRect(mrc,&rect);
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 	SDL_SetRenderTarget(mrc,old);
 }
 
