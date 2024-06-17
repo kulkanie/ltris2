@@ -148,11 +148,16 @@ void VGame::init(bool demo) {
 	renderer.clearTarget();
 
 	/* XXX initialize single vbowl wrapper, TODO do all game types */
-	int tsize = (int)(renderer.getHeight() / 44)*2; /* get nearest even value to 22 tiles */
+	int tsize = (int)(renderer.getHeight() / 42)*2; /* get nearest even value to 22 tiles */
 	int x = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
+	int panelw = x; /* space left/right of bowl */
 	SDL_Rect rBowl, rPreview, rHold, rScore;
 
 	rBowl = {x, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+	rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
+			2*tsize,4*tsize,10*tsize};
+	rHold = {rPreview.x, 14*tsize, 4*tsize, 4*tsize};
+	rScore = {(panelw - 6*tsize)/2, 4*tsize, 6*tsize, 4*tsize};
 
 	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
 
@@ -162,9 +167,9 @@ void VGame::init(bool demo) {
 	 * we need to enable blending */
 	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
 	background.fill(rBowl,clr);
-	//background.fill(rPreview,clr);
-	//background.fill(rHold,clr);
-	//background.fill(rScore,clr);
+	background.fill(rPreview,clr);
+	background.fill(rHold,clr);
+	background.fill(rScore,clr);
 	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 
 	state = VGS_RUNNING;
