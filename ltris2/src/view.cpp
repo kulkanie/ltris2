@@ -79,8 +79,8 @@ void View::init(string t, uint f)
 	createMenus();
 
 	/* set label stuff */
-	lblCredits1.setText(theme.fSmall, "http://lgames.sf.net");
-	lblCredits2.setText(theme.fSmall, string("v")+PACKAGE_VERSION);
+	lblCredits1.setText(theme.fTooltip, "http://lgames.sf.net");
+	lblCredits2.setText(theme.fTooltip, string("v")+PACKAGE_VERSION);
 
 	/* start demo game */
 	game.init(true);
@@ -196,15 +196,15 @@ void View::render()
 		theme.menuBackground.copy();
 		lblCredits1.copy(renderer.getWidth()-2,renderer.getHeight(),
 					ALIGN_X_RIGHT | ALIGN_Y_BOTTOM);
-		lblCredits2.copy(renderer.getWidth()-2,renderer.getHeight() - theme.fSmall.getLineHeight(),
+		lblCredits2.copy(renderer.getWidth()-2,renderer.getHeight() - theme.fTooltip.getLineHeight(),
 					ALIGN_X_RIGHT | ALIGN_Y_BOTTOM);
 		curMenu->render();
 	}
 
 	/* stats */
 	if (vconfig.showfps) {
-		theme.fSmall.setAlign(ALIGN_X_LEFT | ALIGN_Y_TOP);
-		theme.fSmall.write(0,0,to_string((int)fps));
+		theme.fTooltip.setAlign(ALIGN_X_LEFT | ALIGN_Y_TOP);
+		theme.fTooltip.write(0,0,to_string((int)fps));
 	}
 }
 
@@ -240,7 +240,7 @@ bool View::showInfo(const string &line, int type)
  * If confirm is true, wait for key y/n and return true false. */
 bool View::showInfo(const vector<string> &text, int type)
 {
-	Font &font = theme.fSmall;
+	Font &font = theme.fTooltip;
 	bool ret = true;
 	uint h = text.size() * font.getLineHeight();
 	int tx = renderer.getWidth()/2;
@@ -272,7 +272,7 @@ void View::createMenus()
 	 * use static pointers instead */
 	MenuItem::fNormal = &theme.fMenuNormal;
 	MenuItem::fFocus = &theme.fMenuFocus;
-	MenuItem::fTooltip = &theme.fSmall;
+	MenuItem::fTooltip = &theme.fTooltip;
 	MenuItem::tooltipWidth = 0.4 * renderer.w;
 
 	rootMenu.reset(); /* delete any old menu ... */

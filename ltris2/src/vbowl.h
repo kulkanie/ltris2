@@ -23,7 +23,7 @@ class VBowl {
 
 	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */
 	int w, h; /* width/height of bowl (tiles) */
-	int tileSize; /* size of a single tile */
+	int tileSize; /* screen size of a single tile */
 	SDL_Rect rBowl; /* screen region for bowl content */
 	SDL_Rect rPreview; /* screen region for preview pieces */
 	SDL_Rect rHold; /* screen region for hold piece */

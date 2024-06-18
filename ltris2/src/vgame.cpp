@@ -172,6 +172,18 @@ void VGame::init(bool demo) {
 	background.fill(rScore,clr);
 	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 
+	/* XXX Set actual bowl assets. Is stored in theme as putting it to
+	 * VBowlAssets does not work. Textures exist but do not appear.
+	 * Same instructions... WHY!?!?!
+	 */
+	for (int i = 0; i < MAXNUMTILES; i++) {
+		theme.vbaTiles[i].create(tsize,tsize);
+		renderer.setTarget(theme.vbaTiles[i]);
+		theme.tiles.copy(i*theme.tileSize,0,theme.tileSize,theme.tileSize,
+				0,0,tsize,tsize);
+	}
+	renderer.clearTarget();
+
 	state = VGS_RUNNING;
 }
 

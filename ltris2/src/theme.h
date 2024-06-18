@@ -21,7 +21,9 @@ class VBowl;
 class Menu;
 
 enum {
-	MAXWALLPAPERS = 10
+	MAXWALLPAPERS = 10,
+	MAXNUMTILES = 10,
+	NUMPIECES = 7
 };
 
 class Theme {
@@ -34,13 +36,23 @@ class Theme {
 
 	Texture menuBackground;
 	uint menuX, menuY, menuItemWidth, menuItemHeight;
-	Font fMenuNormal, fMenuFocus;
+	Font fMenuNormal, fMenuFocus, fTooltip;
 	Sound sMenuClick, sMenuMotion;
 
-	Font fSmall, fNormal, fNormalHighlighted;
 	Texture wallpapers[MAXWALLPAPERS];
 	uint numWallpapers;
-	Texture blocks;
+	Texture tiles; /* for pieces */
+	uint numTiles;
+	uint tileSize;
+
+	/* XXX vbowl assets, set by vgame.init(). having a vbowl assets
+	 * class does not work. for some reason textures are empty and
+	 * I cannot figure out why. instructions are exactly the same...
+	 * so we just do it this way.
+	 */
+	Texture vbaTiles[MAXNUMTILES];
+	Texture vbaPreviews[NUMPIECES];
+	Font vbaFontNormal, vbaFontBold, vbaFontSmall;
 
 	const string &testRc(const string &path, const string &fname) {
 		static string fpath; /* not thread safe */
@@ -52,7 +64,7 @@ class Theme {
 	}
 public:
 	Theme() : menuX(0), menuY(0), menuItemWidth(0), menuItemHeight(0),
-			numWallpapers(0)
+			numWallpapers(0), numTiles(0), tileSize(0)
 	{
 		stdPath = string(DATADIR) + "/themes/Standard";
 	}

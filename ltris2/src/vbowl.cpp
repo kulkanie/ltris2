@@ -22,6 +22,7 @@
 #include "vbowl.h"
 
 extern SDL_Renderer *mrc;
+extern Renderer renderer;
 extern VConfig vconfig;
 extern Theme theme;
 extern Bowl *bowls[];
@@ -42,6 +43,7 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 		_logerr("VBowl init: libgame bowl %d does not exist\n",id);
 		return;
 	}
+
 	bowl = bowls[id];
 	w = BOWL_WIDTH;
 	h = BOWL_HEIGHT;
@@ -50,13 +52,16 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	rPreview = rp;
 	rHold = rh;
 	rScore = rs;
+
 	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
 }
 
 /** Render bowl by drawing pieces, preview, hold, score, ... */
 void VBowl::render() {
-	int osize = theme.blocks.getHeight();
 	int pid, x, y;
+
+	if (bowl == NULL)
+		return;
 
 	/* bowl content */
 	for (int j = 0; j < h; j++)
@@ -66,7 +71,7 @@ void VBowl::render() {
 			pid = bowl->contents[i][j];
 			x = rBowl.x + i*tileSize;
 			y = rBowl.y + j*tileSize;
-			theme.blocks.copy(pid*osize,0,osize,osize,x,y,tileSize,tileSize);
+			theme.vbaTiles[pid].copy(x,y);
 		}
 
 	/* current piece: block.id is the index in block_masks and
@@ -82,8 +87,8 @@ void VBowl::render() {
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
 				if (block_masks[bowl->block.id].mask[bowl->block.rot_id][i][j])
-					theme.blocks.copy(pid*osize,0,osize,osize,
-							x,y,tileSize,tileSize);
+					theme.vbaTiles[pid].copy(x,y);
+
 				x += tileSize;
 			}
 			x = rBowl.x + bowl->block.x*tileSize;
@@ -94,5 +99,8 @@ void VBowl::render() {
 
 /** Update bowl according to passed time @ms in milliseconds and input. */
 void VBowl::update(uint ms, BowlControls &bc) {
+	if (bowl == NULL)
+		return;
+
 	bowl_update(bowl, ms, &bc, 0);
 }

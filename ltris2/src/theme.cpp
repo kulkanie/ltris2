@@ -40,12 +40,6 @@ void Theme::load(string name, Renderer &r)
 
 	readDir(path, RD_FILES, fnames);
 
-	/* fonts */
-	fSmall.load(testRc(path,"f_normal.otf"), r.ry2sy(0.028));
-	fNormal.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
-	fNormalHighlighted.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
-	fNormalHighlighted.setColor(255,220,0,255);
-
 	/* menu */
 	menuX = r.rx2sx(0.16);
 	menuY = r.ry2sy(0.63);
@@ -56,6 +50,7 @@ void Theme::load(string name, Renderer &r)
 	fMenuNormal.setColor({255,255,255,255});
 	fMenuFocus.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
 	fMenuFocus.setColor({255,220,0,255});
+	fTooltip.load(testRc(path,"f_normal.otf"), r.ry2sy(0.028));
 
 	/* sounds */
 	sMenuClick.load(testRc(path,"s_menuclick.wav"));
@@ -72,6 +67,10 @@ void Theme::load(string name, Renderer &r)
 		numWallpapers = 1;
 	}
 
-	/* blocks */
-	blocks.load(testRc(path,"blocks.png"));
+	/* tiles -- assume one row of valid tiles */
+	tiles.load(testRc(path,"blocks.png"));
+	tileSize = tiles.getHeight();
+	numTiles = tiles.getWidth() / tileSize;
+	if (numTiles > MAXNUMTILES)
+		numTiles = MAXNUMTILES;
 }
