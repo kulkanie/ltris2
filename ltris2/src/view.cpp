@@ -31,6 +31,7 @@ extern Theme theme;
 
 View::View() : menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
+	  lblCredits1(true), lblCredits2(true),
 	  noGameYet(true),
 	  state(VS_IDLE),
 	  quitReceived(false),
