@@ -5,10 +5,10 @@ von lbrhd:
 - SDL_CONFIG setzen
 
 VGame & VBowl
-- pause game on menu, gameover
+- pause game on menu, gameover (except demo)
 - finalize single player layout
-  * ghost piece/preview/hold
-  * score/charts/stats
+  * ghost piece
+  * charts/stats
 - frames/backgrounds
 - add and translate all menu options
 - multiplayer layout
