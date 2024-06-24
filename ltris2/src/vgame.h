@@ -30,6 +30,7 @@ class VGame {
 
 	void setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl);
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
+	void addFrame(SDL_Rect inner, int border = 0);
 public:
 	VGame();
 	~VGame();

@@ -106,6 +106,22 @@ void VGame::setBowlControlsCPU(BowlControls &bc, VBowl &bowl)
 		bc.lrot = CS_DOWN;
 }
 
+/* Render a frame around @inner region to background. */
+void VGame::addFrame(SDL_Rect inner, int border)
+{
+	SDL_Rect outer = {inner.x - border, inner.y - border,
+				inner.w + border*2, inner.h + border*2};
+	SDL_Color clr = {0,0,0,192};
+
+	/* since we don't want to set alpha but apply it to texture to darken it
+	 * we need to enable blending */
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
+	background.fill(outer,clr);
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
+
+}
+
+
 VGame::VGame() : state(VGS_NOINIT) {
 	init_sdl(0); // needed to create dummy sdl.screen
 	tetris_create(); // loads figures and init block masks
@@ -155,8 +171,12 @@ void VGame::init(bool demo) {
 	SDL_Rect rBowl, rPreview, rHold, rScore;
 
 	rBowl = {x, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
-	rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
-			2*tsize,4*tsize,10*tsize};
+	if (config.modern)
+		rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
+				2*tsize,4*tsize,10*tsize};
+	else
+		rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
+				5*tsize,4*tsize,4*tsize};
 	rHold = {rPreview.x, 14*tsize, 4*tsize, 4*tsize};
 	rScore = {(panelw - 6*tsize)/2, 3*tsize, 6*tsize, 7*tsize};
 
@@ -191,15 +211,11 @@ void VGame::init(bool demo) {
 	theme.vbaLoadFonts(tsize);
 
 	/* and frames to background XXX for all game types, too! */
-	SDL_Color clr = {0,0,0,192};
-	/* since we don't want to set alpha but apply it to texture to darken it
-	 * we need to enable blending */
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
-	background.fill(rBowl,clr);
-	background.fill(rPreview,clr);
-	background.fill(rHold,clr);
-	background.fill(rScore,clr);
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
+	addFrame(rBowl);
+	addFrame(rPreview,tsize/4);
+	addFrame(rHold,tsize/4);
+	addFrame(rScore,tsize/4);
+
 	/* write fixed text */
 	renderer.setTarget(background);
 	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
