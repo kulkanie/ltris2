@@ -80,7 +80,7 @@ void Theme::load(string name, Renderer &r)
 /** Load fonts for bowl assets. */
 void Theme::vbaLoadFonts(uint tsize)
 {
-	vbaFontNormal.load(testRc(path,"f_normal.otf"), tsize);
-	vbaFontBold.load(testRc(path,"f_bold.otf"), tsize);
-	vbaFontSmall.load(testRc(path,"f_normal.otf"), 8*tsize/10);
+	vbaFontNormal.load(testRc(path,"f_normal.otf"), 9*tsize/10);
+	vbaFontBold.load(testRc(path,"f_bold.otf"), 9*tsize/10);
+	vbaFontSmall.load(testRc(path,"f_normal.otf"), 7*tsize/10);
 }

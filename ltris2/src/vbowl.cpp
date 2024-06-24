@@ -112,6 +112,24 @@ void VBowl::render() {
 	/* hold piece */
 	if (bowl->hold_active && bowl->hold_id != -1)
 		theme.vbaPreviews[bowl->hold_id].copy(rHold.x,rHold.y+1.5*tileSize);
+
+	/* player info */
+	int ix = rScore.x + rScore.w/2, iy = rScore.y + tileSize/2;
+	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontSmall.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontBold.write(ix,iy,bowl->name);
+	iy += tileSize;
+	theme.vbaFontNormal.write(ix,iy,to_string((int)counter_get_approach(bowl->score)));
+	iy += 1.5*tileSize;
+	theme.vbaFontBold.write(ix,iy,_("Level"));
+	iy += tileSize;
+	theme.vbaFontNormal.write(ix,iy,to_string(bowl->level));
+	iy += 1.5*tileSize;
+	theme.vbaFontBold.write(ix,iy,_("Lines"));
+	iy += tileSize;
+	theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
+
 }
 
 /** Update bowl according to passed time @ms in milliseconds and input. */

@@ -158,7 +158,7 @@ void VGame::init(bool demo) {
 	rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
 			2*tsize,4*tsize,10*tsize};
 	rHold = {rPreview.x, 14*tsize, 4*tsize, 4*tsize};
-	rScore = {(panelw - 6*tsize)/2, 4*tsize, 6*tsize, 4*tsize};
+	rScore = {(panelw - 6*tsize)/2, 3*tsize, 6*tsize, 7*tsize};
 
 	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
 
@@ -202,9 +202,9 @@ void VGame::init(bool demo) {
 	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 	/* write fixed text */
 	renderer.setTarget(background);
-	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-	theme.vbaFontBold.write(rPreview.x+rPreview.w/2,rPreview.y+tsize/2,_("Next"));
-	theme.vbaFontBold.write(rHold.x+rHold.w/2,rHold.y+tsize/2,_("Hold"));
+	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontNormal.write(rPreview.x+rPreview.w/2,rPreview.y+tsize/2,_("Next"));
+	theme.vbaFontNormal.write(rHold.x+rHold.w/2,rHold.y+tsize/2,_("Hold"));
 	renderer.clearTarget();
 
 	state = VGS_RUNNING;
