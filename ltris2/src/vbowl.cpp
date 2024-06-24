@@ -95,6 +95,13 @@ void VBowl::render() {
 			y += tileSize;
 		}
 	}
+
+	/* preview */
+//	for (int i = 0; i < NUMPIECES; i++)
+//		theme.vbaPreviews[i].copy(0,i*tileSize*2);
+	_loginfo("Preview id: %d\n",bowl->next_block_id);
+	if (bowl->next_block_id >= 0)
+		theme.vbaPreviews[bowl->next_block_id].copy(rPreview.x,rPreview.y);
 }
 
 /** Update bowl according to passed time @ms in milliseconds and input. */

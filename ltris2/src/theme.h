@@ -48,8 +48,7 @@ class Theme {
 	/* XXX vbowl assets, set by vgame.init(). having a vbowl assets
 	 * class does not work. for some reason textures are empty and
 	 * I cannot figure out why. instructions are exactly the same...
-	 * so we just do it this way.
-	 */
+	 * so we just do it this way. */
 	Texture vbaTiles[MAXNUMTILES];
 	Texture vbaPreviews[NUMPIECES];
 	Font vbaFontNormal, vbaFontBold, vbaFontSmall;

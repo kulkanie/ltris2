@@ -27,6 +27,7 @@ extern VConfig vconfig;
 extern Theme theme;
 extern SDL_Renderer *mrc;
 extern Config config;
+extern Block_Mask block_masks[BLOCK_COUNT];
 
 /** Translate current event/input states into bowl controls for human player. */
 void VGame::setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl)
@@ -172,15 +173,30 @@ void VGame::init(bool demo) {
 	background.fill(rScore,clr);
 	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 
-	/* XXX Set actual bowl assets. Is stored in theme as putting it to
-	 * VBowlAssets does not work. Textures exist but do not appear.
-	 * Same instructions... WHY!?!?!
-	 */
+	/* XXX store bowl assets in theme as using a VBowlAssets class in
+	 * bowl does not work. textures get created but are not displayed
+	 * and I can't figure out why... */
+	/* create tiles for pieces */
 	for (int i = 0; i < MAXNUMTILES; i++) {
 		theme.vbaTiles[i].create(tsize,tsize);
 		renderer.setTarget(theme.vbaTiles[i]);
 		theme.tiles.copy(i*theme.tileSize,0,theme.tileSize,theme.tileSize,
 				0,0,tsize,tsize);
+	}
+	/* create previews for all pieces */
+	double pxoff[7] = {-0.5,-0.5,-0.5,0,-0.5,-0.5,0};
+	double pyoff[7] = {-2,-2,-2,-2,-2,-2,-1.5};
+	for (int k = 0; k < NUMPIECES; k++) {
+		int pid = block_masks[k].blockid;
+		theme.vbaPreviews[k].create(4*tsize,2*tsize);
+		renderer.setTarget(theme.vbaPreviews[k]);
+		for (int j = 0; j < 4; j++)
+			for (int i = 0; i < 4; i++) {
+				if (!block_masks[k].mask[block_masks[k].rstart][i][j])
+					continue;
+				theme.vbaTiles[pid].copy(pxoff[k]*tsize + i*tsize,
+							pyoff[k]*tsize + j*tsize);
+			}
 	}
 	renderer.clearTarget();
 

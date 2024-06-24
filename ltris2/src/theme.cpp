@@ -17,6 +17,8 @@
 #include "mixer.h"
 #include "theme.h"
 
+extern Renderer renderer;
+
 /** Load resources and scale if necessary using bricks screen height.
  * Whatever is missing: Fall back to Standard theme. */
 void Theme::load(string name, Renderer &r)
