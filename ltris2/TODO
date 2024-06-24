@@ -15,6 +15,7 @@ VGame & VBowl
 - shrapnells
 - undim (?)
 - sounds
+- font colors in theme
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h

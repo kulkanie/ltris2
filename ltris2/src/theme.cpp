@@ -23,7 +23,7 @@ extern Renderer renderer;
  * Whatever is missing: Fall back to Standard theme. */
 void Theme::load(string name, Renderer &r)
 {
-	string path, fpath;
+	string fpath;
 	vector<string> fnames;
 
 	path = string(DATADIR) + "/themes/" + name;
@@ -75,4 +75,12 @@ void Theme::load(string name, Renderer &r)
 	numTiles = tiles.getWidth() / tileSize;
 	if (numTiles > MAXNUMTILES)
 		numTiles = MAXNUMTILES;
+}
+
+/** Load fonts for bowl assets. */
+void Theme::vbaLoadFonts(uint tsize)
+{
+	vbaFontNormal.load(testRc(path,"f_normal.otf"), tsize);
+	vbaFontBold.load(testRc(path,"f_bold.otf"), tsize);
+	vbaFontSmall.load(testRc(path,"f_normal.otf"), 8*tsize/10);
 }

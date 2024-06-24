@@ -27,6 +27,7 @@ extern VConfig vconfig;
 extern Theme theme;
 extern Bowl *bowls[];
 extern Block_Mask block_masks[BLOCK_COUNT];
+extern int  *next_blocks;
 extern Config config;
 
 VBowl::VBowl() {
@@ -97,11 +98,20 @@ void VBowl::render() {
 	}
 
 	/* preview */
-//	for (int i = 0; i < NUMPIECES; i++)
-//		theme.vbaPreviews[i].copy(0,i*tileSize*2);
-	_loginfo("Preview id: %d\n",bowl->next_block_id);
-	if (bowl->next_block_id >= 0)
-		theme.vbaPreviews[bowl->next_block_id].copy(rPreview.x,rPreview.y);
+	if (bowl->preview && bowl->next_block_id >= 0) {
+		theme.vbaPreviews[bowl->next_block_id].copy(rPreview.x,rPreview.y+1.5*tileSize);
+
+		/* only for modern: show next two pieces of piece bag */
+		for (int i = 0; i < bowl->preview-1; i++) {
+			pid = next_blocks[bowl->next_blocks_pos+i];
+			theme.vbaPreviews[pid].copy(rPreview.x,
+					rPreview.y+4.5*tileSize+i*3*tileSize);
+		}
+	}
+
+	/* hold piece */
+	if (bowl->hold_active && bowl->hold_id != -1)
+		theme.vbaPreviews[bowl->hold_id].copy(rHold.x,rHold.y+1.5*tileSize);
 }
 
 /** Update bowl according to passed time @ms in milliseconds and input. */

@@ -69,12 +69,12 @@ enum {
     OPAQUE = 0
 };
 #ifndef ALIGN_X_LEFT
-	#define ALIGN_X_LEFT	(1L<<1)
-	#define ALIGN_X_CENTER	(1L<<2)
-	#define ALIGN_X_RIGHT	(1L<<3)
-	#define ALIGN_Y_TOP	(1L<<4)
-	#define ALIGN_Y_CENTER	(1L<<5)
-	#define ALIGN_Y_BOTTOM	(1L<<6)
+	#define ALIGN_X_LEFT	1
+	#define ALIGN_X_CENTER	2
+	#define ALIGN_X_RIGHT	4
+	#define ALIGN_Y_TOP	8
+	#define ALIGN_Y_CENTER	16
+	#define ALIGN_Y_BOTTOM	32
 #endif
 
 typedef struct {

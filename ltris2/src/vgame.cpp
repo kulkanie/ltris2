@@ -162,17 +162,6 @@ void VGame::init(bool demo) {
 
 	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
 
-	/* and frames to background XXX for all game types, too! */
-	SDL_Color clr = {0,0,0,192};
-	/* since we don't want to set alpha but apply it to texture to darken it
-	 * we need to enable blending */
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
-	background.fill(rBowl,clr);
-	background.fill(rPreview,clr);
-	background.fill(rHold,clr);
-	background.fill(rScore,clr);
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
-
 	/* XXX store bowl assets in theme as using a VBowlAssets class in
 	 * bowl does not work. textures get created but are not displayed
 	 * and I can't figure out why... */
@@ -198,6 +187,24 @@ void VGame::init(bool demo) {
 							pyoff[k]*tsize + j*tsize);
 			}
 	}
+	renderer.clearTarget();
+	theme.vbaLoadFonts(tsize);
+
+	/* and frames to background XXX for all game types, too! */
+	SDL_Color clr = {0,0,0,192};
+	/* since we don't want to set alpha but apply it to texture to darken it
+	 * we need to enable blending */
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
+	background.fill(rBowl,clr);
+	background.fill(rPreview,clr);
+	background.fill(rHold,clr);
+	background.fill(rScore,clr);
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
+	/* write fixed text */
+	renderer.setTarget(background);
+	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontBold.write(rPreview.x+rPreview.w/2,rPreview.y+tsize/2,_("Next"));
+	theme.vbaFontBold.write(rHold.x+rHold.w/2,rHold.y+tsize/2,_("Hold"));
 	renderer.clearTarget();
 
 	state = VGS_RUNNING;

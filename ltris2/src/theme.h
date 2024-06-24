@@ -32,6 +32,7 @@ class Theme {
 	friend VBowl;
 	friend Menu;
 
+	string path; /* resource path for this theme */
 	string stdPath; /* path to standard theme for fallbacks */
 
 	Texture menuBackground;
@@ -68,6 +69,7 @@ public:
 		stdPath = string(DATADIR) + "/themes/Standard";
 	}
 	void load(string name, Renderer &r);
+	void vbaLoadFonts(uint tsize);
 };
 
 #endif /* SRC_THEME_H_ */
