@@ -186,7 +186,7 @@ void VGame::init(bool demo) {
 	 * bowl does not work. textures get created but are not displayed
 	 * and I can't figure out why... */
 	/* create tiles for pieces */
-	for (int i = 0; i < MAXNUMTILES; i++) {
+	for (int i = 0; i < NUMTILES; i++) {
 		theme.vbaTiles[i].create(tsize,tsize);
 		renderer.setTarget(theme.vbaTiles[i]);
 		theme.tiles.copy(i*theme.tileSize,0,theme.tileSize,theme.tileSize,

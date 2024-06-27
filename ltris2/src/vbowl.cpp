@@ -75,25 +75,54 @@ void VBowl::render() {
 			theme.vbaTiles[pid].copy(x,y);
 		}
 
-	/* current piece: block.id is the index in block_masks and
-	 * block_masks[].blockid is the picture id */
-	if (bowl->are == 0) {
-		pid = block_masks[bowl->block.id].blockid;
+	/* (ghost) piece: block_masks[block.id].blockid is the picture id */
+	if (!bowl->hide_block && bowl->are == 0) {
+		/* get starting screen position for piece. y is a bit of an issue
+		 * for smooth drop as we need to check here again if we use y or
+		 * cur_y as sy from libgame is 480p and thus too coarse. */
 		x = rBowl.x + bowl->block.x*tileSize;
 		if (bowl->ldelay_cur > 0 || config.block_by_block ||
 				!bowl_piece_can_drop(bowl))
 			y = rBowl.y + bowl->block.y*tileSize;
 		else
 			y = rBowl.y + bowl->block.cur_y / bowl->block_size * tileSize;
+		int xstart = x;
+
+		/* get starting y for ghost piece, x is same. to interfere as little
+		 * with the original code we just translate the 480p position back */
+		int gy = rBowl.y + ((bowl->help_sy - bowl->sy) / bowl->block_size)*tileSize;
+
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
-				if (block_masks[bowl->block.id].mask[bowl->block.rot_id][i][j])
+				if (block_masks[bowl->block.id].mask[bowl->block.rot_id][i][j]) {
+					pid = block_masks[bowl->block.id].blockid;
+
+					/* ghost piece */
+					if (config.modern) {
+						theme.vbaTiles[pid].setAlpha(96);
+						theme.vbaTiles[pid].copy(x,gy);
+						theme.vbaTiles[pid].setAlpha(SDL_ALPHA_OPAQUE);
+					}
+
+					/* actual piece */
 					theme.vbaTiles[pid].copy(x,y);
 
+					/* use special tile id layered to indicate lock
+					 * delay unless soft drop was used which will
+					 * insert the block on the next cycle */
+					if (bowl->ldelay_cur > 0 && !bowl->sdrop_pressed) {
+						pid = LOCKDELAYTILEID;
+						theme.vbaTiles[pid].setAlpha(128);
+						theme.vbaTiles[pid].copy(x,y);
+						theme.vbaTiles[pid].setAlpha(SDL_ALPHA_OPAQUE);
+					}
+
+				}
 				x += tileSize;
 			}
-			x = rBowl.x + bowl->block.x*tileSize;
+			x = xstart;
 			y += tileSize;
+			gy += tileSize;
 		}
 	}
 

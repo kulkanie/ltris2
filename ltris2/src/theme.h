@@ -22,8 +22,9 @@ class Menu;
 
 enum {
 	MAXWALLPAPERS = 10,
-	MAXNUMTILES = 10,
-	NUMPIECES = 7
+	NUMTILES = 11,
+	NUMPIECES = 7,
+	LOCKDELAYTILEID = 10
 };
 
 class Theme {
@@ -50,7 +51,7 @@ class Theme {
 	 * class does not work. for some reason textures are empty and
 	 * I cannot figure out why. instructions are exactly the same...
 	 * so we just do it this way. */
-	Texture vbaTiles[MAXNUMTILES];
+	Texture vbaTiles[NUMTILES];
 	Texture vbaPreviews[NUMPIECES];
 	Font vbaFontNormal, vbaFontBold, vbaFontSmall;
 

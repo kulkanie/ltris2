@@ -7,7 +7,6 @@ von lbrhd:
 VGame & VBowl
 - pause game on menu, gameover (except demo)
 - finalize single player layout
-  * ghost piece
   * charts/stats
 - frames/backgrounds
 - add and translate all menu options

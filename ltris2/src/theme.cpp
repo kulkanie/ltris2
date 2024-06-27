@@ -73,8 +73,10 @@ void Theme::load(string name, Renderer &r)
 	tiles.load(testRc(path,"blocks.png"));
 	tileSize = tiles.getHeight();
 	numTiles = tiles.getWidth() / tileSize;
-	if (numTiles > MAXNUMTILES)
-		numTiles = MAXNUMTILES;
+	if (numTiles > NUMTILES)
+		numTiles = NUMTILES;
+	if (numTiles < NUMTILES)
+		_loginfo("Theme provides only %d tiles instead of %d...\n",numTiles,NUMTILES);
 }
 
 /** Load fonts for bowl assets. */
