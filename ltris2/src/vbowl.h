@@ -15,10 +15,12 @@
 #ifndef __VBOWL_H_
 #define __VBOWL_H_
 
+class View;
 class VGame;
 
 /** Wrapper for libgame's bowl.c */
 class VBowl {
+	friend View;
 	friend VGame;
 
 	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */

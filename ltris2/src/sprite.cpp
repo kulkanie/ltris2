@@ -1,6 +1,6 @@
 /*
- * vgame.h
- * (C) 2024 by Michael Speck
+ * sprite.cpp
+ * (C) 2018 by Michael Speck
  */
 
 /***************************************************************************
@@ -12,36 +12,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __VGAME_H_
-#define __VGAME_H_
+#include "tools.h"
+#include "sdl.h"
+#include "mixer.h"
+#include "theme.h"
+#include "sprite.h"
 
-enum {
-	VGS_NOINIT = -1,
-	VGS_RUNNING,
-	VGS_PAUSED,
-	VGS_GAMEOVER
-};
-
-class View;
-
-/** Wrapper for libgame's tetris.c stuff. */
-class VGame {
-	friend View;
-
-	VBowl vbowls[MAXNUMPLAYERS];
-	int state;
-	Texture background;
-
-	void setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl);
-	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
-	void addFrame(SDL_Rect inner, int border = 0);
-public:
-	VGame();
-	~VGame();
-	void init(bool demo);
-	void render();
-	void update(uint ms, SDL_Event &ev);
-};
-
-#endif
-
+Shrapnell::Shrapnell(Texture &t, Vector &p, Vector &v, Vector &g, uint a, double amod) :
+	texture(t), w(t.getWidth()), h(t.getHeight()), pos(p), vel(v), grav(g)
+{
+	alpha.init(SCT_ONCE, a, SDL_ALPHA_TRANSPARENT, amod);
+}

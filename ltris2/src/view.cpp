@@ -16,6 +16,7 @@
 #include "sdl.h"
 #include "mixer.h"
 #include "theme.h"
+#include "sprite.h"
 #include "menu.h"
 #include "vconfig.h"
 #include "vcharts.h"
@@ -28,7 +29,6 @@ extern SDL_Renderer *mrc;
 extern Renderer renderer;
 extern VConfig vconfig;
 extern Theme theme;
-extern ViewBowlInfo vbi;
 
 View::View() : menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
@@ -163,25 +163,25 @@ void View::run()
 		/* update game */
 		game.update(ms,ev);
 
-		/* play sounds */
-		if (vbi.snd_shift)
-			mixer.play(theme.sShift);
-		if (vbi.snd_insert)
-			mixer.play(theme.sInsert);
-		if (vbi.snd_explosion)
-			mixer.play(theme.sExplosion);
-		if (vbi.snd_nextlevel)
-			mixer.play(theme.sNextLevel);
-		if (vbi.snd_tetris)
-			mixer.play(theme.sTetris);
+		/* play sounds & create shrapnells */
+		for (int i = 0; i < MAXNUMPLAYERS; i++)
+			if (game.vbowls[i].initialized()) {
+				if (game.vbowls[i].bowl->vbi.snd_shift)
+					mixer.play(theme.sShift);
+				if (game.vbowls[i].bowl->vbi.snd_insert)
+					mixer.play(theme.sInsert);
+				if (game.vbowls[i].bowl->vbi.snd_explosion)
+					mixer.play(theme.sExplosion);
+				if (game.vbowls[i].bowl->vbi.snd_nextlevel)
+					mixer.play(theme.sNextLevel);
+				if (game.vbowls[i].bowl->vbi.snd_tetris)
+					mixer.play(theme.sTetris);
 
-		/* create shrapnells */
-		for (int i = 0; i < vbi.cleared_line_count; i++) {
-			_loginfo("Cleared line %d\n", vbi.cleared_line_y[i]);
-		}
+				/* TODO create shrapnells */
 
-		/* clear view bowl info for next frame */
-		memset(&vbi,0,sizeof(vbi));
+				/* clear view bowl info */
+				memset(&game.vbowls[i].bowl->vbi,0,sizeof(ViewBowlInfo));
+			}
 
 		/* render */
 		render();
@@ -524,4 +524,9 @@ void View::handleMenuEvent(SDL_Event &ev)
 			break;
 		}
 	}
+}
+
+/** Create shrapnells from view bowl info. */
+void View::createShrapnells()
+{
 }

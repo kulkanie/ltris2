@@ -18,6 +18,7 @@ using namespace std;
 #include "tools.h"
 #include "mixer.h"
 #include "theme.h"
+#include "sprite.h"
 #include "menu.h"
 #include "vconfig.h"
 #include "vcharts.h"

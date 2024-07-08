@@ -151,6 +151,9 @@ typedef struct {
 
     /* training */
     int zero_gravity;
+
+    /* view bowl info */
+    ViewBowlInfo vbi;
 } Bowl;
 
 /*

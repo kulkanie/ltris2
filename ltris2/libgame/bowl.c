@@ -45,8 +45,6 @@ Block_Mask block_masks[BLOCK_COUNT];
 extern Bowl *bowls[BOWL_COUNT];
 extern int  *next_blocks, next_blocks_size;
 
-ViewBowlInfo vbi;
-
 /*
 ====================================================================
 Locals
@@ -558,7 +556,7 @@ void bowl_finish_game( Bowl *bowl, int winner )
 #ifdef SOUND
     if ( !bowl->mute ) sound_play( bowl->wav_explosion );
 #endif
-    vbi.snd_explosion = 1;
+    bowl->vbi.snd_explosion = 1;
 }
 
 /** Adjust bowl->score if lc lines have been cleared in current level. */
@@ -604,7 +602,7 @@ void bowl_add_lines( Bowl *bowl, int cleared)
 		if (!bowl->mute)
 			sound_play( bowl->wav_nextlevel );
 #endif
-		vbi.snd_nextlevel = 1;
+		bowl->vbi.snd_nextlevel = 1;
 	}
 }
 
@@ -691,11 +689,11 @@ void bowl_insert_block( Bowl *bowl )
 #ifdef SOUND
   if ( !bowl->mute ) sound_play( bowl->wav_stop );
 #endif    
-  vbi.snd_insert = 1;
+  bowl->vbi.snd_insert = 1;
 
   /* check for completed lines */
   bowl->cleared_line_count = 0;
-  vbi.cleared_line_count = 0;
+  bowl->vbi.cleared_line_count = 0;
   for ( j = 0; j < bowl->h; j++ ) {
     full = 1;
     for ( i = 0; i < bowl->w; i++ ) {
@@ -707,10 +705,10 @@ void bowl_insert_block( Bowl *bowl )
     if ( full ) {
       bowl->cleared_line_y[bowl->cleared_line_count++] = j;
 
-      vbi.cleared_line_y[vbi.cleared_line_count] = j;
+      bowl->vbi.cleared_line_y[bowl->vbi.cleared_line_count] = j;
       for (i = 0; i < bowl->w; i++)
-        vbi.cleared_lines[vbi.cleared_line_count][i] = bowl->contents[i][j];
-      vbi.cleared_line_count++;
+        bowl->vbi.cleared_lines[bowl->vbi.cleared_line_count][i] = bowl->contents[i][j];
+      bowl->vbi.cleared_line_count++;
     }
   }
   if (bowl->cleared_line_count > 0)
@@ -726,7 +724,7 @@ void bowl_insert_block( Bowl *bowl )
 #ifdef SOUND
     if ( !bowl->mute ) sound_play( bowl->wav_excellent );
 #endif
-    vbi.snd_tetris = 1;
+    bowl->vbi.snd_tetris = 1;
   }
 
   /* create shrapnells */
@@ -737,7 +735,7 @@ void bowl_insert_block( Bowl *bowl )
 #ifdef SOUND
     if ( !bowl->mute ) sound_play( bowl->wav_explosion );
 #endif
-    vbi.snd_explosion = 1;
+    bowl->vbi.snd_explosion = 1;
   }
 
   /* animation adds 18/60 to are */
@@ -1114,7 +1112,7 @@ Bowl *bowl_create( int x, int y,
     bowl->wav_nextlevel = sound_chunk_load( "nextlevel.wav" );
     bowl->wav_excellent = sound_chunk_load( "excellent.wav" );
 #endif
-    memset(&vbi,0,sizeof(vbi));
+    memset(&bowl->vbi,0,sizeof(ViewBowlInfo));
 
     /* das charge, either class 16/6 or fast 10/3
     if (config.hyper_das) {
@@ -1541,7 +1539,7 @@ void bowl_update( Bowl *bowl, int ms, BowlControls *bc, int game_over )
         	if (!bowl->mute && config.shiftsound)
         		sound_play( bowl->wav_leftright );
 #endif    
-        	vbi.snd_shift = 1;
+        	bowl->vbi.snd_shift = 1;
         }
 
         /* update horizontal float&screen position */
