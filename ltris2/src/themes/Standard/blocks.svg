@@ -537,7 +537,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="341.96429"
+     inkscape:cx="258.03571"
      inkscape:cy="198.39286"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -619,24 +619,27 @@
        height="23.8125"
        x="93.927086"
        y="23.8125"
-       inkscape:export-xdpi="28.222324"
-       inkscape:export-ydpi="28.222324" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="/home/michael/projects/ltris2/src/themes/Standard/rect4569-1-2.png" />
     <path
        inkscape:connector-curvature="0"
        style="fill:url(#radialGradient4664-7);fill-opacity:1;stroke:#003e00;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 92.604167,22.489584 V 48.947917 L 95.25,46.302084 V 25.135417 h 21.16667 l 2.64583,-2.645833 z"
        id="rect4559-7"
-       inkscape:export-xdpi="28.222324"
-       inkscape:export-ydpi="28.222324"
-       sodipodi:nodetypes="ccccccc" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/michael/projects/ltris2/src/themes/Standard/rect4569-1-2.png" />
     <path
        inkscape:connector-curvature="0"
        style="fill:url(#radialGradient4664-2-6);fill-opacity:1;stroke:#003e00;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 119.0625,48.947917 V 22.489584 l -2.64583,2.645833 V 46.302084 H 95.25 l -2.645833,2.645833 z"
        id="rect4559-88-9"
-       inkscape:export-xdpi="28.222324"
-       inkscape:export-ydpi="28.222324"
-       sodipodi:nodetypes="ccccccc" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/michael/projects/ltris2/src/themes/Standard/rect4569-1-2.png" />
     <path
        inkscape:connector-curvature="0"
        style="fill:url(#radialGradient4666);fill-opacity:1;stroke:#003e00;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
