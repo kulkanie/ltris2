@@ -28,6 +28,7 @@ extern SDL_Renderer *mrc;
 extern Renderer renderer;
 extern VConfig vconfig;
 extern Theme theme;
+extern ViewBowlInfo vbi;
 
 View::View() : menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
@@ -161,6 +162,26 @@ void View::run()
 
 		/* update game */
 		game.update(ms,ev);
+
+		/* play sounds */
+		if (vbi.snd_shift)
+			mixer.play(theme.sShift);
+		if (vbi.snd_insert)
+			mixer.play(theme.sInsert);
+		if (vbi.snd_explosion)
+			mixer.play(theme.sExplosion);
+		if (vbi.snd_nextlevel)
+			mixer.play(theme.sNextLevel);
+		if (vbi.snd_tetris)
+			mixer.play(theme.sTetris);
+
+		/* create shrapnells */
+		for (int i = 0; i < vbi.cleared_line_count; i++) {
+			_loginfo("Cleared line %d\n", vbi.cleared_line_y[i]);
+		}
+
+		/* clear view bowl info for next frame */
+		memset(&vbi,0,sizeof(vbi));
 
 		/* render */
 		render();

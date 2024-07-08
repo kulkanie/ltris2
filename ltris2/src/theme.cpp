@@ -53,8 +53,6 @@ void Theme::load(string name, Renderer &r)
 	fMenuFocus.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
 	fMenuFocus.setColor({255,220,0,255});
 	fTooltip.load(testRc(path,"f_normal.otf"), r.ry2sy(0.028));
-
-	/* sounds */
 	sMenuClick.load(testRc(path,"s_menuclick.wav"));
 	sMenuMotion.load(testRc(path,"s_menumotion.wav"));
 
@@ -77,6 +75,13 @@ void Theme::load(string name, Renderer &r)
 		numTiles = NUMTILES;
 	if (numTiles < NUMTILES)
 		_loginfo("Theme provides only %d tiles instead of %d...\n",numTiles,NUMTILES);
+
+	/* ingame sounds */
+	sShift.load(testRc(path,"s_shift.wav"));
+	sInsert.load(testRc(path,"s_insert.wav"));
+	sExplosion.load(testRc(path,"s_explosion.wav"));
+	sNextLevel.load(testRc(path,"s_nextlevel.wav"));
+	sTetris.load(testRc(path,"s_tetris.wav"));
 }
 
 /** Load fonts for bowl assets. */

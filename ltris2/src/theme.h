@@ -46,6 +46,7 @@ class Theme {
 	Texture tiles; /* for pieces */
 	uint numTiles;
 	uint tileSize;
+	Sound sShift, sInsert, sExplosion, sNextLevel, sTetris;
 
 	/* XXX vbowl assets, set by vgame.init(). having a vbowl assets
 	 * class does not work. for some reason textures are empty and

@@ -29,3 +29,4 @@ Changes to make ltris1 core work:
 - rename Font to OldFont
 - turn ALIGN_X_LEFT,... into macros and only set if not yet defined 
 - disable bowl_quick_game() in bowls.h
+- add ViewBowlInfo and set sounds and cleared lines

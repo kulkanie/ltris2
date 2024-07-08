@@ -24,6 +24,19 @@ extern "C" {
 
 #include "ltris.h"
 
+/* view bowl info - used to play sounds, create shrapnells by view */
+typedef struct {
+	int snd_explosion;
+	int snd_nextlevel;
+	int snd_insert;
+	int snd_tetris;
+	int snd_shift;
+
+	int cleared_line_count;
+	int cleared_line_y[4];
+	int cleared_lines[4][BOWL_WIDTH];
+} ViewBowlInfo;
+
 /* control states */
 enum {
 	CS_RELEASED = 0, /* continuously released */
