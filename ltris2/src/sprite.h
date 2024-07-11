@@ -28,16 +28,26 @@ class Shrapnell : public Sprite {
 	Texture &texture; /* reference to an existing texture */
 	int w, h; /* size of texture */
 	Vector pos, vel, grav; /* position, velocity and vel change (gravity) */
-	SmoothCounter alpha;
+	double alpha, alphaMod; /* mod is per ms */
 public:
 	Shrapnell(Texture &t, Vector &p, Vector &v, Vector &g, uint a, double amod);
 	int update(uint ms) {
+		if (alpha == 0)
+			return 1;
+
 		pos.add(ms, vel);
 		vel.add(ms, grav);
-		return alpha.update(ms);
+		alpha -= alphaMod * ms;
+		if (alpha <= 0) {
+			alpha = 0;
+			return 1;
+		}
+		return 0;
 	}
 	void render() {
-		texture.setAlpha(alpha.get());
+		if (alpha == 0)
+			return;
+		texture.setAlpha(alpha);
 		texture.copy(pos.getX(), pos.getY(), w, h);
 		texture.clearAlpha();
 	}

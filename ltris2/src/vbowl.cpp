@@ -54,6 +54,14 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	rHold = rh;
 	rScore = rs;
 
+	/* TEST for sprites
+	for (int i = 0; i < 9; i++) {
+		bowl->contents[i][19] = 1;
+		bowl->contents[i][18] = 2;
+		bowl->contents[i][17] = 3;
+		bowl->contents[i][16] = 4;
+	} */
+
 	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
 }
 

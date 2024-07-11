@@ -19,7 +19,7 @@
 #include "sprite.h"
 
 Shrapnell::Shrapnell(Texture &t, Vector &p, Vector &v, Vector &g, uint a, double amod) :
-	texture(t), w(t.getWidth()), h(t.getHeight()), pos(p), vel(v), grav(g)
+	texture(t), w(t.getWidth()), h(t.getHeight()), pos(p), vel(v), grav(g),
+	alpha(a), alphaMod(amod)
 {
-	alpha.init(SCT_ONCE, a, SDL_ALPHA_TRANSPARENT, amod);
 }

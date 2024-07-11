@@ -43,7 +43,7 @@ class View {
 	int state;
 	bool quitReceived;
 	uint curWallpaperId;
-	unique_ptr<Shrapnell> shrapnells;
+	list<unique_ptr<Sprite>> sprites;
 
 	/* stats */
 	Uint32 fpsCycles, fpsStart;
@@ -57,7 +57,8 @@ class View {
 	bool showInfo(const vector<string> &text, int type);
 	void dim();
 	void handleMenuEvent(SDL_Event &ev);
-	void createShrapnells();
+	void createShrapnells(VBowl &vb);
+	void setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &g);
 public:
 	View();
 	void init(string t, uint f);

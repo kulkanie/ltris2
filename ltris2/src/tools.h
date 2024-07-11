@@ -180,9 +180,19 @@ void strprintf(string& str, const char *fmt, ... );
 class Vector {
 	double x,y;
 public:
-	Vector(double _x, double _y) : x(_x), y(_y) {}
+	Vector(double _x=0, double _y=0) : x(_x), y(_y) {}
 	double getX() { return x; }
 	double getY() { return y; }
+	void setX(double _x) {
+		x = _x;
+	}
+	void setY(double _y) {
+		y = _y;
+	}
+	void set(double _x, double _y) {
+		x = _x;
+		y = _y;
+	}
 	void normalize() {
 		if ( x == 0 && y == 0 )
 			return;
