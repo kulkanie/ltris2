@@ -11,9 +11,7 @@ VGame & VBowl
 - frames/backgrounds
 - add and translate all menu options
 - multiplayer layout
-- shrapnells
 - undim (?)
-- sounds
 - font colors in theme
 
 Changes to make ltris1 core work:

@@ -16,7 +16,7 @@
   #define _GNU_SOURCE
 #endif
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

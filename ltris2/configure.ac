@@ -62,6 +62,11 @@ CFLAGS="$CFLAGS -Wno-int-conversion -Wno-format -Wno-implicit-function-declarati
 CFLAGS="$CFLAGS $debugflags -DSRC_DIR=\\\"$datdir\\\" -DCONFIG_DIR_NAME=\\\"$configdir\\\" -DHI_DIR=\\\"$hiscoredir\\\""
 CXXFLAGS="$CXXFLAGS -std=c++11 -Wall $debugflags -DLOCALEDIR=\\\"$localedir\\\" -DCONFIGDIR=\\\"$configdir\\\" -DDATADIR=\\\"$datdir\\\" -DHISCOREDIR=\\\"$hiscoredir\\\""
 
+# allow setting SDL2_CONFIG externally for crosscompiling
+if test "x$SDL2_CONFIG" = "x"; then
+	SDL2_CONFIG="sdl2-config"
+fi
+
 # add SDL/crosscompile flags
 if test "x$host" = "xx86_64-w64-mingw32"; then
 	CFLAGS="$CFLAGS -DWIN32 -I/usr/$host/sys-root/mingw/include"
@@ -71,8 +76,8 @@ if test "x$host" = "xx86_64-w64-mingw32"; then
 	# does funny things (not like a clown tho) also -lintl is needed
 	LIBS="$LIBS -lintl -L/usr/$host/sys-root/mingw/lib -lmingw32 -lSDL2main -lSDL2"
 else
-	CXXFLAGS="$CXXFLAGS $(sdl2-config --cflags)"
-	LIBS="$LIBS $LIBINTL $(sdl2-config --libs)"
+	CXXFLAGS="$CXXFLAGS $($SDL2_CONFIG --cflags)"
+	LIBS="$LIBS $LIBINTL $($SDL2_CONFIG --libs)"
 fi
 
 # Makefiles
