@@ -124,7 +124,8 @@ int Menu::handleEvent(const SDL_Event &ev)
 
 	if (ev.type == SDL_MOUSEMOTION) {
 		bool onItem = false;
-		for (auto& i : items)
+		uint id = 0;
+		for (auto& i : items) {
 			if (i->hasPointer(ev.motion.x,ev.motion.y)) {
 				if (i.get() == curItem) {
 					onItem = true;
@@ -132,15 +133,21 @@ int Menu::handleEvent(const SDL_Event &ev)
 				}
 				if (curItem)
 					curItem->setFocus(0);
+				if (keySelectId != -1)
+					items[keySelectId]->setFocus(0);
 				curItem = i.get();
+				keySelectId = id;
 				curItem->setFocus(1);
 				onItem = true;
 				ret = AID_FOCUSCHANGED;
 				break;
 			}
+			id++;
+		}
 		if (!onItem && curItem) {
 			curItem->setFocus(0);
 			curItem = NULL;
+			keySelectId = -1;
 			ret = AID_FOCUSCHANGED;
 		}
 		return ret;
@@ -150,6 +157,45 @@ int Menu::handleEvent(const SDL_Event &ev)
 		for (auto& i : items)
 			if (i->hasPointer(ev.button.x,ev.button.y))
 				return i->handleEvent(ev);
+	}
+
+	if (ev.type == SDL_KEYDOWN) {
+		int oldselid = keySelectId;
+		if (keySelectId == -1)
+			keySelectId = 0;
+		else if (ev.key.keysym.scancode == SDL_SCANCODE_UP ||
+				ev.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+			if (ev.key.keysym.scancode == SDL_SCANCODE_UP) {
+				keySelectId--;
+				if (keySelectId < 0)
+					keySelectId = items.size()-1;
+				/* check for separators which only come single
+				 * and are never at the beginning/end of the
+				 * menu so this should work without further
+				 * checks */
+				else if (dynamic_cast<MenuItemSep*>(items[keySelectId].get()))
+					keySelectId--;
+			} else if (ev.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+				keySelectId++;
+				if (keySelectId >= (int)items.size())
+					keySelectId = 0;
+				else if (dynamic_cast<MenuItemSep*>(items[keySelectId].get()))
+					keySelectId++;
+			}
+		} else if (ev.key.keysym.scancode == SDL_SCANCODE_RETURN ||
+				ev.key.keysym.scancode == SDL_SCANCODE_LEFT ||
+				ev.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+			return items[keySelectId]->handleEvent(ev);
+		if (oldselid != keySelectId) {
+			if (oldselid != -1)
+				items[oldselid]->setFocus(0);
+			ret = AID_FOCUSCHANGED;
+			items[keySelectId]->setFocus(1);
+			if (curItem) {
+				curItem->setFocus(0);
+				curItem = NULL;
+			}
+		}
 	}
 
 	return ret;

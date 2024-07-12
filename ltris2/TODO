@@ -1,8 +1,6 @@
 von lbrhd:
 - mainwindow mit flickerschutz
-- tasten für menüsteuerung
 - pot datei generieren?
-- SDL_CONFIG setzen
 
 VGame & VBowl
 - pause game on menu, gameover (except demo)

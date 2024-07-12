@@ -33,7 +33,7 @@ extern Theme theme;
 View::View() : menuActive(true),
 	  curMenu(NULL), graphicsMenu(NULL),
 	  lblCredits1(true), lblCredits2(true),
-	  noGameYet(true),
+	  noGameYet(true), changingKey(false),
 	  state(VS_IDLE),
 	  quitReceived(false),
 	  fpsCycles(0), fpsStart(0), fps(0)
@@ -106,6 +106,7 @@ void View::run()
 
 	state = VS_IDLE;
 	sprites.clear();
+	changingKey = false;
 
 	fpsStart = SDL_GetTicks();
 	fpsCycles = 0;
@@ -127,17 +128,14 @@ void View::run()
 		if (SDL_PollEvent(&ev)) {
 			if (ev.type == SDL_QUIT)
 				quitReceived = true;
-			else if (ev.type == SDL_KEYUP) {
+			else if (!changingKey && ev.type == SDL_KEYUP) {
 				switch (ev.key.keysym.scancode) {
 				case SDL_SCANCODE_F:
 					if (!menuActive)
 						vconfig.showfps = !vconfig.showfps;
 					break;
-				case SDL_SCANCODE_R:
-					if (!menuActive)
-						; // TODO restart game
-					break;
 				case SDL_SCANCODE_ESCAPE:
+					/* XXX kills ESC to cancel edit */
 					if (!noGameYet)
 						menuActive = !menuActive;
 					break;
@@ -478,10 +476,24 @@ void View::handleMenuEvent(SDL_Event &ev)
 	MenuItemSub *subItem;
 	MenuItemBack *backItem;
 
-	if (ev.type == SDL_QUIT)
-		quitReceived = true;
-	else if (ev.type == SDL_KEYDOWN &&
-			ev.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+	if (changingKey) {
+		/* changing a key is completely blocking */
+		if (ev.type == SDL_KEYDOWN) {
+			MenuItemKey *keyItem = dynamic_cast<MenuItemKey*>
+			(curMenu->getCurItem());
+			switch (ev.key.keysym.scancode) {
+			case SDL_SCANCODE_ESCAPE:
+				keyItem->cancelChange();
+				changingKey = false;
+				break;
+			default:
+				keyItem->setKey(ev.key.keysym.scancode);
+				changingKey = false;
+				break;
+			}
+		}
+	} else if (ev.type == SDL_KEYDOWN &&
+			ev.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
 		Menu *lm = curMenu->getLastMenu();
 		if (lm)
 			curMenu = lm;
@@ -508,6 +520,9 @@ void View::handleMenuEvent(SDL_Event &ev)
 				curMenu = backItem->getLastMenu();
 			} else
 				_logerr("Oops, last menu not found...\n");
+			break;
+		case AID_CHANGEKEY:
+			changingKey = true;
 			break;
 		case AID_SOUND:
 			mixer.setMute(!vconfig.sound);

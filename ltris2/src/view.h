@@ -36,6 +36,7 @@ class View {
 	vector<string> themeNames;
 	Label lblCredits1, lblCredits2;
 	bool noGameYet;
+	bool changingKey;
 
 	/* game */
 	VCharts charts; // wrapper for libgame/chart.c
