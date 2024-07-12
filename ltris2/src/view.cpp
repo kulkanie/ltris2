@@ -570,9 +570,9 @@ void View::createShrapnells(VBowl &vb)
  * in a cleared line for VBowl @vb. */
 void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &g)
 {
-	/* set ratio to convert libgame 640x480 geometry to screen resolution */
-	double xratio = renderer.getWidth() / 640.0;
-	double yratio = renderer.getHeight() / 480.0;
+	/* set ratio to convert libgame 640x480 geometry to screen resolution
+	 * we need height ratio only since that defines size of the bowl */
+	double ratio = renderer.getHeight() / 480.0;
 
 	v.set(0,0);
 	g.set(0,0);
@@ -584,18 +584,18 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 		 * each tile takes 300 ms to get to the side (px/ms = i*20/300)
 		 */
 		if (xid < vb.w/2)
-			v.setX(xratio * (-xid) * 0.0667);
+			v.setX(ratio * (-xid) * 0.0667);
 		else
-			v.setX(xratio * (vb.w - 1 - xid) * 0.0667);
+			v.setX(ratio * (vb.w - 1 - xid) * 0.0667);
 		break;
 	case 1:
 	case 2:
 		/* move tiles up with in/decreasing speed and some gravity */
 		if (type == 1)
-			v.setY(yratio * (vb.w - xid) * -0.015);
+			v.setY(ratio * (vb.w - xid) * -0.015);
 		else
-			v.setY(yratio * (xid + 1) * -0.015);
-		g.set(0,yratio*0.0002);
+			v.setY(ratio * (xid + 1) * -0.015);
+		g.set(0,ratio*0.0002);
 		break;
 	case 3:
 	case 4:
@@ -604,34 +604,34 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 		 */
 		if (type == 3) {
 			if (xid < vb.w/2)
-				v.setY(yratio * (xid+1) * -0.016);
+				v.setY(ratio * (xid+1) * -0.016);
 			else
-				v.setY(yratio * (vb.w-xid) * -0.016);
+				v.setY(ratio * (vb.w-xid) * -0.016);
 		} else {
 			if (xid < vb.w/2)
-				v.setY(yratio * (vb.w/2 - xid) *-0.016);
+				v.setY(ratio * (vb.w/2 - xid) *-0.016);
 			else
-				v.setY(yratio * (xid + 1 - vb.w/2) *-0.016);
+				v.setY(ratio * (xid + 1 - vb.w/2) *-0.016);
 		}
-		g.set(0,yratio*0.0002);
+		g.set(0,ratio*0.0002);
 		break;
 	case 5:
 		/* opposite of 1: move tiles horizontally to the middle */
 		if (xid < vb.w/2)
-			v.setX(xratio * (vb.w/2 - xid - 1) * 0.0667);
+			v.setX(ratio * (vb.w/2 - xid - 1) * 0.0667);
 		else
-			v.setX(xratio * (xid - vb.w/2) * -0.0667);
+			v.setX(ratio * (xid - vb.w/2) * -0.0667);
 		break;
 	case 6:
 	case 7:
 		if (type == 6) {
-			v.setX(xratio * (xid+1) * -0.02);
-			v.setY(yratio * (vb.w-xid) * -0.01);
+			v.setX(ratio * (xid+1) * -0.02);
+			v.setY(ratio * (vb.w-xid) * -0.01);
 		} else {
-			v.setX(xratio * (vb.w-xid) * 0.02);
-			v.setY(yratio * (xid+1) * -0.01);
+			v.setX(ratio * (vb.w-xid) * 0.02);
+			v.setY(ratio * (xid+1) * -0.01);
 		}
-		g.set(0,yratio*0.0002);
+		g.set(0,ratio*0.0002);
 		break;
 	default:
 		/* no animation, just fade out */
