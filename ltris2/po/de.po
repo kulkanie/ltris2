@@ -1,0 +1,206 @@
+# German translations for ltris2 package
+# German translation for ltris2.
+# Copyright (C) 2024 Free Software Foundation, Inc.
+# This file is distributed under the same license as the ltris2 package.
+# Michael <kulkanie@gmx.net>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ltris2 2.0\n"
+"Report-Msgid-Bugs-To: kulkanie@gmx.net\n"
+"POT-Creation-Date: 2024-07-13 11:09+0200\n"
+"PO-Revision-Date: 2024-07-13 11:10+0200\n"
+"Last-Translator: Michael <kulkanie@gmx.net>\n"
+"Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/menu.h:166
+msgid "Back"
+msgstr ""
+
+#: src/menu.h:282
+msgid "Off"
+msgstr ""
+
+#: src/menu.h:282
+msgid "On"
+msgstr ""
+
+#: src/menu.h:330
+msgid "Enter Name"
+msgstr ""
+
+#: src/view.cpp:299
+msgid "50 FPS"
+msgstr ""
+
+#: src/view.cpp:299
+msgid "60 FPS"
+msgstr ""
+
+#: src/view.cpp:299
+msgid "200 FPS"
+msgstr ""
+
+#: src/view.cpp:302
+msgid "Demo"
+msgstr ""
+
+#: src/view.cpp:302
+msgid "Normal"
+msgstr ""
+
+#: src/view.cpp:302
+msgid "Figures"
+msgstr ""
+
+#: src/view.cpp:302
+msgid "Vs CPU"
+msgstr ""
+
+#: src/view.cpp:320
+msgid "Start Game"
+msgstr ""
+
+#: src/view.cpp:322
+msgid "Game Type"
+msgstr ""
+
+#: src/view.cpp:323
+msgid "You can play alone or against a human or CPU opponent."
+msgstr ""
+
+#: src/view.cpp:325
+msgid "Game Style"
+msgstr ""
+
+#: src/view.cpp:326
+msgid "Modern or classic."
+msgstr ""
+
+#: src/view.cpp:327
+msgid "Classic"
+msgstr ""
+
+#: src/view.cpp:327
+msgid "Modern"
+msgstr ""
+
+#: src/view.cpp:328
+msgid "Starting Level"
+msgstr ""
+
+#: src/view.cpp:331
+msgid "Player Name"
+msgstr ""
+
+#: src/view.cpp:344
+msgid "Theme"
+msgstr ""
+
+#: src/view.cpp:345
+msgid "Select theme. (not applied yet)"
+msgstr ""
+
+#: src/view.cpp:347
+msgid "Mode"
+msgstr ""
+
+#: src/view.cpp:348
+msgid "Select mode. (not applied yet)"
+msgstr ""
+
+#: src/view.cpp:349
+msgid "Window"
+msgstr ""
+
+#: src/view.cpp:349
+msgid "Fullscreen"
+msgstr ""
+
+#: src/view.cpp:350
+msgid "Apply Theme&Mode"
+msgstr ""
+
+#: src/view.cpp:351
+msgid "Apply the above settings."
+msgstr ""
+
+#: src/view.cpp:353
+msgid "Animations"
+msgstr ""
+
+#: src/view.cpp:355
+msgid "Frame Limit"
+msgstr ""
+
+#: src/view.cpp:361
+msgid "Sound"
+msgstr ""
+
+#: src/view.cpp:362
+msgid "Volume"
+msgstr ""
+
+#: src/view.cpp:365
+msgid "Buffer Size"
+msgstr ""
+
+#: src/view.cpp:366
+msgid ""
+"Reduce buffer size if you experience sound delays. Might have more CPU "
+"impact though. (not applied yet)"
+msgstr ""
+
+#: src/view.cpp:368
+msgid "Channels"
+msgstr ""
+
+#: src/view.cpp:369
+msgid ""
+"More channels gives more sound variety, less channels less (not applied yet)"
+msgstr ""
+
+#: src/view.cpp:371
+msgid "Apply Size&Channels"
+msgstr ""
+
+#: src/view.cpp:372
+msgid "Apply above settings"
+msgstr ""
+
+#: src/view.cpp:380
+msgid "New Game"
+msgstr ""
+
+#: src/view.cpp:382
+msgid "Graphics"
+msgstr ""
+
+#: src/view.cpp:383
+msgid "Audio"
+msgstr ""
+
+#: src/view.cpp:387
+msgid "Quit"
+msgstr ""
+
+#: src/vgame.cpp:222
+msgid "Next"
+msgstr ""
+
+#: src/vgame.cpp:223
+msgid "Hold"
+msgstr ""
+
+#: src/vbowl.cpp:162
+msgid "Level"
+msgstr ""
+
+#: src/vbowl.cpp:166
+msgid "Lines"
+msgstr ""

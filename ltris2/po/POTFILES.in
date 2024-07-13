@@ -1,2 +1,6 @@
 # List of source files which contain translatable strings.
 src/main.cpp
+src/menu.h
+src/view.cpp
+src/vgame.cpp
+src/vbowl.cpp

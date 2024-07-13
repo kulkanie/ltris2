@@ -16,8 +16,13 @@ config.h
 config.log
 config.status
 configure
+
 po/POTFILES
 po/remove-potcdate.sed
+po/de.gmo
+po/stamp-po
+po/ltris2.pot
+
 src/.deps/
 src/ltris2
 src/ltris2.conf
