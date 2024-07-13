@@ -72,6 +72,30 @@ void VBowl::render() {
 	if (bowl == NULL)
 		return;
 
+	/* player info */
+	int ix = rScore.x + rScore.w/2, iy = rScore.y + tileSize/2;
+	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontSmall.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontBold.write(ix,iy,bowl->name);
+	iy += tileSize;
+	theme.vbaFontNormal.write(ix,iy,to_string((int)counter_get_approach(bowl->score)));
+	iy += 1.5*tileSize;
+	theme.vbaFontBold.write(ix,iy,_("Level"));
+	iy += tileSize;
+	theme.vbaFontNormal.write(ix,iy,to_string(bowl->level));
+	iy += 1.5*tileSize;
+	theme.vbaFontBold.write(ix,iy,_("Lines"));
+	iy += tileSize;
+	theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
+
+	if (bowl->paused) {
+		/* show message */
+		theme.vbaFontNormal.write(rBowl.x + rBowl.w/2,
+					rBowl.y + rBowl.h/2, _("Paused"));
+		return;
+	}
+
 	/* bowl content */
 	for (int j = 0; j < h; j++)
 		for (int i = 0; i < w; i++) {
@@ -150,23 +174,6 @@ void VBowl::render() {
 	if (bowl->hold_active && bowl->hold_id != -1)
 		theme.vbaPreviews[bowl->hold_id].copy(rHold.x,rHold.y+1.5*tileSize);
 
-	/* player info */
-	int ix = rScore.x + rScore.w/2, iy = rScore.y + tileSize/2;
-	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-	theme.vbaFontSmall.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-	theme.vbaFontBold.write(ix,iy,bowl->name);
-	iy += tileSize;
-	theme.vbaFontNormal.write(ix,iy,to_string((int)counter_get_approach(bowl->score)));
-	iy += 1.5*tileSize;
-	theme.vbaFontBold.write(ix,iy,_("Level"));
-	iy += tileSize;
-	theme.vbaFontNormal.write(ix,iy,to_string(bowl->level));
-	iy += 1.5*tileSize;
-	theme.vbaFontBold.write(ix,iy,_("Lines"));
-	iy += tileSize;
-	theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
-
 }
 
 /** Update bowl according to passed time @ms in milliseconds and input. */
@@ -174,5 +181,6 @@ void VBowl::update(uint ms, BowlControls &bc) {
 	if (bowl == NULL)
 		return;
 
-	bowl_update(bowl, ms, &bc, 0);
+	if (!bowl->paused)
+		bowl_update(bowl, ms, &bc, 0);
 }

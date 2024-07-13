@@ -296,3 +296,29 @@ void VGame::update(uint ms, SDL_Event &ev) {
 			vbowls[i].update(ms,bc);
 		}
 }
+
+/** Pause or unpause game. */
+void VGame::pause(bool p)
+{
+	if (state == VGS_NOINIT || state == VGS_GAMEOVER)
+		return;
+
+	for (auto &vb : vbowls) {
+		if (!vb.initialized())
+			continue;
+		if (p)
+			vb.bowl->paused = 1;
+		else
+			vb.bowl->paused = 0;
+	}
+
+	if (p)
+		state = VGS_PAUSED;
+	else
+		state = VGS_RUNNING;
+}
+
+bool VGame::isDemo()
+{
+	return (config.gametype == GAME_DEMO);
+}

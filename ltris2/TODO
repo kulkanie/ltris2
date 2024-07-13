@@ -1,9 +1,9 @@
 VGame & VBowl
-- pause game on menu, gameover (except demo)
+- gameover (except demo)
+- add and translate all menu options
 - finalize single player layout
   * charts/stats
-- frames/backgrounds
-- add and translate all menu options
+- backgrounds
 - multiplayer layout
 - undim (?)
 - font colors in theme

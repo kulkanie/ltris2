@@ -135,9 +135,11 @@ void View::run()
 						vconfig.showfps = !vconfig.showfps;
 					break;
 				case SDL_SCANCODE_ESCAPE:
-					/* XXX kills ESC to cancel edit */
-					if (!noGameYet)
+					if (!noGameYet) {
 						menuActive = !menuActive;
+						if (!game.isDemo())
+							game.pause(menuActive);
+					}
 					break;
 				default:
 					break;

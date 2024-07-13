@@ -41,6 +41,8 @@ public:
 	void init(bool demo);
 	void render();
 	void update(uint ms, SDL_Event &ev);
+	void pause(bool p=true);
+	bool isDemo();
 };
 
 #endif
