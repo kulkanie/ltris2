@@ -89,10 +89,15 @@ void VBowl::render() {
 	iy += tileSize;
 	theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
 
+	/* show nothing more on pause or game over */
 	if (bowl->paused) {
-		/* show message */
 		theme.vbaFontNormal.write(rBowl.x + rBowl.w/2,
 					rBowl.y + rBowl.h/2, _("Paused"));
+		return;
+	}
+	if (bowl->game_over) {
+		theme.vbaFontNormal.write(rBowl.x + rBowl.w/2,
+					rBowl.y + rBowl.h/2, _("Game Over"));
 		return;
 	}
 

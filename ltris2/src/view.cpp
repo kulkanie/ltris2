@@ -562,6 +562,9 @@ void View::createShrapnells(VBowl &vb)
 	Bowl *b = vb.bowl;
 	int anim = rand() % 8;
 
+	if (b == NULL)
+		return;
+
 	if (!vconfig.animations)
 		anim = -1; /* only fading */
 
@@ -580,7 +583,6 @@ void View::createShrapnells(VBowl &vb)
 			pos.setX(pos.getX() + vb.tileSize);
 		}
 	}
-
 }
 
 /** Set velocity @v and gravity @g for animation @type and index @xid (0-9)

@@ -22,3 +22,4 @@ Changes to make ltris1 core work:
 - turn ALIGN_X_LEFT,... into macros and only set if not yet defined 
 - disable bowl_quick_game() in bowls.h
 - add ViewBowlInfo and set sounds and cleared lines
+- set full bowl content to vbi on game over

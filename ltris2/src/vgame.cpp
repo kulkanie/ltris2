@@ -306,6 +306,9 @@ void VGame::pause(bool p)
 	for (auto &vb : vbowls) {
 		if (!vb.initialized())
 			continue;
+		if (vb.bowl->game_over)
+			continue;
+
 		if (p)
 			vb.bowl->paused = 1;
 		else

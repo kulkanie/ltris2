@@ -535,10 +535,22 @@ void bowl_finish_game( Bowl *bowl, int winner )
     char *msg = (winner)?_("Winner!"):_("Game Over");
     int mx = bowl->sx + bowl->sw / 2, my = bowl->sy + bowl->sh / 2;
 
+    if (bowl->game_over)
+	    return;
+
     bowl->game_over = 1;
     bowl->hide_block = 1;
     bowl_final_animation( bowl );
     bowl->use_figures = 0;
+
+    /* transfer complete bowl to vbi for final animation */
+    bowl->vbi.cleared_line_count = bowl->h;
+    for (int j = 0; j < bowl->h; j++) {
+        bowl->vbi.cleared_line_y[j] = j;
+        for (int i = 0; i < bowl->w; i++) {
+            bowl->vbi.cleared_lines[j][i] = bowl->contents[i][j];
+        }
+    }
 
     /* add stats for multiplayer game and move message down */
     if (config.gametype >= GAME_VS_HUMAN && config.gametype <= GAME_VS_CPU_CPU) {

@@ -33,8 +33,8 @@ typedef struct {
 	int snd_shift;
 
 	int cleared_line_count;
-	int cleared_line_y[4];
-	int cleared_lines[4][BOWL_WIDTH];
+	int cleared_line_y[BOWL_HEIGHT];
+	int cleared_lines[BOWL_HEIGHT][BOWL_WIDTH];
 } ViewBowlInfo;
 
 /* control states */
