@@ -128,7 +128,7 @@ void View::run()
 		if (SDL_PollEvent(&ev)) {
 			if (ev.type == SDL_QUIT)
 				quitReceived = true;
-			else if (!changingKey && ev.type == SDL_KEYUP) {
+			else if (!changingKey && ev.type == SDL_KEYDOWN) {
 				switch (ev.key.keysym.scancode) {
 				case SDL_SCANCODE_F:
 					if (!menuActive)
