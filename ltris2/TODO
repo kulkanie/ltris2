@@ -1,6 +1,4 @@
-von lbrhd:
-- mainwindow mit flickerschutz
-- pot datei generieren?
+- generate pot file
 
 VGame & VBowl
 - pause game on menu, gameover (except demo)

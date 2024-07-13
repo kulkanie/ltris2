@@ -28,7 +28,6 @@ int Renderer::create(const string &title, int _w, int _h, int _full)
 	/* destroy old contexts if any */
 	destroy();
 
-	int flags = 0;
 	if (_w <= 0 || _h <= 0) { /* no width or height, use desktop setting */
 		SDL_DisplayMode mode;
 		SDL_GetCurrentDisplayMode(0,&mode);
@@ -36,13 +35,18 @@ int Renderer::create(const string &title, int _w, int _h, int _full)
 		_h = mode.h;
 		_full = 1;
 	}
-	if (_full)
-		flags = SDL_WINDOW_FULLSCREEN;
 	w = _w;
 	h = _h;
+
 	_loginfo("Creating main window with %dx%d, fullscreen=%d\n",w,h,_full);
-	if( (mw = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-				SDL_WINDOWPOS_CENTERED, w, h, flags)) == NULL) {
+ 	if (_full) {
+		mw = SDL_CreateWindow(title.c_str(), 0,0,0,0,0);
+		if (mw)
+			SDL_SetWindowFullscreen(mw, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	} else
+		mw = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
+					SDL_WINDOWPOS_CENTERED, w, h, 0);
+	if(mw == NULL) {
 		_logsdlerr();
 		ret = 0;
 	}
@@ -53,7 +57,7 @@ int Renderer::create(const string &title, int _w, int _h, int _full)
 	mrc = mr;
 
 	/* back to black */
-	SDL_SetRenderDrawColor(mr,0,0,0,0);
+	SDL_SetRenderDrawColor(mr,0,0,0,SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(mr);
 
 	return ret;
