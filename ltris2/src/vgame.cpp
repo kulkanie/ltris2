@@ -106,19 +106,60 @@ void VGame::setBowlControlsCPU(BowlControls &bc, VBowl &bowl)
 		bc.lrot = CS_DOWN;
 }
 
-/* Render a frame around @inner region to background. */
-void VGame::addFrame(SDL_Rect inner, int border)
+/* Render a frame around @inner region to background. @padding is distance
+ * between inner content and border. @border is width of frame. */
+void VGame::addFrame(SDL_Rect inner, int padding, int border)
 {
-	SDL_Rect outer = {inner.x - border, inner.y - border,
-				inner.w + border*2, inner.h + border*2};
-	SDL_Color clr = {0,0,0,192};
+	int x1, y1, x2, y2;
+	SDL_Rect outer = {inner.x - padding, inner.y - padding,
+				inner.w + padding*2, inner.h + padding*2};
+	SDL_Color clr = {0,0,0,128};
 
-	/* since we don't want to set alpha but apply it to texture to darken it
+
+	/* since we don't want to set alpha but apply color to texture with it
 	 * we need to enable blending */
 	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_BLEND);
-	background.fill(outer,clr);
-	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 
+	background.fill(outer,clr);
+
+	SDL_SetRenderTarget(mrc, background.get());
+	for (int i = 0; i < border; i++) {
+		/* alpha ranges from outer 96 to inner 192 */
+		SDL_SetRenderDrawColor(mrc,0,0,0,96+96*(border-i-1)/(border-1));
+
+		/* top line */
+		x1 = outer.x - 1 - i;
+		y1 = outer.y - 1 - i;
+		x2 = outer.x + outer.w + i;
+		y2 = outer.y - 1 - i;
+		SDL_RenderDrawLine(mrc, x1, y1, x2, y2);
+
+		/* left line */
+		x1 = outer.x - 1 - i;
+		y1 = outer.y - i; /* no -1 to prevent overlap with top line */
+		x2 = outer.x - 1 - i;
+		y2 = outer.y + outer.h + i;
+		SDL_RenderDrawLine(mrc, x1, y1, x2, y2);
+
+		SDL_SetRenderDrawColor(mrc,255,255,255,64+96*(border-i-1)/(border-1));
+
+		/* right line */
+		x1 = outer.x + outer.w + i;
+		y1 = outer.y - 1 - i;
+		x2 = outer.x + outer.w + i;
+		y2 = outer.y + outer.h + i - 1; /* -1 to prevent overlap with bottom line */
+		SDL_RenderDrawLine(mrc, x1, y1, x2, y2);
+
+		/* bottom line */
+		x1 = outer.x - 1 - i;
+		y1 = outer.y + outer.h + i;
+		x2 = outer.x + outer.w + i;
+		y2 = outer.y + outer.h + i;
+		SDL_RenderDrawLine(mrc, x1, y1, x2, y2);
+	}
+	SDL_SetRenderTarget(mrc, NULL);
+
+	SDL_SetRenderDrawBlendMode(mrc, SDL_BLENDMODE_NONE);
 }
 
 
@@ -211,10 +252,10 @@ void VGame::init(bool demo) {
 	theme.vbaLoadFonts(tsize);
 
 	/* and frames to background XXX for all game types, too! */
-	addFrame(rBowl);
-	addFrame(rPreview,tsize/4);
-	addFrame(rHold,tsize/4);
-	addFrame(rScore,tsize/4);
+	addFrame(rBowl,0,tsize/3);
+	addFrame(rPreview,tsize/4,tsize/3);
+	addFrame(rHold,tsize/4,tsize/3);
+	addFrame(rScore,tsize/4,tsize/3);
 
 	/* write fixed text */
 	renderer.setTarget(background);
