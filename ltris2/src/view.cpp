@@ -574,12 +574,19 @@ void View::createShrapnells(VBowl &vb)
 		Vector vel, grav;
 
 		for (int i = 0; i < vb.w; i++) {
+			if (b->vbi.cleared_lines[j][i] == -1) {
+				/* game over animation may have gaps */
+				pos.setX(pos.getX() + vb.tileSize);
+				continue;
+			}
+
 			setShrapnellVelGrav(vb, anim, i, vel, grav);
 
 			Shrapnell *s = new Shrapnell(
 				theme.vbaTiles[b->vbi.cleared_lines[j][i]],
 				pos, vel, grav, 192, 0.64);
 			sprites.push_back(unique_ptr<Sprite>(s));
+
 			pos.setX(pos.getX() + vb.tileSize);
 		}
 	}
@@ -595,6 +602,13 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 
 	v.set(0,0);
 	g.set(0,0);
+
+	/* if game over, this is the final animation. use special setting. */
+	if (vb.bowl->game_over) {
+		v.setY(ratio * -0.05);
+		g.setY(ratio * 0.0002);
+		return;
+	}
 
 	switch (type) {
 	case 0:
