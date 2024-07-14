@@ -297,11 +297,14 @@ bool View::showInfo(const vector<string> &text, int type)
 
 void View::createMenus()
 {
-	Menu *mNewGame, *mAudio, *mGraphics;
+	Menu *mNewGame, *mAudio, *mGraphics, *mMultiplayer;
+	Menu *mControls, *mPlayer1, *mPlayer2;
 	const char *fpsLimitNames[] = {_("50 FPS"),_("60 FPS"),_("200 FPS") } ;
 	const int bufSizes[] = { 256, 512, 1024, 2048, 4096 };
 	const int channelNums[] = { 8, 16, 32 };
-	const char *typeNames[] = {_("Demo"), _("Normal"), _("Figures"), _("Vs CPU")};
+	const char *typeNames[GT_NUM] = {_("Normal"), _("Figures"), _("Vs Human"),
+			_("Vs CPU"), _("Vs 2xCPU")};
+	const char *cpuStyleNames[] = {_("Defensive"), _("Normal"), _("Aggressive")};
 
 	/* XXX too lazy to set fonts for each and every item...
 	 * use static pointers instead */
@@ -314,35 +317,56 @@ void View::createMenus()
 
 	rootMenu = unique_ptr<Menu>(new Menu(theme)); /* .. or is assigning a new object doing it? */
 	mNewGame = new Menu(theme);
-	//mOptions = new Menu(theme);
+	mMultiplayer = new Menu(theme);
+	mControls = new Menu(theme);
+	mPlayer1 = new Menu(theme);
+	mPlayer2 = new Menu(theme);
 	mAudio = new Menu(theme);
 	mGraphics = new Menu(theme);
 	graphicsMenu = mGraphics; /* needed to return after mode/theme change */
 
+	/* new game */
 	mNewGame->add(new MenuItem(_("Start Game"),"",AID_STARTGAME));
+	mNewGame->add(new MenuItemSep());
+	mNewGame->add(new MenuItemEdit(_("Player 1"),vconfig.playernames[0]));
+	mNewGame->add(new MenuItemEdit(_("Player 2"),vconfig.playernames[1]));
+	mNewGame->add(new MenuItemEdit(_("Player 3"),vconfig.playernames[2]));
 	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemList(_("Game Type"),
 			_("You can play alone or against a human or CPU opponent."),
-			AID_NONE,vconfig.gametype,typeNames,4));
+			AID_NONE,vconfig.gametype,typeNames,GT_NUM));
 	mNewGame->add(new MenuItemList(_("Game Style"),
 			_("Modern or classic."),
 			AID_NONE,vconfig.modern,_("Classic"),_("Modern")));
 	mNewGame->add(new MenuItemRange(_("Starting Level"),
 			"Starting level between 0 and 19.",
 			AID_NONE,vconfig.startinglevel,0,19,1));
-	mNewGame->add(new MenuItemEdit(_("Player Name"),vconfig.playernames[0]));
-
 	mNewGame->add(new MenuItemSep());
-/*	mNewGame->add(new MenuItemRange(_("Players"),
-			_("Number and names of players. Players alternate whenever a life is lost."),
-			AID_NONE,config.playercount,1,MAX_PLAYERS,1));
-	mNewGame->add(new MenuItemEdit(_("1st"),config.playernames[0]));
-	mNewGame->add(new MenuItemEdit(_("2nd"),config.playernames[1]));
-	mNewGame->add(new MenuItemEdit(_("3rd"),config.playernames[2]));
-	mNewGame->add(new MenuItemEdit(_("4th"),config.playernames[3]));
-	mNewGame->add(new MenuItemSep());*/
+	mNewGame->add(new MenuItemSub(_("Multiplayer Options"),mMultiplayer));
+	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemBack(rootMenu.get()));
 
+	/* multiplayer */
+	mMultiplayer->add(new MenuItemRange(_("Holes"),
+			_("Number of holes in sent lines."),
+			AID_NONE,vconfig.mp_numholes,1,9,1));
+	mMultiplayer->add(new MenuItemSwitch(_("Random Holes"),
+			_("If multiple lines are sent, each line has different holes."),
+			AID_NONE, vconfig.mp_randholes));
+	mMultiplayer->add(new MenuItemSep());
+	mMultiplayer->add(new MenuItemList(_("CPU Style"),
+			_("Defensive: Clears any lines.#Normal: Mostly goes for two lines.#Aggressive: Tries to complete three or four lines (on modern only).##In general: The more aggressive the style, the more priority is put on completing multiple lines at the expense of a balanced bowl contents."),
+			AID_NONE,vconfig.cpu_style,cpuStyleNames,3));
+	mMultiplayer->add(new MenuItemRange(_("CPU Drop Delay"),
+			"Delay (in ms) before CPU starts dropping a piece.",
+			AID_NONE,vconfig.cpu_delay,0,2000,100));
+	mMultiplayer->add(new MenuItemRange(_("CPU Speed"),
+			"Multiplier in percent for dropping speed of pieces, e.g.,#50% = half the regular speed#100% = regular speed#200% = doubled speed#Can range between 50% and 400%.",
+			AID_NONE,vconfig.cpu_sfactor,50,400,25));
+	mMultiplayer->add(new MenuItemSep());
+	mMultiplayer->add(new MenuItemBack(mNewGame));
+
+	/* graphics */
 	mGraphics->add(new MenuItemList(_("Theme"),
 			_("Select theme. (not applied yet)"),
 			AID_NONE,vconfig.themeid,themeNames));

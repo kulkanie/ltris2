@@ -20,7 +20,14 @@ enum {
 
 	FPS_50 = 0,
 	FPS_60,
-	FPS_200
+	FPS_200,
+
+	GT_NORMAL = 0,
+	GT_FIGURES,
+	GT_VSHUMAN,
+	GT_VSCPU,
+	GT_VSCPU2,
+	GT_NUM
 };
 
 typedef struct {
@@ -45,6 +52,27 @@ public:
 	string playernames[MAXNUMPLAYERS];
 	PControls controls[MAXNUMPLAYERS];
 
+	/* gamepad */
+	int gp_enabled;
+	int gp_lrot;
+	int gp_rrot;
+	int gp_hdrop;
+	int gp_pause;
+	int gp_hold;
+
+	/* multiplayer */
+	int mp_numholes;
+	int mp_randholes;
+
+	/* cpu */
+	int cpu_style; /* cpu style */
+	int cpu_delay; /* delay in ms before CPU soft drops */
+	int cpu_sfactor; /* multiplier for dropping speed in 0.25 steps */
+
+	/* controls */
+	int as_delay;
+	int as_speed;
+
 	/* sound */
 	int sound;
 	int volume; /* 1 - 8 */
@@ -56,6 +84,7 @@ public:
 	int fullscreen; /* 0 = window, 1 = fullscreen */
 	int fps; /* frames per second: 0 - no limit, 1 - 100, 2 - 200 */
 	int showfps;
+	int smoothdrop;
 
 	/* various */
 	int themeid; /* 0 == default theme */

@@ -48,6 +48,27 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 	controls[2].hdrop = SDL_SCANCODE_KP_8;
 	controls[2].hold = SDL_SCANCODE_KP_7;
 
+	/* gamepad */
+	gp_enabled = 1;
+	gp_lrot = 3;
+	gp_rrot = 0;
+	gp_hdrop = 2;
+	gp_pause = 9;
+	gp_hold = 1;
+
+	/* multiplayer */
+	mp_numholes = 1;
+	mp_randholes = 0;
+
+	/* cpu */
+	cpu_style = 1; /* normal */
+	cpu_delay = 700;
+	cpu_sfactor = 100;
+
+	/* controls */
+	as_delay = 170;
+	as_speed = 50;
+
 	/* sounds */
 	sound = 1;
 	volume = 50;
@@ -59,6 +80,7 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 	fullscreen = 1;
 	fps = 1;
 	showfps = 0;
+	smoothdrop = 1;
 
 	/* various */
 	themeid = 0;
@@ -82,14 +104,35 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 	fp.get("player0", playernames[0]);
 	fp.get("player1", playernames[1]);
 	fp.get("player2", playernames[2]);
+
+	fp.get("gp_enabled",gp_enabled);
+	fp.get("gp_lrot",gp_lrot);
+	fp.get("gp_rrot",gp_rrot);
+	fp.get("gp_hdrop",gp_hdrop);
+	fp.get("gp_pause",gp_pause);
+	fp.get("gp_hold",gp_hold);
+
+	fp.get("mp_numholes",mp_numholes);
+	fp.get("mp_randholes",mp_randholes);
+
+	fp.get("cpu_style",cpu_style);
+	fp.get("cpu_delay",cpu_delay);
+	fp.get("cpu_sfactor",cpu_sfactor);
+
+	fp.get("as_delay",as_delay);
+	fp.get("as_speed",as_speed);
+
 	fp.get("sound", sound);
 	fp.get("volume", volume);
 	fp.get("audiobuffersize", audiobuffersize);
 	fp.get("channels", channels);
+
 	fp.get("animations", animations);
 	fp.get("fullscreen", fullscreen);
 	fp.get("fps", fps);
 	fp.get("showfps", showfps);
+	fp.get("smoothdrop", smoothdrop);
+
 	fp.get("themeid", themeid);
 	fp.get("themecount", themecount);
 }
@@ -108,14 +151,35 @@ void VConfig::save()
 	ofs << "player0=" << playernames[0] << "\n";
 	ofs << "player1=" << playernames[1] << "\n";
 	ofs << "player2=" << playernames[2] << "\n";
+
+	ofs << "gp_enabled=" << gp_enabled << "\n";
+	ofs << "gp_lrot=" << gp_lrot << "\n";
+	ofs << "gp_rrot=" << gp_rrot << "\n";
+	ofs << "gp_hdrop=" << gp_hdrop << "\n";
+	ofs << "gp_pause=" << gp_pause << "\n";
+	ofs << "gp_hold=" << gp_hold << "\n";
+
+	ofs << "mp_numholes=" << mp_numholes << "\n";
+	ofs << "mp_randholes=" << mp_randholes << "\n";
+
+	ofs << "cpu_style=" << cpu_style << "\n";
+	ofs << "cpu_delay=" << cpu_delay << "\n";
+	ofs << "cpu_sfactor=" << cpu_sfactor << "\n";
+
+	ofs << "as_delay=" << as_delay << "\n";
+	ofs << "as_speed=" << as_speed << "\n";
+
 	ofs << "sound=" << sound << "\n";
 	ofs << "volume=" << volume << "\n";
 	ofs << "audiobuffersize=" << audiobuffersize << "\n";
 	ofs << "channels=" << channels << "\n";
+
 	ofs << "animations=" << animations << "\n";
 	ofs << "fullscreen=" << fullscreen << "\n";
 	ofs << "fps=" << fps << "\n";
 	ofs << "showfps=" << showfps << "\n";
+	ofs << "smoothdrop=" << smoothdrop << "\n";
+
 	ofs << "themeid=" << themeid << "\n";
 	ofs << "themecount=" << themecount << "\n";
 

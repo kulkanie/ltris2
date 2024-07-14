@@ -184,14 +184,30 @@ void VGame::init(bool demo) {
 	/* set default config values */
 	config_reset();
 
-	/* transfer existing vconfig settings */
+	/* set game type, vconfig.gametype is different and must be translated! */
 	if (demo)
 		config.gametype = GAME_DEMO;
-	else
-		config.gametype = vconfig.gametype;
+	else switch (vconfig.gametype) {
+		case GT_NORMAL: config.gametype = GAME_CLASSIC; break;
+		case GT_FIGURES: config.gametype = GAME_FIGURES; break;
+		case GT_VSHUMAN: config.gametype = GAME_VS_HUMAN; break;
+		case GT_VSCPU: config.gametype = GAME_VS_CPU; break;
+		case GT_VSCPU2: config.gametype = GAME_VS_CPU_CPU; break;
+		default: config.gametype = GAME_DEMO; break; /* shouldn't happen */
+	}
+
+	/* transfer existing vconfig settings */
 	config.modern = vconfig.modern;
 	config.starting_level = vconfig.startinglevel;
 	snprintf(config.player1.name,32,"%s",vconfig.playernames[0].c_str());
+	config.holes = vconfig.mp_numholes;
+	config.rand_holes = vconfig.mp_randholes;
+	config.cpu_style = vconfig.cpu_style;
+	config.cpu_delay = vconfig.cpu_delay;
+	config.cpu_sfactor = vconfig.cpu_sfactor;
+	config.as_delay = vconfig.as_delay;
+	config.as_speed = vconfig.as_speed;
+	/* TODO transfer keyboard/gamepad controls */
 
 	_loginfo("Initializing game (type=%d)\n",config.gametype);
 
