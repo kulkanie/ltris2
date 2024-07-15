@@ -163,7 +163,7 @@ void VGame::addFrame(SDL_Rect inner, int padding, int border)
 }
 
 
-VGame::VGame() : state(VGS_NOINIT) {
+VGame::VGame() : type(-1), state(VGS_NOINIT) {
 	init_sdl(0); // needed to create dummy sdl.screen
 	tetris_create(); // loads figures and init block masks
 }
@@ -185,15 +185,19 @@ void VGame::init(bool demo) {
 	config_reset();
 
 	/* set game type, vconfig.gametype is different and must be translated! */
-	if (demo)
+	if (demo) {
+		type = -1;
 		config.gametype = GAME_DEMO;
-	else switch (vconfig.gametype) {
+	} else {
+		switch (vconfig.gametype) {
 		case GT_NORMAL: config.gametype = GAME_CLASSIC; break;
 		case GT_FIGURES: config.gametype = GAME_FIGURES; break;
 		case GT_VSHUMAN: config.gametype = GAME_VS_HUMAN; break;
 		case GT_VSCPU: config.gametype = GAME_VS_CPU; break;
 		case GT_VSCPU2: config.gametype = GAME_VS_CPU_CPU; break;
 		default: config.gametype = GAME_DEMO; break; /* shouldn't happen */
+		}
+		type = vconfig.gametype;
 	}
 
 	/* transfer existing vconfig settings */
@@ -207,7 +211,6 @@ void VGame::init(bool demo) {
 	config.cpu_sfactor = vconfig.cpu_sfactor;
 	config.as_delay = vconfig.as_delay;
 	config.as_speed = vconfig.as_speed;
-	/* TODO transfer keyboard/gamepad controls */
 
 	_loginfo("Initializing game (type=%d)\n",config.gametype);
 
@@ -235,9 +238,16 @@ void VGame::init(bool demo) {
 		rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
 				5*tsize,4*tsize,4*tsize};
 	rHold = {rPreview.x, 14*tsize, 4*tsize, 4*tsize};
-	rScore = {(panelw - 6*tsize)/2, 3*tsize, 6*tsize, 7*tsize};
+	rScore = {(panelw - 6*tsize)/2, 2*tsize, 6*tsize, 7*tsize};
 
 	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
+
+	/* hiscores is game level not bowl level */
+	if (!demo) {
+		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
+		addFrame(rHiscores,tsize/4,tsize/3);
+	} else
+		rHiscores = {0,0,0,0};
 
 	/* XXX store bowl assets in theme as using a VBowlAssets class in
 	 * bowl does not work. textures get created but are not displayed
@@ -296,12 +306,13 @@ void VGame::render() {
 			b.render();
 }
 
-/** Update bowls according to passed time @ms in milliseconds and input. */
-void VGame::update(uint ms, SDL_Event &ev) {
+/** Update bowls according to passed time @ms in milliseconds and input.
+ * Return 1 if state switches to game over, 0 otherwise. */
+bool VGame::update(uint ms, SDL_Event &ev) {
 	BowlControls bc;
 
-	if (state == VGS_NOINIT)
-		return;
+	if (state != VGS_RUNNING)
+		return false;
 
 	for (int i = 0; i < MAXNUMPLAYERS; i++)
 		if (vbowls[i].initialized()) {
@@ -311,6 +322,18 @@ void VGame::update(uint ms, SDL_Event &ev) {
 				setBowlControls(bc, ev, vconfig.controls[i]);
 			vbowls[i].update(ms,bc);
 		}
+
+	/* check for game over */
+	bool gameover = true;
+	for (int i = 0; i < MAXNUMPLAYERS; i++)
+		if (vbowls[i].initialized())
+			if (!vbowls[i].bowl->game_over)
+				gameover = false;
+	if (gameover) {
+		state = VGS_GAMEOVER;
+		return true;
+	}
+	return false;
 }
 
 /** Pause or unpause game. */

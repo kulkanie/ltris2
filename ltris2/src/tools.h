@@ -104,6 +104,7 @@ public:
 bool dirExists(const string& name);
 bool makeDir(const string &name);
 bool fileExists(const string& name);
+bool fileIsWriteable(const string& name);
 
 /** Count continuously from start to end. Delay is in milliseconds for
  * changing counter by one (e.g. delay=1000 means it takes one second per step. */

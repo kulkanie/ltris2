@@ -28,9 +28,11 @@ class View;
 class VGame {
 	friend View;
 
-	VBowl vbowls[MAXNUMPLAYERS];
+	int type; /* -1 for demo or vconfig game type */
 	int state;
+	VBowl vbowls[MAXNUMPLAYERS];
 	Texture background;
+	SDL_Rect rHiscores; /* screen region for hiscore chart */
 
 	void setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl);
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
@@ -40,7 +42,7 @@ public:
 	~VGame();
 	void init(bool demo);
 	void render();
-	void update(uint ms, SDL_Event &ev);
+	bool update(uint ms, SDL_Event &ev);
 	void pause(bool p=true);
 	bool isDemo();
 };

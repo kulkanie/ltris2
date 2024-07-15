@@ -19,7 +19,7 @@
 #include "sprite.h"
 #include "menu.h"
 #include "vconfig.h"
-#include "vcharts.h"
+#include "hiscores.h"
 #include "../libgame/bowl.h"
 #include "vbowl.h"
 #include "vgame.h"
@@ -41,6 +41,13 @@ View::View() : menuActive(true),
 	mixer.open(vconfig.channels, vconfig.audiobuffersize);
 	mixer.setVolume(vconfig.volume);
 	mixer.setMute(!vconfig.sound);
+
+	/* set game type names - needed for menu and hiscores */
+	gameTypeNames.push_back(_("Normal"));
+	gameTypeNames.push_back(_("Figures"));
+	gameTypeNames.push_back(_("Vs Human"));
+	gameTypeNames.push_back(_("Vs CPU"));
+	gameTypeNames.push_back(_("Vs 2xCPU"));
 
 	/* load theme names */
 	readDir(string(DATADIR)+"/themes", RD_FOLDERS, themeNames);
@@ -94,15 +101,12 @@ void View::init(string t, uint f)
 void View::run()
 {
 	SDL_Event ev;
-	int flags;
 	Ticks ticks;
 	Ticks renderTicks;
 	int maxDelay, delay = 0;
 	Uint32 ms;
 	vector<string> text;
 	string str;
-	int button = 0; /* pressed button */
-	int buttonX = 0, buttonY = 0; /* position if pressed */
 
 	state = VS_IDLE;
 	sprites.clear();
@@ -124,7 +128,6 @@ void View::run()
 		renderTicks.reset();
 
 		/* handle events */
-		button = 0; /* none pressed */
 		if (SDL_PollEvent(&ev)) {
 			if (ev.type == SDL_QUIT)
 				quitReceived = true;
@@ -147,11 +150,6 @@ void View::run()
 			}
 			if (menuActive)
 				handleMenuEvent(ev);
-			else if (ev.type == SDL_MOUSEBUTTONUP && state == VS_IDLE) {
-				button = ev.button.button;
-				buttonX = ev.button.x;
-				buttonY = ev.button.y;
-			}
 		}
 
 		/* get passed time */
@@ -162,7 +160,16 @@ void View::run()
 			curMenu->update(ms);
 
 		/* update game */
-		game.update(ms,ev);
+		if (game.update(ms,ev)) {
+			/* game over, save hiscores, only for single player */
+			if (game.type == GT_NORMAL || game.type == GT_FIGURES) {
+				HiscoreChart *hc = hiscores.get(gameTypeNames[game.type]);
+				hc->add(game.vbowls[0].bowl->name,
+						game.vbowls[0].bowl->level,
+						game.vbowls[0].bowl->score.value);
+			}
+			hiscores.save();
+		}
 
 		/* update sprites */
 		for (auto it = begin(sprites); it != end(sprites); ++it) {
@@ -221,6 +228,11 @@ void View::render()
 {
 	/* game */
 	game.render();
+
+	/* render hiscores if region is set (single player only) */
+	if (game.rHiscores.w > 0)
+		renderHiscore(game.rHiscores.x, game.rHiscores.y,
+				game.rHiscores.w, game.rHiscores.h, false);
 
 	/* sprites */
 	for (auto& s : sprites)
@@ -302,8 +314,6 @@ void View::createMenus()
 	const char *fpsLimitNames[] = {_("50 FPS"),_("60 FPS"),_("200 FPS") } ;
 	const int bufSizes[] = { 256, 512, 1024, 2048, 4096 };
 	const int channelNums[] = { 8, 16, 32 };
-	const char *typeNames[GT_NUM] = {_("Normal"), _("Figures"), _("Vs Human"),
-			_("Vs CPU"), _("Vs 2xCPU")};
 	const char *cpuStyleNames[] = {_("Defensive"), _("Normal"), _("Aggressive")};
 
 	/* longer hints */
@@ -348,7 +358,7 @@ void View::createMenus()
 	mNewGame->add(new MenuItemEdit(_("Player 3"),vconfig.playernames[2]));
 	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemList(_("Game Mode"),
-			hGameMode,AID_NONE,vconfig.gametype,typeNames,GT_NUM));
+			hGameMode,AID_NONE,vconfig.gametype,gameTypeNames));
 	mNewGame->add(new MenuItemList(_("Game Style"),
 			hGameStyle,AID_NONE,vconfig.modern,_("Classic"),_("Modern")));
 	mNewGame->add(new MenuItemRange(_("Starting Level"),
@@ -734,4 +744,57 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 		/* no animation, just fade out */
 		break;
 	}
+}
+
+/* Render hiscore at given screen region. */
+void View::renderHiscore(int x, int y, int w, int h, bool detailed)
+{
+	Font &fTitle = theme.vbaFontSmall;
+	Font &fEntry = theme.vbaFontSmall;
+
+	if (game.type != GT_NORMAL && game.type != GT_FIGURES)
+		return;
+
+	HiscoreChart *chart = hiscores.get(gameTypeNames[game.type]);
+
+	int cy = y + (h - fTitle.getLineHeight() - 10*fEntry.getLineHeight())/2;
+
+	string str = _("Hiscores");
+	if (detailed)
+		str = chart->getName() + " " + str;
+	fTitle.setAlign(ALIGN_X_CENTER | ALIGN_Y_TOP);
+	fTitle.write(x + w/2, cy, str);
+	cy += fTitle.getLineHeight();
+	if (detailed)
+		cy += fTitle.getLineHeight();
+
+	int cx_num = x;
+	int cx_name = x + fEntry.getCharWidth('0')*3;
+	int cx_level = x + fEntry.getCharWidth('W')*10;
+	int cx_score = x + w;
+
+	for (int i = 0; i < CHARTSIZE; i++) {
+		const ChartEntry *entry = chart->get(i);
+		if (entry->newEntry)
+			fEntry.setColor(theme.fontColorHighlight);
+		else
+			fEntry.setColor(theme.fontColorNormal);
+
+		fEntry.setAlign(ALIGN_X_LEFT | ALIGN_Y_TOP);
+
+		/* number */
+		str = to_string(i+1) + ".";
+		fEntry.write(cx_num, cy, str);
+		/* name */
+		fEntry.write(cx_name, cy, entry->name);
+		/* level */
+		if (detailed)
+			fEntry.write(cx_level, cy, "L" + to_string(entry->level+1));
+		/* score */
+		fEntry.setAlign(ALIGN_X_RIGHT | ALIGN_Y_TOP);
+		fEntry.write(cx_score, cy, to_string(entry->score));
+
+		cy += fEntry.getLineHeight();
+	}
+	fEntry.setColor(theme.fontColorNormal);
 }

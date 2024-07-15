@@ -43,15 +43,17 @@ void Theme::load(string name, Renderer &r)
 	readDir(path, RD_FILES, fnames);
 
 	/* menu */
+	fontColorNormal = {255,255,255,255};
+	fontColorHighlight = {255,220,0,255};
 	menuX = r.rx2sx(0.16);
 	menuY = r.ry2sy(0.63);
 	menuItemWidth = r.rx2sx(0.22);
 	menuItemHeight = r.ry2sy(0.037);
 	menuBackground.load(testRc(path,"menu.png"));
 	fMenuNormal.load(testRc(path,"f_normal.otf"), r.ry2sy(0.033));
-	fMenuNormal.setColor({255,255,255,255});
+	fMenuNormal.setColor(fontColorNormal);
 	fMenuFocus.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
-	fMenuFocus.setColor({255,220,0,255});
+	fMenuFocus.setColor(fontColorHighlight);
 	fTooltip.load(testRc(path,"f_normal.otf"), r.ry2sy(0.028));
 	sMenuClick.load(testRc(path,"s_menuclick.wav"));
 	sMenuMotion.load(testRc(path,"s_menumotion.wav"));
@@ -89,5 +91,5 @@ void Theme::vbaLoadFonts(uint tsize)
 {
 	vbaFontNormal.load(testRc(path,"f_normal.otf"), 9*tsize/10);
 	vbaFontBold.load(testRc(path,"f_bold.otf"), 9*tsize/10);
-	vbaFontSmall.load(testRc(path,"f_normal.otf"), 7*tsize/10);
+	vbaFontSmall.load(testRc(path,"f_normal.otf"), 6*tsize/10);
 }

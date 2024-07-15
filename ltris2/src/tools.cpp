@@ -152,6 +152,14 @@ bool fileExists(const string& name) {
 	return false;
 }
 
+bool fileIsWriteable(const string& name) {
+	if (FILE *file = fopen(name.c_str(), "r+")) {
+		fclose(file);
+		return true;
+	}
+	return false;
+}
+
 /** Not the nicest but hands down most efficient way to do it. */
 void strprintf(string& str, const char *fmt, ... )
 {

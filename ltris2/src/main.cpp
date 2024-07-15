@@ -21,7 +21,7 @@ using namespace std;
 #include "sprite.h"
 #include "menu.h"
 #include "vconfig.h"
-#include "vcharts.h"
+#include "hiscores.h"
 #include "../libgame/bowl.h"
 #include "vbowl.h"
 #include "vgame.h"

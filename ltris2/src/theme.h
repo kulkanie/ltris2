@@ -40,6 +40,8 @@ class Theme {
 	uint menuX, menuY, menuItemWidth, menuItemHeight;
 	Font fMenuNormal, fMenuFocus, fTooltip;
 	Sound sMenuClick, sMenuMotion;
+	SDL_Color fontColorNormal;
+	SDL_Color fontColorHighlight;
 
 	Texture wallpapers[MAXWALLPAPERS];
 	uint numWallpapers;

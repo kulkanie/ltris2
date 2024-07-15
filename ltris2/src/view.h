@@ -39,7 +39,8 @@ class View {
 	bool changingKey;
 
 	/* game */
-	VCharts charts; // wrapper for libgame/chart.c
+	vector<string> gameTypeNames;
+	Hiscores hiscores;
 	VGame game;  // wrapper for libgame/tetris.c
 	int state;
 	bool quitReceived;
@@ -60,6 +61,7 @@ class View {
 	void handleMenuEvent(SDL_Event &ev);
 	void createShrapnells(VBowl &vb);
 	void setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &g);
+	void renderHiscore(int x, int y, int w, int h, bool detailed);
 public:
 	View();
 	void init(string t, uint f);
