@@ -230,7 +230,7 @@ void View::render()
 	game.render();
 
 	/* render hiscores if region is set (single player only) */
-	if (game.rHiscores.w > 0)
+	if (game.rHiscores.w > 0 && game.state != VGS_PAUSED)
 		renderHiscore(game.rHiscores.x, game.rHiscores.y,
 				game.rHiscores.w, game.rHiscores.h, false);
 
