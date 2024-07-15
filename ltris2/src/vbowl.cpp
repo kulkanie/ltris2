@@ -118,7 +118,7 @@ void VBowl::render() {
 		 * for smooth drop as we need to check here again if we use y or
 		 * cur_y as sy from libgame is 480p and thus too coarse. */
 		x = rBowl.x + bowl->block.x*tileSize;
-		if (bowl->ldelay_cur > 0 || config.block_by_block ||
+		if (bowl->ldelay_cur > 0 || !vconfig.smoothdrop ||
 				!bowl_piece_can_drop(bowl))
 			y = rBowl.y + bowl->block.y*tileSize;
 		else

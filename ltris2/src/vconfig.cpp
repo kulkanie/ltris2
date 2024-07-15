@@ -21,9 +21,9 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 	gametype = 1; /* demo, classic, ... */
 	modern = 1; /* ghost piece, 3-piece-preview, ... */
 	startinglevel = 0;
-	playernames[0] = "Michael";
-	playernames[1] = "Mr. X";
-	playernames[2] = "Mr. Y";
+	playernames[0] = "Mike";
+	playernames[1] = "Tom";
+	playernames[2] = "Chris";
 
 	/* controls */
 	controls[0].lshift = SDL_SCANCODE_LEFT;
@@ -101,9 +101,17 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 	fp.get("gametype", gametype);
 	fp.get("modern", modern);
 	fp.get("startinglevel", startinglevel);
-	fp.get("player0", playernames[0]);
-	fp.get("player1", playernames[1]);
-	fp.get("player2", playernames[2]);
+
+	for (int i = 0; i < 3; i++) {
+		fp.get("player"+to_string(i+1)+".name",playernames[i]);
+		fp.get("player"+to_string(i+1)+".lshift",controls[i].lshift);
+		fp.get("player"+to_string(i+1)+".rshift",controls[i].rshift);
+		fp.get("player"+to_string(i+1)+".lrot",controls[i].lrot);
+		fp.get("player"+to_string(i+1)+".rrot",controls[i].rrot);
+		fp.get("player"+to_string(i+1)+".sdrop",controls[i].sdrop);
+		fp.get("player"+to_string(i+1)+".hdrop",controls[i].hdrop);
+		fp.get("player"+to_string(i+1)+".hold",controls[i].hold);
+	}
 
 	fp.get("gp_enabled",gp_enabled);
 	fp.get("gp_lrot",gp_lrot);
@@ -148,9 +156,19 @@ void VConfig::save()
 	ofs << "gametype=" << gametype << "\n";
 	ofs << "modern=" << modern << "\n";
 	ofs << "startinglevel=" << startinglevel << "\n";
-	ofs << "player0=" << playernames[0] << "\n";
-	ofs << "player1=" << playernames[1] << "\n";
-	ofs << "player2=" << playernames[2] << "\n";
+
+	for (int i = 0; i < 3; i++) {
+		ofs << "player" << to_string(i+1) << " {\n";
+		ofs << "  name=" << playernames[i] << "\n";
+		ofs << "  lshift=" << controls[i].lshift << "\n";
+		ofs << "  rshift=" << controls[i].rshift << "\n";
+		ofs << "  lrot=" << controls[i].lrot << "\n";
+		ofs << "  rrot=" << controls[i].rrot << "\n";
+		ofs << "  sdrop=" << controls[i].sdrop << "\n";
+		ofs << "  hdrop=" << controls[i].hdrop << "\n";
+		ofs << "  hold=" << controls[i].hold << "\n";
+		ofs << "}\n";
+	}
 
 	ofs << "gp_enabled=" << gp_enabled << "\n";
 	ofs << "gp_lrot=" << gp_lrot << "\n";

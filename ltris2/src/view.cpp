@@ -298,13 +298,28 @@ bool View::showInfo(const vector<string> &text, int type)
 void View::createMenus()
 {
 	Menu *mNewGame, *mAudio, *mGraphics, *mMultiplayer;
-	Menu *mControls, *mPlayer1, *mPlayer2;
+	Menu *mControls, *mPlayer[2];
 	const char *fpsLimitNames[] = {_("50 FPS"),_("60 FPS"),_("200 FPS") } ;
 	const int bufSizes[] = { 256, 512, 1024, 2048, 4096 };
 	const int channelNums[] = { 8, 16, 32 };
 	const char *typeNames[GT_NUM] = {_("Normal"), _("Figures"), _("Vs Human"),
 			_("Vs CPU"), _("Vs 2xCPU")};
 	const char *cpuStyleNames[] = {_("Defensive"), _("Normal"), _("Aggressive")};
+
+	/* longer hints */
+	string hStartingLevel = _("This is your starting level which will be ignored " \
+			"for mode 'Figures' (always starts at level 0).\n\n"\
+			"If not 0 the first level transition will require more lines "\
+			"to be cleared (the higher the starting level the more lines).");
+	string hGameMode = _("Normal: Starts with an empty bowl. Try to survive as long as possible.\n\n"\
+			"Figures: Clear a different figure each level. Later on single tiles (level 7+) or lines (level 13+) will appear.\n\n"\
+			"Vs Human/CPU/2xCPU: Play against another human or one or two CPU opponents.");
+	string hGameStyle = _("Modern: Enables all that stuff that makes tetris "\
+			"casual like ghost piece, wall-kicks, hold, "\
+			"DAS charge during ARE (allows to shift next piece faster), "\
+			"piece bag (at max 12 pieces before getting same piece again).\n\n"\
+			"Classic: Doesn't give you any of this, making the game "\
+			"really hard but also very interesting.");
 
 	/* XXX too lazy to set fonts for each and every item...
 	 * use static pointers instead */
@@ -319,8 +334,8 @@ void View::createMenus()
 	mNewGame = new Menu(theme);
 	mMultiplayer = new Menu(theme);
 	mControls = new Menu(theme);
-	mPlayer1 = new Menu(theme);
-	mPlayer2 = new Menu(theme);
+	mPlayer[0] = new Menu(theme);
+	mPlayer[1] = new Menu(theme);
 	mAudio = new Menu(theme);
 	mGraphics = new Menu(theme);
 	graphicsMenu = mGraphics; /* needed to return after mode/theme change */
@@ -332,15 +347,12 @@ void View::createMenus()
 	mNewGame->add(new MenuItemEdit(_("Player 2"),vconfig.playernames[1]));
 	mNewGame->add(new MenuItemEdit(_("Player 3"),vconfig.playernames[2]));
 	mNewGame->add(new MenuItemSep());
-	mNewGame->add(new MenuItemList(_("Game Type"),
-			_("You can play alone or against a human or CPU opponent."),
-			AID_NONE,vconfig.gametype,typeNames,GT_NUM));
+	mNewGame->add(new MenuItemList(_("Game Mode"),
+			hGameMode,AID_NONE,vconfig.gametype,typeNames,GT_NUM));
 	mNewGame->add(new MenuItemList(_("Game Style"),
-			_("Modern or classic."),
-			AID_NONE,vconfig.modern,_("Classic"),_("Modern")));
+			hGameStyle,AID_NONE,vconfig.modern,_("Classic"),_("Modern")));
 	mNewGame->add(new MenuItemRange(_("Starting Level"),
-			"Starting level between 0 and 19.",
-			AID_NONE,vconfig.startinglevel,0,19,1));
+			hStartingLevel,AID_NONE,vconfig.startinglevel,0,19,1));
 	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemSub(_("Multiplayer Options"),mMultiplayer));
 	mNewGame->add(new MenuItemSep());
@@ -355,16 +367,47 @@ void View::createMenus()
 			AID_NONE, vconfig.mp_randholes));
 	mMultiplayer->add(new MenuItemSep());
 	mMultiplayer->add(new MenuItemList(_("CPU Style"),
-			_("Defensive: Clears any lines.#Normal: Mostly goes for two lines.#Aggressive: Tries to complete three or four lines (on modern only).##In general: The more aggressive the style, the more priority is put on completing multiple lines at the expense of a balanced bowl contents."),
+			_("Defensive: Clears any lines.\nNormal: Mostly goes for two lines.\nAggressive: Tries to complete three or four lines (on modern only).\n\nIn general: The more aggressive the style, the more priority is put on completing multiple lines at the expense of a balanced bowl contents."),
 			AID_NONE,vconfig.cpu_style,cpuStyleNames,3));
 	mMultiplayer->add(new MenuItemRange(_("CPU Drop Delay"),
 			"Delay (in ms) before CPU starts dropping a piece.",
 			AID_NONE,vconfig.cpu_delay,0,2000,100));
 	mMultiplayer->add(new MenuItemRange(_("CPU Speed"),
-			"Multiplier in percent for dropping speed of pieces, e.g.,#50% = half the regular speed#100% = regular speed#200% = doubled speed#Can range between 50% and 400%.",
+			"Multiplier in percent for dropping speed of pieces, e.g.,\n50% = half the regular speed\n100% = regular speed\n200% = doubled speed\nCan range between 50% and 400%.",
 			AID_NONE,vconfig.cpu_sfactor,50,400,25));
 	mMultiplayer->add(new MenuItemSep());
 	mMultiplayer->add(new MenuItemBack(mNewGame));
+
+	/* controls */
+	mControls->add(new MenuItemSub(_("Player 1"),mPlayer[0]));
+	mControls->add(new MenuItemSub(_("Player 2"),mPlayer[1]));
+	mControls->add(new MenuItemSep());
+	mControls->add(new MenuItemRange(_("Auto-Shift Delay"),
+			_("Initial delay before auto shift starts. Classic DAS has 270."),
+			AID_NONE,vconfig.as_delay,20,300,10));
+	mControls->add(new MenuItemRange(_("Auto-Shift Speed"),
+			_("Delay between auto shift steps. Classic DAS has 100."),
+			AID_NONE,vconfig.as_speed,20,200,10));
+	mControls->add(new MenuItemSep());
+	mControls->add(new MenuItemBack(rootMenu.get()));
+
+	/* player keys */
+	for (int i = 0; i < 2; i++) {
+		string hCtrls = _("Left/Right: horizontal movement\n" \
+				"Rotate Left/Right: piece rotation\n" \
+				"Down: fast soft drop\n" \
+				"Drop: INSTANT hard drop\n" \
+				"Hold: put current piece to hold (only for modern style)");
+		mPlayer[i]->add(new MenuItemKey(_("Left"),hCtrls, vconfig.controls[i].lshift));
+		mPlayer[i]->add(new MenuItemKey(_("Right"),hCtrls, vconfig.controls[i].rshift));
+		mPlayer[i]->add(new MenuItemKey(_("Rotate Left"),hCtrls, vconfig.controls[i].lrot));
+		mPlayer[i]->add(new MenuItemKey(_("Rotate Right"),hCtrls, vconfig.controls[i].rrot));
+		mPlayer[i]->add(new MenuItemKey(_("Down"),hCtrls, vconfig.controls[i].sdrop));
+		mPlayer[i]->add(new MenuItemKey(_("Drop"),hCtrls, vconfig.controls[i].hdrop));
+		mPlayer[i]->add(new MenuItemKey(_("Hold"),hCtrls, vconfig.controls[i].hold));
+		mPlayer[i]->add(new MenuItemSep());
+		mPlayer[i]->add(new MenuItemBack(mControls));
+	}
 
 	/* graphics */
 	mGraphics->add(new MenuItemList(_("Theme"),
@@ -378,6 +421,9 @@ void View::createMenus()
 	mGraphics->add(new MenuItemSep());
 	mGraphics->add(new MenuItemSwitch(_("Animations"),"",AID_NONE,
 			vconfig.animations));
+	mGraphics->add(new MenuItemSwitch(_("Smooth Drop"),
+			_("Drop piece tile-by-tile or smoothly. Does not affect drop speed."),
+			AID_NONE,vconfig.smoothdrop));
 	mGraphics->add(new MenuItemList(_("Frame Limit"),
 			"Maximum number of frames per second.",
 			AID_NONE,vconfig.fps,fpsLimitNames,3));
@@ -386,7 +432,6 @@ void View::createMenus()
 
 	mAudio->add(new MenuItemSwitch(_("Sound"),"",AID_SOUND,vconfig.sound));
 	mAudio->add(new MenuItemRange(_("Volume"),"",AID_VOLUME,vconfig.volume,0,100,10));
-	//mAudio->add(new MenuItemSwitch(_("Speech"),"",AID_NONE,config.speech));
 	mAudio->add(new MenuItemSep());
 	mAudio->add(new MenuItemIntList(_("Buffer Size"),
 			_("Reduce buffer size if you experience sound delays. Might have more CPU impact though. (not applied yet)"),
@@ -399,16 +444,11 @@ void View::createMenus()
 	mAudio->add(new MenuItemSep());
 	mAudio->add(new MenuItemBack(rootMenu.get()));
 
-	/* mOptions->add(new MenuItemSub(_("Graphics"),mGraphics));
-	mOptions->add(new MenuItemSub(_("Audio"),mAudio));
-	mOptions->add(new MenuItemBack(rootMenu.get())); */
-
 	rootMenu->add(new MenuItemSub(_("New Game"), mNewGame));
 	rootMenu->add(new MenuItemSep());
+	rootMenu->add(new MenuItemSub(_("Controls"), mControls));
 	rootMenu->add(new MenuItemSub(_("Graphics"),mGraphics));
 	rootMenu->add(new MenuItemSub(_("Audio"),mAudio));
-	//rootMenu->add(new MenuItemSub(_("Settings"), mOptions));
-	//rootMenu->add(new MenuItem(_("Help"), "", AID_HELP));
 	rootMenu->add(new MenuItemSep());
 	rootMenu->add(new MenuItem(_("Quit"), "", AID_QUIT));
 
