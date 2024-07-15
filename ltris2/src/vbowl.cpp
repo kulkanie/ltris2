@@ -87,17 +87,19 @@ void VBowl::render() {
 	iy += 1.5*tileSize;
 	theme.vbaFontBold.write(ix,iy,_("Lines"));
 	iy += tileSize;
-	theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
+	if (bowl->firstlevelup_lines > 10 && bowl->lines < bowl->firstlevelup_lines)
+		theme.vbaFontNormal.write(ix,iy,
+				to_string(bowl->lines)+"/"+to_string(bowl->firstlevelup_lines));
+	else
+		theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
 
-	/* show nothing more on pause or game over */
-	if (bowl->paused) {
-		theme.vbaFontNormal.write(rBowl.x + rBowl.w/2,
-					rBowl.y + rBowl.h/2, _("Paused"));
-		return;
-	}
-	if (bowl->game_over) {
-		theme.vbaFontNormal.write(rBowl.x + rBowl.w/2,
-					rBowl.y + rBowl.h/2, _("Game Over"));
+	/* show nothing more but stats for pause or game over */
+	if (bowl->paused || bowl->game_over) {
+		string msg = bowl->game_over?_("Game Over"):_("Paused");
+
+		theme.vbaFontBold.write(rBowl.x + rBowl.w/2,
+					rBowl.y + 3*tileSize, msg);
+		renderStats();
 		return;
 	}
 
@@ -188,4 +190,63 @@ void VBowl::update(uint ms, BowlControls &bc) {
 
 	if (!bowl->paused)
 		bowl_update(bowl, ms, &bc, 0);
+}
+
+
+/** Render a single line into bowl at y-pos @y and update @y to next line.
+ * Caption @cap is left and value @val right aligned. If @val < 0 show a minus
+ * for "not set". */
+void VBowl::renderStatLine(const string &cap, int val, int &y)
+{
+	int cx = rBowl.x + tileSize;
+	int vx = rBowl.x + rBowl.w - tileSize;
+
+	theme.vbaFontSmall.setAlign(ALIGN_X_LEFT | ALIGN_Y_TOP);
+	theme.vbaFontSmall.write(cx, y, cap+":");
+	theme.vbaFontSmall.setAlign(ALIGN_X_RIGHT | ALIGN_Y_TOP);
+	if (val < 0)
+		theme.vbaFontSmall.write(vx, y, "-");
+	else
+		theme.vbaFontSmall.write(vx, y, to_string(val));
+
+	y += theme.vbaFontSmall.getLineHeight();
+}
+
+/** Render stats inside of bowl. */
+void VBowl::renderStats()
+{
+	BowlStats *s = &bowl->stats;
+	int sy = rBowl.y + 6*tileSize;
+
+	renderStatLine(_("Pieces Placed"), s->pieces, sy);
+	renderStatLine(_("I-Pieces"), s->i_pieces, sy);
+	sy += theme.vbaFontSmall.getLineHeight();
+
+	renderStatLine(_("Singles"), s->cleared[0], sy);
+	renderStatLine(_("Doubles"), s->cleared[1], sy);
+	renderStatLine(_("Triples"), s->cleared[2], sy);
+	renderStatLine(_("Tetrises"), s->cleared[3], sy);
+	sy += theme.vbaFontSmall.getLineHeight();
+
+	/* tetris rate: how many line where cleared by tetris */
+	int trate = s->cleared[0] + s->cleared[1]*2 +
+			s->cleared[2]*3 + s->cleared[3]*4;
+	if (trate > 0)
+		trate = ((1000 * (s->cleared[3]*4) / trate) + 5) / 10; /* round up */
+	else
+		trate = -1;
+	renderStatLine(_("Tetris Rate"), trate, sy);
+	sy += theme.vbaFontSmall.getLineHeight();
+
+
+	renderStatLine(_("Droughts"), s->droughts, sy);
+	renderStatLine(_("Drought Max"), s->max_drought, sy);
+	int avg = -1;
+	if (s->droughts > 0)
+		avg = ((10 * s->sum_droughts / s->droughts) + 5) / 10;
+	renderStatLine(_("Drought Avg"), avg, sy);
+	int dc = -1;
+	if (bowl->drought > 12)
+		dc = bowl->drought;
+	renderStatLine(_("Current Drought"), dc, sy);
 }

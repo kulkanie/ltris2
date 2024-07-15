@@ -30,6 +30,9 @@ class VBowl {
 	SDL_Rect rPreview; /* screen region for preview pieces */
 	SDL_Rect rHold; /* screen region for hold piece */
 	SDL_Rect rScore; /* screen region for score */
+
+	void renderStatLine(const string &cap, int val, int &y);
+	void renderStats();
 public:
 	VBowl();
 	void init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp, SDL_Rect &rh, SDL_Rect &rs);

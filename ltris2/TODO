@@ -1,12 +1,17 @@
 VGame & VBowl
-- add and translate all menu options
 - finalize single player layout
-  * charts/stats
+  * charts
 - backgrounds
 - menu overlay and logo
 - multiplayer layout
-- undim (?)
+
+minor stuff:
+- title element for submenus
+- changing video mode should not restart game
 - font colors in theme
+- undim
+- multiple tile sets that rotate each level
+- no tooltip if using keys in menu
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h
