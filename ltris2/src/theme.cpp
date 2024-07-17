@@ -91,5 +91,6 @@ void Theme::vbaLoadFonts(uint tsize)
 {
 	vbaFontNormal.load(testRc(path,"f_normal.otf"), 9*tsize/10);
 	vbaFontBold.load(testRc(path,"f_bold.otf"), 9*tsize/10);
-	vbaFontSmall.load(testRc(path,"f_normal.otf"), 6*tsize/10);
+	vbaFontSmall.load(testRc(path,"f_normal.otf"), 7*tsize/10);
+	vbaFontTiny.load(testRc(path,"f_normal.otf"), 6*tsize/10);
 }

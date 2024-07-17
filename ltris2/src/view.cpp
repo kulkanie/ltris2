@@ -230,7 +230,7 @@ void View::render()
 	game.render();
 
 	/* render hiscores if region is set (single player only) */
-	if (game.rHiscores.w > 0 && game.state != VGS_PAUSED)
+	if (game.rHiscores.w > 0 && !menuActive)
 		renderHiscore(game.rHiscores.x, game.rHiscores.y,
 				game.rHiscores.w, game.rHiscores.h, false);
 
@@ -749,8 +749,8 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 /* Render hiscore at given screen region. */
 void View::renderHiscore(int x, int y, int w, int h, bool detailed)
 {
-	Font &fTitle = theme.vbaFontSmall;
-	Font &fEntry = theme.vbaFontSmall;
+	Font &fTitle = theme.vbaFontTiny;
+	Font &fEntry = theme.vbaFontTiny;
 
 	if (game.type != GT_NORMAL && game.type != GT_FIGURES)
 		return;

@@ -56,7 +56,7 @@ class Theme {
 	 * so we just do it this way. */
 	Texture vbaTiles[NUMTILES];
 	Texture vbaPreviews[NUMPIECES];
-	Font vbaFontNormal, vbaFontBold, vbaFontSmall;
+	Font vbaFontNormal, vbaFontBold, vbaFontSmall, vbaFontTiny;
 
 	const string &testRc(const string &path, const string &fname) {
 		static string fpath; /* not thread safe */

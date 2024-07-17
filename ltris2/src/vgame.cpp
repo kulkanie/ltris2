@@ -178,8 +178,12 @@ VGame::~VGame() {
 /** Initialize a new game. If @demo is true, start a demo game. */
 void VGame::init(bool demo) {
 	/* clear game context */
-	if (state != VGS_NOINIT)
+	if (state != VGS_NOINIT) {
 		tetris_clear();
+		for (auto &vb : vbowls)
+			vb.bowl = NULL;
+		state = VGS_NOINIT;
+	}
 
 	/* set default config values */
 	config_reset();
@@ -242,8 +246,21 @@ void VGame::init(bool demo) {
 
 	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
 
-	/* hiscores is game level not bowl level */
-	if (!demo) {
+	/* and frames to background XXX for all game types, too! */
+	addFrame(rBowl,0,tsize/3);
+	addFrame(rPreview,tsize/4,tsize/3);
+	addFrame(rHold,tsize/4,tsize/3);
+	addFrame(rScore,tsize/4,tsize/3);
+
+	/* write fixed text */
+	renderer.setTarget(background);
+	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	theme.vbaFontNormal.write(rPreview.x+rPreview.w/2,rPreview.y+tsize/2,_("Next"));
+	theme.vbaFontNormal.write(rHold.x+rHold.w/2,rHold.y+tsize/2,_("Hold"));
+	renderer.clearTarget();
+
+	/* hiscores is game level not bowl level (single player only) */
+	if (type == GT_NORMAL || type == GT_FIGURES) {
 		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
 		addFrame(rHiscores,tsize/4,tsize/3);
 	} else
@@ -276,19 +293,6 @@ void VGame::init(bool demo) {
 	}
 	renderer.clearTarget();
 	theme.vbaLoadFonts(tsize);
-
-	/* and frames to background XXX for all game types, too! */
-	addFrame(rBowl,0,tsize/3);
-	addFrame(rPreview,tsize/4,tsize/3);
-	addFrame(rHold,tsize/4,tsize/3);
-	addFrame(rScore,tsize/4,tsize/3);
-
-	/* write fixed text */
-	renderer.setTarget(background);
-	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-	theme.vbaFontNormal.write(rPreview.x+rPreview.w/2,rPreview.y+tsize/2,_("Next"));
-	theme.vbaFontNormal.write(rHold.x+rHold.w/2,rHold.y+tsize/2,_("Hold"));
-	renderer.clearTarget();
 
 	state = VGS_RUNNING;
 }

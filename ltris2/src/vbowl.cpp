@@ -216,7 +216,7 @@ void VBowl::renderStatLine(const string &cap, int val, int &y)
 void VBowl::renderStats()
 {
 	BowlStats *s = &bowl->stats;
-	int sy = rBowl.y + 6*tileSize;
+	int sy = rBowl.y + 5.5*tileSize;
 
 	renderStatLine(_("Pieces Placed"), s->pieces, sy);
 	renderStatLine(_("I-Pieces"), s->i_pieces, sy);
