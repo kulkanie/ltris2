@@ -228,43 +228,70 @@ void VGame::init(bool demo) {
 	theme.wallpapers[0].copy();
 	renderer.clearTarget();
 
-	/* XXX initialize single vbowl wrapper, TODO do all game types */
-	int tsize = (int)(renderer.getHeight() / 42)*2; /* get nearest even value to 22 tiles */
-	int x = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
-	int panelw = x; /* space left/right of bowl */
-	SDL_Rect rBowl, rPreview, rHold, rScore;
+	/* initialize vbowls depending on game type */
+	int tsize; /* actual tile size for bowls */
+	int padding, border; /* for frames: may vary on game type */
+	SDL_Rect rBowl[3], rPreview[3], rHold[3], rScore[3];
+	rHiscores = {0,0,0,0};
+	if (demo || type == GT_NORMAL || type == GT_FIGURES) {
+		/* initialize a single bowl with big score info and hiscores */
+		tsize = (int)(renderer.getHeight() / 42)*2; /* get nearest even value to 21 tiles */
+		int bx = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
+		int panelw = bx; /* space left/right of bowl */
 
-	rBowl = {x, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
-	if (config.modern)
-		rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
-				2*tsize,4*tsize,10*tsize};
-	else
-		rPreview = {rBowl.x + rBowl.w + (panelw - 4*tsize)/2,
-				5*tsize,4*tsize,4*tsize};
-	rHold = {rPreview.x, 14*tsize, 4*tsize, 4*tsize};
-	rScore = {(panelw - 6*tsize)/2, 2*tsize, 6*tsize, 7*tsize};
+		rBowl[0] = {bx, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		if (config.modern)
+			rPreview[0] = {rBowl[0].x + rBowl[0].w + (panelw - 4*tsize)/2,
+					2*tsize,4*tsize,10*tsize};
+		else
+			rPreview[0] = {rBowl[0].x + rBowl[0].w + (panelw - 4*tsize)/2,
+					5*tsize,4*tsize,4*tsize};
+		rHold[0] = {rPreview[0].x, 14*tsize, 4*tsize, 4*tsize};
+		rScore[0] = {(panelw - 6*tsize)/2, 2*tsize, 6*tsize, 7*tsize};
 
-	vbowls[0].init(0,tsize,rBowl,rPreview,rHold,rScore);
+		vbowls[0].init(0,tsize,rBowl[0],rPreview[0],rHold[0],rScore[0]);
 
-	/* and frames to background XXX for all game types, too! */
-	addFrame(rBowl,0,tsize/3);
-	addFrame(rPreview,tsize/4,tsize/3);
-	addFrame(rHold,tsize/4,tsize/3);
-	addFrame(rScore,tsize/4,tsize/3);
+		padding = tsize/4;
+		border = tsize/3;
 
-	/* write fixed text */
-	renderer.setTarget(background);
-	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-	theme.vbaFontNormal.write(rPreview.x+rPreview.w/2,rPreview.y+tsize/2,_("Next"));
-	theme.vbaFontNormal.write(rHold.x+rHold.w/2,rHold.y+tsize/2,_("Hold"));
-	renderer.clearTarget();
+		/* hiscores is game level not bowl level (single player only) */
+		if (!demo) {
+			rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
+			addFrame(rHiscores,tsize/4,tsize/3);
+		}
+	} else if (type == GT_VSHUMAN || type == GT_VSCPU) {
+		/* initialize two bowls with small score info below it */
+		tsize = (int)(renderer.getHeight() / 48)*2; /* get nearest even value to 24 tiles */
+		padding = tsize/6;
+		border = tsize/4;
+		/* get total width of bowl and attached preview and divide rest of
+		 * screen width in three gaps of same size. */
+		int bw = tsize*BOWL_WIDTH + border*2 + 2*padding + 4*tsize;
+		int bgap = (renderer.getWidth() - 2*bw) / 3;
 
-	/* hiscores is game level not bowl level (single player only) */
-	if (type == GT_NORMAL || type == GT_FIGURES) {
-		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
-		addFrame(rHiscores,tsize/4,tsize/3);
-	} else
-		rHiscores = {0,0,0,0};
+		rBowl[0] = {bgap, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[1] = {bgap*2+bw, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+
+		for (int i = 0; i < 2; i++) {
+			if (config.modern)
+				rPreview[i] = {rBowl[i].x + rBowl[i].w + border*2 + padding,
+						rBowl[i].y + 2*tsize,
+						4*tsize,10*tsize};
+			else
+				rPreview[i] = {rBowl[i].x + rBowl[i].w + border*2 + padding,
+						rBowl[i].y + 5*tsize,
+						4*tsize,4*tsize};
+			rHold[i] = {rPreview[i].x, rBowl[i].y + 14*tsize,
+					4*tsize, 4*tsize};
+			rScore[i] = {rBowl[i].x + tsize,
+					rBowl[i].y + rBowl[i].h + border*2 + padding,
+					rBowl[i].w - tsize*2, tsize*3};
+		}
+
+		for (int i = 0; i < 2; i++)
+			vbowls[i].init(i,tsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
+
+	}
 
 	/* XXX store bowl assets in theme as using a VBowlAssets class in
 	 * bowl does not work. textures get created but are not displayed
@@ -293,6 +320,23 @@ void VGame::init(bool demo) {
 	}
 	renderer.clearTarget();
 	theme.vbaLoadFonts(tsize);
+
+	/* add frames and fixed text to background */
+	for (int i = 0; i < MAXNUMPLAYERS; i++)
+		if (vbowls[i].initialized()) {
+			addFrame(vbowls[i].rBowl,0,border);
+			addFrame(vbowls[i].rPreview,padding,border);
+			addFrame(vbowls[i].rHold,padding,border);
+			addFrame(vbowls[i].rScore,padding,border);
+
+			renderer.setTarget(background);
+			theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+			theme.vbaFontNormal.write(vbowls[i].rPreview.x+vbowls[i].rPreview.w/2,
+					vbowls[i].rPreview.y+tsize/2,_("Next"));
+			theme.vbaFontNormal.write(vbowls[i].rHold.x+vbowls[i].rHold.w/2,
+					vbowls[i].rHold.y+tsize/2,_("Hold"));
+			renderer.clearTarget();
+		}
 
 	state = VGS_RUNNING;
 }

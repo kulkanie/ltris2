@@ -30,12 +30,13 @@ class VBowl {
 	SDL_Rect rPreview; /* screen region for preview pieces */
 	SDL_Rect rHold; /* screen region for hold piece */
 	SDL_Rect rScore; /* screen region for score */
+	bool compactInfo; /* display compact version of player score info */
 
 	void renderStatLine(const string &cap, int val, int &y);
 	void renderStats();
 public:
 	VBowl();
-	void init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp, SDL_Rect &rh, SDL_Rect &rs);
+	void init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp, SDL_Rect &rh, SDL_Rect &rs, bool compact=false);
 	bool initialized() { return (bowl != NULL); }
 	void render();
 	void update(uint ms, BowlControls &bc);

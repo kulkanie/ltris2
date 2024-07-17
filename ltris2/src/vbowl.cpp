@@ -36,9 +36,9 @@ VBowl::VBowl() {
 }
 
 /* Initialize representation of libgame bowl @id at screen position @_sx,@_sy
- * and piece tile size @_tsize. */
+ * and piece tile size @_tsize. If @compact is true render compact player info. */
 void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
-					SDL_Rect &rh, SDL_Rect &rs)
+				SDL_Rect &rh, SDL_Rect &rs, bool compact)
 {
 	if (id >= MAXNUMPLAYERS || !bowls[id]) {
 		_logerr("VBowl init: libgame bowl %d does not exist\n",id);
@@ -53,6 +53,7 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	rPreview = rp;
 	rHold = rh;
 	rScore = rs;
+	compactInfo = compact;
 
 	/* TEST for sprites
 	for (int i = 0; i < 9; i++) {
@@ -68,6 +69,7 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 /** Render bowl by drawing pieces, preview, hold, score, ... */
 void VBowl::render() {
 	int pid, x, y;
+	string strLines;
 
 	if (bowl == NULL)
 		return;
@@ -77,21 +79,36 @@ void VBowl::render() {
 	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
 	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
 	theme.vbaFontSmall.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	/* first line is always name, second is score */
 	theme.vbaFontBold.write(ix,iy,bowl->name);
 	iy += tileSize;
 	theme.vbaFontNormal.write(ix,iy,to_string((int)counter_get_approach(bowl->score)));
-	iy += 1.5*tileSize;
-	theme.vbaFontBold.write(ix,iy,_("Level"));
-	iy += tileSize;
-	theme.vbaFontNormal.write(ix,iy,to_string(bowl->level));
-	iy += 1.5*tileSize;
-	theme.vbaFontBold.write(ix,iy,_("Lines"));
-	iy += tileSize;
+	/* add limit to line info if no transition yet */
 	if (bowl->firstlevelup_lines > 10 && bowl->lines < bowl->firstlevelup_lines)
-		theme.vbaFontNormal.write(ix,iy,
-				to_string(bowl->lines)+"/"+to_string(bowl->firstlevelup_lines));
+		strLines = to_string(bowl->lines)+"/"+to_string(bowl->firstlevelup_lines);
 	else
-		theme.vbaFontNormal.write(ix,iy,to_string(bowl->lines));
+		strLines = to_string(bowl->lines);
+	if (compactInfo) {
+		/* have level and lines in one line */
+		string str;
+		iy += tileSize;
+		theme.vbaFontSmall.setAlign(ALIGN_X_LEFT | ALIGN_Y_CENTER);
+		str = string(_("Lines"))+": "+strLines;
+		theme.vbaFontSmall.write(rScore.x,iy,str);
+		theme.vbaFontSmall.setAlign(ALIGN_X_RIGHT | ALIGN_Y_CENTER);
+		str = string(_("Level"))+": "+to_string(bowl->level);
+		theme.vbaFontSmall.write(rScore.x+rScore.w,iy,str);
+	} else {
+		/* level and lines in separate lines */
+		iy += 1.5*tileSize;
+		theme.vbaFontBold.write(ix,iy,_("Level"));
+		iy += tileSize;
+		theme.vbaFontNormal.write(ix,iy,to_string(bowl->level));
+		iy += 1.5*tileSize;
+		theme.vbaFontBold.write(ix,iy,_("Lines"));
+		iy += tileSize;
+		theme.vbaFontNormal.write(ix,iy,strLines);
+	}
 
 	/* show nothing more but stats for pause or game over */
 	if (bowl->paused || bowl->game_over) {
