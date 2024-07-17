@@ -32,7 +32,7 @@ public:
 
 	Renderer() : mw(NULL), mr(NULL), w(0), h(0) {
 		_loginfo("Initializing SDL\n");
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 				SDL_Log("SDL_Init failed: %s\n", SDL_GetError());
 		if (TTF_Init() < 0)
 		 		SDL_Log("TTF_Init failed: %s\n", SDL_GetError());
@@ -297,6 +297,58 @@ public:
 			return 0;
 		return img.getWidth();
 	}
+};
+
+/** Wrapper for SDL_Joystick. Yes, it should be gamecontroller
+ * but I cannot open a valid gamepad as controller but as joystick
+ * so we go with what works. */
+enum {
+	GPAD_NONE = 0,
+	GPAD_LEFT,
+	GPAD_RIGHT,
+	GPAD_UP,
+	GPAD_DOWN,
+	GPAD_BUTTON0,
+	GPAD_BUTTON1,
+	GPAD_BUTTON2,
+	GPAD_BUTTON3,
+	GPAD_BUTTON4,
+	GPAD_BUTTON5,
+	GPAD_BUTTON6,
+	GPAD_BUTTON7,
+	GPAD_BUTTON8,
+	GPAD_BUTTON9,
+	GPAD_LAST1,
+
+	GPBS_RELEASED = 0,
+	GPBS_PRESSED,
+	GPBS_DOWN,
+	GPBS_UP
+};
+class Gamepad {
+	SDL_Joystick *js;
+	uint numbuttons;
+	Uint8 state[GPAD_LAST1];
+	Uint8 oldstate[GPAD_LAST1];
+
+	void updateInput(uint id, bool active);
+public:
+	Gamepad() : js(NULL), numbuttons(0) {}
+	~Gamepad() {
+		close();
+	}
+	void open();
+	int opened() {
+		return (js != NULL);
+	}
+	void close() {
+		if (js) {
+			SDL_JoystickClose(js);
+			_loginfo("Closed game controller 0\n");
+			js = NULL;
+		}
+	}
+	const Uint8 *update();
 };
 
 #endif /* SDL_H_ */

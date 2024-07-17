@@ -28,6 +28,7 @@ enum {
 class View {
 	/* general */
 	Mixer mixer;
+	Gamepad gamepad;
 
 	/* menu */
 	bool menuActive;

@@ -441,7 +441,7 @@ void tetris_set_bowl_controls(int i, SDL_Event *ev, BowlControls *bc)
 				bc->hold = CS_DOWN;
 		}
 
-		/* allow gamepad for bowl 0 */
+		/* allow gamepad for bowl 0
 		if (i == 0 && config.gp_enabled) {
 			if (gamepad_ctrl_isdown(GPAD_LEFT))
 				bc->lshift = CS_DOWN;
@@ -464,7 +464,7 @@ void tetris_set_bowl_controls(int i, SDL_Event *ev, BowlControls *bc)
 				if (ev->jbutton.button == config.gp_hold)
 					bc->hold = CS_DOWN;
 			}
-		}
+		} */
 	}
 
 	/* do cpu move, soft drop is done in bowl_update because of timer */

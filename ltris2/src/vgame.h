@@ -34,7 +34,8 @@ class VGame {
 	Texture background;
 	SDL_Rect rHiscores; /* screen region for hiscore chart */
 
-	void setBowlControls(BowlControls &bc, SDL_Event &ev, PControls &pctrl);
+	void setBowlControls(uint bid, BowlControls &bc, SDL_Event &ev,
+					const Uint8 *gpstate, PControls &pctrl);
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
 	void addFrame(SDL_Rect inner, int padding = 0, int border = 0);
 public:
@@ -42,7 +43,7 @@ public:
 	~VGame();
 	void init(bool demo);
 	void render();
-	bool update(uint ms, SDL_Event &ev);
+	bool update(uint ms, SDL_Event &ev, const Uint8 *gpstate);
 	void pause(bool p=true);
 	bool isDemo();
 };

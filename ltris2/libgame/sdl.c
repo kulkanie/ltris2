@@ -34,8 +34,8 @@ SDL_Cursor *empty_cursor = 0;
 SDL_Cursor *std_cursor = 0;
 SDL_Joystick *gamepad = 0;
 int gamepad_numbuttons = 0;
-Uint8 gamepad_state[GPAD_LAST1];
-Uint8 gamepad_oldstate[GPAD_LAST1];
+//Uint8 gamepad_state[GPAD_LAST1];
+//Uint8 gamepad_oldstate[GPAD_LAST1];
 
 /* shadow surface stuff */
 int use_shadow_surface = 0;
@@ -639,7 +639,7 @@ void gamepad_close()
 }
 const Uint8 *gamepad_update()
 {
-	return gamepad_state;
+	return NULL;
 }
 
 int gamepad_ctrl_isdown(uint cid)

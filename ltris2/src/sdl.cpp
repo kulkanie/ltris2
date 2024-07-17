@@ -425,3 +425,80 @@ void Label::setText(Font &font, const string &str, uint maxw)
 	SDL_SetRenderTarget(mrc,old);
 	empty = false;
 }
+
+/** Try to find and open a joystick (game controller) */
+void Gamepad::open()
+{
+	if (js)
+		close(); /* make sure none is opened yet */
+
+	if (SDL_NumJoysticks() == 0) {
+		_loginfo("No game controller found...\n");
+		return;
+	}
+
+	if ((js = SDL_JoystickOpen(0)) == NULL) {
+		_logerr("Couldn't open game controller: %s\n",SDL_GetError());
+		return;
+	}
+
+	_loginfo("Opened game controller 0\n");
+	_logdebug(1,"  num axes: %d, num buttons: %d, num balls: %d\n",
+			SDL_JoystickNumAxes(js),SDL_JoystickNumButtons(js),
+			SDL_JoystickNumBalls(js));
+
+	numbuttons = SDL_JoystickNumButtons(js);
+	if (numbuttons > 10)
+		numbuttons = 10;
+}
+
+/** Update a single input state (@id). @active is the current SDL state. */
+void Gamepad::updateInput(uint id, bool active)
+{
+	if (id >= GPAD_LAST1)
+		return;
+
+	if (active) {
+		if (oldstate[id]==GPBS_DOWN || oldstate[id]==GPBS_PRESSED)
+			state[id] = GPBS_PRESSED;
+		else
+			state[id] = GPBS_DOWN;
+	} else {
+		if (oldstate[id]==GPBS_DOWN || oldstate[id]==GPBS_PRESSED)
+			state[id] = GPBS_UP;
+	}
+}
+
+/** Update joystick state and return state array.
+ * (0=released,1=permanently pressed,2=down,3=up) */
+const Uint8 *Gamepad::update() {
+	SDL_JoystickUpdate();
+
+	memcpy(oldstate,state,sizeof(state));
+	memset(state,GPBS_RELEASED,sizeof(state));
+
+	if (js == NULL)
+		return state;
+
+	if (SDL_JoystickGetAxis(js,0) < -3200)
+		updateInput(GPAD_LEFT, true);
+	else
+		updateInput(GPAD_LEFT, false);
+	if (SDL_JoystickGetAxis(js,0) > 3200)
+		updateInput(GPAD_RIGHT, true);
+	else
+		updateInput(GPAD_RIGHT, false);
+	if (SDL_JoystickGetAxis(js,1) < -3200)
+		updateInput(GPAD_UP, true);
+	else
+		updateInput(GPAD_UP, false);
+	if (SDL_JoystickGetAxis(js,1) > 3200)
+		updateInput(GPAD_DOWN, true);
+	else
+		updateInput(GPAD_DOWN, false);
+
+	for (uint i = 0; i < numbuttons; i++)
+		updateInput(GPAD_BUTTON0 + i, SDL_JoystickGetButton(js,i));
+
+	return state;
+}

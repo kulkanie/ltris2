@@ -164,6 +164,7 @@ int get_time();
 void reset_timer();
 
 /* gamepad aka joystick support */
+#if 0
 enum {
 	GPAD_NONE = 0,
 	GPAD_LEFT,
@@ -182,6 +183,7 @@ enum {
 	GPAD_BUTTON9,
 	GPAD_LAST1
 };
+#endif
 void gamepad_open();
 int gamepad_opened();
 void gamepad_close();

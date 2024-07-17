@@ -16,6 +16,7 @@ minor stuff:
 - control menu with gamepad
 - in widescreen show preview/hold for human player in 2xcpu
 - escape goes back to game only in root menu, otherwise one level up
+- wider menu for widescreen (use height ratio to scale it)
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h
@@ -32,3 +33,5 @@ Changes to make ltris1 core work:
 - disable bowl_quick_game() in bowls.h
 - add ViewBowlInfo and set sounds and cleared lines
 - set full bowl content to vbi on game over
+- disable gamepad stuff in sdl.c and tetris.c
+

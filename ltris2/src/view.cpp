@@ -55,6 +55,14 @@ View::View() : menuActive(true),
 		vconfig.themeid = 0;
 	vconfig.themecount = themeNames.size();
 
+	/* gamepad */
+	gamepad.open();
+	if (gamepad.opened()) {
+		printf("  NOTE: Gamepad cannot be configured via menu yet but you\n");
+		printf("  can edit the gp_ entries in config file %s .\n",vconfig.fname.c_str());
+		printf("  In case connection to gamepad gets lost, you can press F5 do reconnect.\n");
+	}
+
 	init(themeNames[vconfig.themeid], vconfig.fullscreen);
 }
 
@@ -131,8 +139,18 @@ void View::run()
 		if (SDL_PollEvent(&ev)) {
 			if (ev.type == SDL_QUIT)
 				quitReceived = true;
-			else if (!changingKey && ev.type == SDL_KEYDOWN) {
+			else if (ev.type == SDL_JOYBUTTONUP) {
+				if (ev.jbutton.button == vconfig.gp_pause) {
+					menuActive = !menuActive;
+					if (!game.isDemo())
+						game.pause(menuActive);
+				}
+			} else if (!changingKey && ev.type == SDL_KEYDOWN) {
 				switch (ev.key.keysym.scancode) {
+				case SDL_SCANCODE_F5:
+					gamepad.close();
+					gamepad.open();
+					break;
 				case SDL_SCANCODE_F:
 					if (!menuActive)
 						vconfig.showfps = !vconfig.showfps;
@@ -155,12 +173,15 @@ void View::run()
 		/* get passed time */
 		ms = ticks.get();
 
+		/* update gamepad state */
+		const Uint8 *gpadstate = gamepad.update();
+
 		/* update menu */
 		if (menuActive)
 			curMenu->update(ms);
 
 		/* update game */
-		if (game.update(ms,ev)) {
+		if (game.update(ms,ev,gpadstate)) {
 			/* game over, save hiscores, only for single player */
 			if (game.type == GT_NORMAL || game.type == GT_FIGURES) {
 				HiscoreChart *hc = hiscores.get(gameTypeNames[game.type]);
