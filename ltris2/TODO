@@ -1,5 +1,4 @@
 VGame & VBowl
-- multiplayer layout
 - gamepad support
 - backgrounds
 
@@ -14,6 +13,7 @@ minor stuff:
 - show level in widescreen hiscores
 - split logo from menu.png to avoid stretching in window mode
 - truncate long names in hiscores to max 8 chars
+- control menu with gamepad
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h

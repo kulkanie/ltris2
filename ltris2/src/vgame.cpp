@@ -290,7 +290,28 @@ void VGame::init(bool demo) {
 
 		for (int i = 0; i < 2; i++)
 			vbowls[i].init(i,tsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
+	} else if (type == GT_VSCPU2) {
+		/* have 3 bowls with no preview/hold active */
+		tsize = (int)(renderer.getHeight() / 48)*2; /* get nearest even value to 24 tiles */
+		padding = tsize/6;
+		border = tsize/4;
+		int bw = tsize*BOWL_WIDTH + border*2;
+		int bgap = (renderer.getWidth() - 3*bw) / 4;
 
+		rBowl[0] = {bgap+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[1] = {bgap+bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[2] = {bgap*3+2*bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+
+		for (int i = 0; i < 3; i++) {
+			rPreview[i] = {0,0,0,0};
+			rHold[i] = {0,0,0,0};
+			rScore[i] = {rBowl[i].x + tsize,
+					rBowl[i].y + rBowl[i].h + border*2 + padding,
+					rBowl[i].w - tsize*2, tsize*3};
+		}
+
+		for (int i = 0; i < 3; i++)
+			vbowls[i].init(i,tsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
 	}
 
 	/* XXX store bowl assets in theme as using a VBowlAssets class in
@@ -325,16 +346,20 @@ void VGame::init(bool demo) {
 	for (int i = 0; i < MAXNUMPLAYERS; i++)
 		if (vbowls[i].initialized()) {
 			addFrame(vbowls[i].rBowl,0,border);
-			addFrame(vbowls[i].rPreview,padding,border);
-			addFrame(vbowls[i].rHold,padding,border);
+			if (vbowls[i].rPreview.w > 0)
+				addFrame(vbowls[i].rPreview,padding,border);
+			if (vbowls[i].rHold.w > 0)
+				addFrame(vbowls[i].rHold,padding,border);
 			addFrame(vbowls[i].rScore,padding,border);
 
 			renderer.setTarget(background);
 			theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-			theme.vbaFontNormal.write(vbowls[i].rPreview.x+vbowls[i].rPreview.w/2,
-					vbowls[i].rPreview.y+tsize/2,_("Next"));
-			theme.vbaFontNormal.write(vbowls[i].rHold.x+vbowls[i].rHold.w/2,
-					vbowls[i].rHold.y+tsize/2,_("Hold"));
+			if (vbowls[i].rPreview.w > 0)
+				theme.vbaFontNormal.write(vbowls[i].rPreview.x+vbowls[i].rPreview.w/2,
+						vbowls[i].rPreview.y+tsize/2,_("Next"));
+			if (vbowls[i].rHold.w > 0)
+				theme.vbaFontNormal.write(vbowls[i].rHold.x+vbowls[i].rHold.w/2,
+						vbowls[i].rHold.y+tsize/2,_("Hold"));
 			renderer.clearTarget();
 		}
 

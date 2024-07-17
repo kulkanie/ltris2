@@ -55,6 +55,12 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	rScore = rs;
 	compactInfo = compact;
 
+	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
+	if (!bowl->preview)
+		_loginfo("    preview disabled\n");
+	if (!bowl->hold_active)
+		_loginfo("    hold disabled\n");
+
 	/* TEST for sprites
 	for (int i = 0; i < 9; i++) {
 		bowl->contents[i][19] = 1;
@@ -62,8 +68,6 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 		bowl->contents[i][17] = 3;
 		bowl->contents[i][16] = 4;
 	} */
-
-	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
 }
 
 /** Render bowl by drawing pieces, preview, hold, score, ... */
@@ -183,7 +187,7 @@ void VBowl::render() {
 	}
 
 	/* preview */
-	if (bowl->preview && bowl->next_block_id >= 0) {
+	if (rPreview.w > 0 && bowl->preview && bowl->next_block_id >= 0) {
 		theme.vbaPreviews[bowl->next_block_id].copy(rPreview.x,rPreview.y+1.5*tileSize);
 
 		/* only for modern: show next two pieces of piece bag */
@@ -195,7 +199,7 @@ void VBowl::render() {
 	}
 
 	/* hold piece */
-	if (bowl->hold_active && bowl->hold_id != -1)
+	if (rHold.w > 0 && bowl->hold_active && bowl->hold_id != -1)
 		theme.vbaPreviews[bowl->hold_id].copy(rHold.x,rHold.y+1.5*tileSize);
 
 }
