@@ -299,7 +299,7 @@ void VGame::init(bool demo) {
 		int bgap = (renderer.getWidth() - 3*bw) / 4;
 
 		rBowl[0] = {bgap+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
-		rBowl[1] = {bgap+bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[1] = {bgap*2+bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
 		rBowl[2] = {bgap*3+2*bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
 
 		for (int i = 0; i < 3; i++) {
