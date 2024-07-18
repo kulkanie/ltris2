@@ -1,10 +1,7 @@
-VGame & VBowl
-- gamepad support
-- backgrounds
-
-minor stuff:
-- title element for submenus
 - changing video mode should not restart game
+- control menu with gamepad
+- truncate long names in hiscores to max 8 chars
+- title element for submenus
 - font colors in theme.ini
 - undim
 - multiple tile sets that rotate each level
@@ -12,11 +9,9 @@ minor stuff:
 - extra menu item to show all hiscores
 - show level in widescreen hiscores
 - split logo from menu.png to avoid stretching in window mode
-- truncate long names in hiscores to max 8 chars
-- control menu with gamepad
 - in widescreen show preview/hold for human player in 2xcpu
 - escape goes back to game only in root menu, otherwise one level up
-- wider menu for widescreen (use height ratio to scale it)
+- wider menu for 4:3 (use height ratio to scale it)
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h

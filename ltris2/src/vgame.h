@@ -33,11 +33,13 @@ class VGame {
 	VBowl vbowls[MAXNUMPLAYERS];
 	Texture background;
 	SDL_Rect rHiscores; /* screen region for hiscore chart */
+	int frPadding, frBorder; /* padding and border for all frames */
 
 	void setBowlControls(uint bid, BowlControls &bc, SDL_Event &ev,
 					const Uint8 *gpstate, PControls &pctrl);
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
 	void addFrame(SDL_Rect inner, int padding = 0, int border = 0);
+	void renderBackground(uint wid);
 public:
 	VGame();
 	~VGame();

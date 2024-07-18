@@ -329,40 +329,14 @@ void VGame::init(bool demo) {
 	renderer.clearTarget();
 	theme.vbaLoadFonts(tsize);
 
-	/* create background with wallpaper */
+	/* save padding and border for wallpaper changes */
+	frPadding = padding;
+	frBorder = border;
+
+	/* create background */
 	background.create(renderer.getWidth(),renderer.getHeight());
 	background.setBlendMode(0);
-	renderer.setTarget(background);
-	theme.wallpapers[vconfig.startinglevel % theme.numWallpapers].copy();
-	renderer.clearTarget();
-
-	/* hiscores is game level not bowl level (single player only) */
-	if (type == GT_NORMAL || type == GT_FIGURES) {
-		int panelw = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
-		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
-		addFrame(rHiscores,tsize/4,tsize/3);
-	}
-
-	/* add frames and fixed text to background */
-	for (int i = 0; i < MAXNUMPLAYERS; i++)
-		if (vbowls[i].initialized()) {
-			addFrame(vbowls[i].rBowl,0,border);
-			if (vbowls[i].rPreview.w > 0)
-				addFrame(vbowls[i].rPreview,padding,border);
-			if (vbowls[i].rHold.w > 0)
-				addFrame(vbowls[i].rHold,padding,border);
-			addFrame(vbowls[i].rScore,padding,border);
-
-			renderer.setTarget(background);
-			theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
-			if (vbowls[i].rPreview.w > 0)
-				theme.vbaFontNormal.write(vbowls[i].rPreview.x+vbowls[i].rPreview.w/2,
-						vbowls[i].rPreview.y+tsize/2,_("Next"));
-			if (vbowls[i].rHold.w > 0)
-				theme.vbaFontNormal.write(vbowls[i].rHold.x+vbowls[i].rHold.w/2,
-						vbowls[i].rHold.y+tsize/2,_("Hold"));
-			renderer.clearTarget();
-		}
+	renderBackground(vconfig.startinglevel % theme.numWallpapers);
 
 	state = VGS_RUNNING;
 }
@@ -384,9 +358,12 @@ void VGame::render() {
  * Return 1 if state switches to game over, 0 otherwise. */
 bool VGame::update(uint ms, SDL_Event &ev, const Uint8 *gpstate) {
 	BowlControls bc;
+	int oldlev;
 
 	if (state != VGS_RUNNING)
 		return false;
+
+	oldlev = vbowls[0].bowl->level;
 
 	for (int i = 0; i < MAXNUMPLAYERS; i++)
 		if (vbowls[i].initialized()) {
@@ -396,6 +373,10 @@ bool VGame::update(uint ms, SDL_Event &ev, const Uint8 *gpstate) {
 				setBowlControls(i, bc, ev, gpstate, vconfig.controls[i]);
 			vbowls[i].update(ms,bc);
 		}
+
+	/* check for level update of first bowl and change wallpaper */
+	if (oldlev != vbowls[0].bowl->level)
+		renderBackground(vbowls[0].bowl->level % theme.numWallpapers);
 
 	/* check for game over */
 	int gameover = 0;
@@ -450,4 +431,44 @@ void VGame::pause(bool p)
 bool VGame::isDemo()
 {
 	return (config.gametype == GAME_DEMO);
+}
+
+/** Render new background and frames. Use wallpaper with id @wid. */
+void VGame::renderBackground(uint wid)
+{
+	renderer.setTarget(background);
+	theme.wallpapers[wid % theme.numWallpapers].copy();
+	renderer.clearTarget();
+
+	int tsize = vbowls[0].tileSize;
+	int padding = frPadding;
+	int border = frBorder;
+
+	/* hiscores is game level not bowl level (single player only) */
+	if (type == GT_NORMAL || type == GT_FIGURES) {
+		int panelw = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
+		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
+		addFrame(rHiscores,tsize/4,tsize/3);
+	}
+
+	/* add frames and fixed text to background */
+	for (int i = 0; i < MAXNUMPLAYERS; i++)
+		if (vbowls[i].initialized()) {
+			addFrame(vbowls[i].rBowl,0,border);
+			if (vbowls[i].rPreview.w > 0)
+				addFrame(vbowls[i].rPreview,padding,border);
+			if (vbowls[i].rHold.w > 0)
+				addFrame(vbowls[i].rHold,padding,border);
+			addFrame(vbowls[i].rScore,padding,border);
+
+			renderer.setTarget(background);
+			theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+			if (vbowls[i].rPreview.w > 0)
+				theme.vbaFontNormal.write(vbowls[i].rPreview.x+vbowls[i].rPreview.w/2,
+						vbowls[i].rPreview.y+tsize/2,_("Next"));
+			if (vbowls[i].rHold.w > 0)
+				theme.vbaFontNormal.write(vbowls[i].rHold.x+vbowls[i].rHold.w/2,
+						vbowls[i].rHold.y+tsize/2,_("Hold"));
+			renderer.clearTarget();
+		}
 }
