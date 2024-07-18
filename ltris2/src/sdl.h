@@ -303,6 +303,7 @@ public:
  * but I cannot open a valid gamepad as controller but as joystick
  * so we go with what works. */
 enum {
+	/* gamepad inputs */
 	GPAD_NONE = 0,
 	GPAD_LEFT,
 	GPAD_RIGHT,
@@ -320,6 +321,7 @@ enum {
 	GPAD_BUTTON9,
 	GPAD_LAST1,
 
+	/* gamepad button states */
 	GPBS_RELEASED = 0,
 	GPBS_PRESSED,
 	GPBS_DOWN,

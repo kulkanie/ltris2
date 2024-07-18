@@ -376,7 +376,7 @@ void View::createMenus()
 	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemEdit(_("Player 1"),vconfig.playernames[0]));
 	mNewGame->add(new MenuItemEdit(_("Player 2"),vconfig.playernames[1]));
-	mNewGame->add(new MenuItemEdit(_("Player 3"),vconfig.playernames[2]));
+	//mNewGame->add(new MenuItemEdit(_("Player 3"),vconfig.playernames[2]));
 	mNewGame->add(new MenuItemSep());
 	mNewGame->add(new MenuItemList(_("Game Mode"),
 			hGameMode,AID_NONE,vconfig.gametype,gameTypeNames));
