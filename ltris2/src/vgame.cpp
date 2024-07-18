@@ -113,7 +113,7 @@ void VGame::addFrame(SDL_Rect inner, int padding, int border)
 	int x1, y1, x2, y2;
 	SDL_Rect outer = {inner.x - padding, inner.y - padding,
 				inner.w + padding*2, inner.h + padding*2};
-	SDL_Color clr = {0,0,0,128};
+	SDL_Color clr = {0,0,0,160};
 
 
 	/* since we don't want to set alpha but apply color to texture with it
@@ -225,7 +225,7 @@ void VGame::init(bool demo) {
 	background.create(renderer.getWidth(),renderer.getHeight());
 	background.setBlendMode(0);
 	renderer.setTarget(background);
-	theme.wallpapers[0].copy();
+	theme.wallpapers[vconfig.startinglevel % theme.numWallpapers].copy();
 	renderer.clearTarget();
 
 	/* initialize vbowls depending on game type */

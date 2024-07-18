@@ -60,11 +60,13 @@ void Theme::load(string name, Renderer &r)
 
 	/* wallpapers */
 	for (uint i = 0; i < numWallpapers; i++) {
-		wallpapers[i].load(path + "/wallpaper" + to_string(i+1) + ".jpg");
+		char strid[4];
+		snprintf(strid,4,"%02d",i+1);
+		wallpapers[i].load(path + "/wallpaper" + strid + ".jpg");
 		wallpapers[i].setBlendMode(0);
 	}
 	if (numWallpapers == 0) {
-		wallpapers[0].load(stdPath + "/wallpaper1.jpg");
+		wallpapers[0].load(stdPath + "/wallpaper01.jpg");
 		wallpapers[0].setBlendMode(0);
 		numWallpapers = 1;
 	}
