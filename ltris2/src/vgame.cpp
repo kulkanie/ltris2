@@ -221,13 +221,6 @@ void VGame::init(bool demo) {
 	/* initialize actual game context */
 	tetris_init();
 
-	/* create background with wallpaper */
-	background.create(renderer.getWidth(),renderer.getHeight());
-	background.setBlendMode(0);
-	renderer.setTarget(background);
-	theme.wallpapers[vconfig.startinglevel % theme.numWallpapers].copy();
-	renderer.clearTarget();
-
 	/* initialize vbowls depending on game type */
 	int tsize; /* actual tile size for bowls */
 	int padding, border; /* for frames: may vary on game type */
@@ -253,12 +246,6 @@ void VGame::init(bool demo) {
 
 		padding = tsize/4;
 		border = tsize/3;
-
-		/* hiscores is game level not bowl level (single player only) */
-		if (!demo) {
-			rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
-			addFrame(rHiscores,tsize/4,tsize/3);
-		}
 	} else if (type == GT_VSHUMAN || type == GT_VSCPU) {
 		/* initialize two bowls with small score info below it */
 		tsize = (int)(renderer.getHeight() / 48)*2; /* get nearest even value to 24 tiles */
@@ -341,6 +328,20 @@ void VGame::init(bool demo) {
 	}
 	renderer.clearTarget();
 	theme.vbaLoadFonts(tsize);
+
+	/* create background with wallpaper */
+	background.create(renderer.getWidth(),renderer.getHeight());
+	background.setBlendMode(0);
+	renderer.setTarget(background);
+	theme.wallpapers[vconfig.startinglevel % theme.numWallpapers].copy();
+	renderer.clearTarget();
+
+	/* hiscores is game level not bowl level (single player only) */
+	if (type == GT_NORMAL || type == GT_FIGURES) {
+		int panelw = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
+		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
+		addFrame(rHiscores,tsize/4,tsize/3);
+	}
 
 	/* add frames and fixed text to background */
 	for (int i = 0; i < MAXNUMPLAYERS; i++)
