@@ -397,12 +397,25 @@ bool VGame::update(uint ms, SDL_Event &ev, const Uint8 *gpstate) {
 		}
 
 	/* check for game over */
-	bool gameover = true;
-	for (int i = 0; i < MAXNUMPLAYERS; i++)
-		if (vbowls[i].initialized())
-			if (!vbowls[i].bowl->game_over)
-				gameover = false;
+	int gameover = 0;
+	int numbowls = 0;
+	for (auto &vb : vbowls)
+		if (vb.initialized()) {
+			numbowls++;
+			if (vb.bowl->game_over)
+				gameover++;
+		}
+	if ((numbowls == 1 && gameover) || (numbowls > 1 && numbowls - gameover <= 1))
+		gameover = 1;
+	else
+		gameover = 0;
 	if (gameover) {
+		if (numbowls > 1)
+			for (auto &vb : vbowls)
+				if (vb.initialized() && !vb.bowl->game_over) {
+					bowl_finish_game(vb.bowl, 1);
+					vb.winner = true;
+				}
 		state = VGS_GAMEOVER;
 		return true;
 	}

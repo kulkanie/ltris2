@@ -33,6 +33,8 @@ extern Config config;
 VBowl::VBowl() {
 	bowl = NULL;
 	w = h = tileSize = 0;
+	compactInfo = false;
+	winner = false;
 }
 
 /* Initialize representation of libgame bowl @id at screen position @_sx,@_sy
@@ -54,6 +56,7 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	rHold = rh;
 	rScore = rs;
 	compactInfo = compact;
+	winner = false;
 
 	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
 	if (!bowl->preview)
@@ -116,10 +119,20 @@ void VBowl::render() {
 
 	/* show nothing more but stats for pause or game over */
 	if (bowl->paused || bowl->game_over) {
-		string msg = bowl->game_over?_("Game Over"):_("Paused");
+		string msg;
+		if (bowl->paused)
+			msg = _("Paused");
+		else if (winner) {
+			msg = _("Winner!");
+		} else
+			msg = _("Game Over");
 
+		if (winner)
+			theme.vbaFontBold.setColor(theme.fontColorHighlight);
 		theme.vbaFontBold.write(rBowl.x + rBowl.w/2,
 					rBowl.y + 3*tileSize, msg);
+		if (winner)
+			theme.vbaFontBold.setColor(theme.fontColorNormal);
 		renderStats();
 		return;
 	}

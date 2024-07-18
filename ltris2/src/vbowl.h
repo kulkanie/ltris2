@@ -31,6 +31,7 @@ class VBowl {
 	SDL_Rect rHold; /* screen region for hold piece */
 	SDL_Rect rScore; /* screen region for score */
 	bool compactInfo; /* display compact version of player score info */
+	bool winner; /* true if winner in multiplayer */
 
 	void renderStatLine(const string &cap, int val, int &y);
 	void renderStats();

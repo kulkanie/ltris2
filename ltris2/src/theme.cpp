@@ -90,7 +90,11 @@ void Theme::load(string name, Renderer &r)
 void Theme::vbaLoadFonts(uint tsize)
 {
 	vbaFontNormal.load(testRc(path,"f_normal.otf"), 9*tsize/10);
+	vbaFontNormal.setColor(fontColorNormal);
 	vbaFontBold.load(testRc(path,"f_bold.otf"), 9*tsize/10);
+	vbaFontBold.setColor(fontColorNormal);
 	vbaFontSmall.load(testRc(path,"f_normal.otf"), 7*tsize/10);
+	vbaFontSmall.setColor(fontColorNormal);
 	vbaFontTiny.load(testRc(path,"f_normal.otf"), 6*tsize/10);
+	vbaFontTiny.setColor(fontColorNormal);
 }
