@@ -1,6 +1,7 @@
 - changing video mode should not restart game
 - control menu with gamepad
 - truncate long names in hiscores to max 8 chars
+- wider menu for 4:3 (use height ratio to scale it)
 - title element for submenus
 - font colors in theme.ini
 - undim
@@ -11,7 +12,6 @@
 - split logo from menu.png to avoid stretching in window mode
 - in widescreen show preview/hold for human player in 2xcpu
 - escape goes back to game only in root menu, otherwise one level up
-- wider menu for 4:3 (use height ratio to scale it)
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h
