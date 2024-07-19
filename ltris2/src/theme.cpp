@@ -60,9 +60,7 @@ void Theme::load(string name, Renderer &r)
 
 	/* wallpapers */
 	for (uint i = 0; i < numWallpapers; i++) {
-		char strid[4];
-		snprintf(strid,4,"%02d",i+1);
-		wallpapers[i].load(path + "/wallpaper" + strid + ".jpg");
+		wallpapers[i].load(path + "/wallpaper" + to_string(i) + ".jpg");
 		wallpapers[i].setBlendMode(0);
 	}
 	if (numWallpapers == 0) {
