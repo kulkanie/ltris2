@@ -448,6 +448,11 @@ void VGame::renderBackground(uint wid)
 	if (type == GT_NORMAL || type == GT_FIGURES) {
 		int panelw = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
 		rHiscores = {(panelw - 6*tsize)/2, 11*tsize, 6*tsize, 8*tsize};
+		if (renderer.isWidescreen()) {
+			/* add some space for level */
+			rHiscores.x -= tsize;
+			rHiscores.w += 2*tsize;
+		}
 		addFrame(rHiscores,tsize/4,tsize/3);
 	}
 

@@ -253,7 +253,7 @@ void View::render()
 	/* render hiscores if region is set (single player only) */
 	if (game.rHiscores.w > 0 && !menuActive)
 		renderHiscore(game.rHiscores.x, game.rHiscores.y,
-				game.rHiscores.w, game.rHiscores.h, false);
+				game.rHiscores.w, game.rHiscores.h, renderer.isWidescreen());
 
 	/* sprites */
 	for (auto& s : sprites)
@@ -768,6 +768,7 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 }
 
 /* Render hiscore at given screen region. */
+/* TODO: pre-render on update and just copy texture here */
 void View::renderHiscore(int x, int y, int w, int h, bool detailed)
 {
 	Font &fTitle = theme.vbaFontTiny;
@@ -781,17 +782,17 @@ void View::renderHiscore(int x, int y, int w, int h, bool detailed)
 	int cy = y + (h - fTitle.getLineHeight() - 10*fEntry.getLineHeight())/2;
 
 	string str = _("Hiscores");
-	if (detailed)
-		str = chart->getName() + " " + str;
+	//if (detailed)
+	//	str = str + " '" + chart->getName() + "'";
 	fTitle.setAlign(ALIGN_X_CENTER | ALIGN_Y_TOP);
 	fTitle.write(x + w/2, cy, str);
 	cy += fTitle.getLineHeight();
-	if (detailed)
-		cy += fTitle.getLineHeight();
+	//if (detailed)
+	//	cy += fTitle.getLineHeight();
 
 	int cx_num = x;
-	int cx_name = x + fEntry.getCharWidth('0')*3;
-	int cx_level = x + fEntry.getCharWidth('W')*10;
+	int cx_name = x + 3*fEntry.getCharWidth('0');
+	int cx_level = x + 9*fEntry.getCharWidth('W');
 	int cx_score = x + w;
 
 	for (int i = 0; i < CHARTSIZE; i++) {
@@ -807,7 +808,10 @@ void View::renderHiscore(int x, int y, int w, int h, bool detailed)
 		str = to_string(i+1) + ".";
 		fEntry.write(cx_num, cy, str);
 		/* name */
-		fEntry.write(cx_name, cy, entry->name);
+		if (entry->name.length() > 8)
+			fEntry.write(cx_name, cy, entry->name.substr(0,7)+"...");
+		else
+			fEntry.write(cx_name, cy, entry->name);
 		/* level */
 		if (detailed)
 			fEntry.write(cx_level, cy, "L" + to_string(entry->level+1));

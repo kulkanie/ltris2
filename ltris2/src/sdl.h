@@ -83,6 +83,9 @@ public:
 	}
 
 	int getDisplayId();
+	bool isWidescreen() {
+		return (w > 4*h/3);
+	}
 };
 
 class Texture {
