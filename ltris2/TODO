@@ -1,7 +1,5 @@
 - changing video mode should not restart game
 - control menu with gamepad
-- truncate long names in hiscores to max 8 chars
-- wider menu for 4:3 (use height ratio to scale it)
 - title element for submenus
 - font colors in theme.ini
 - undim

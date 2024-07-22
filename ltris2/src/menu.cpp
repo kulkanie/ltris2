@@ -19,6 +19,7 @@
 #include "menu.h"
 
 extern SDL_Renderer *mrc;
+extern Renderer renderer;
 
 Font *MenuItem::fNormal = NULL;
 Font *MenuItem::fFocus = NULL;
@@ -116,6 +117,24 @@ int MenuItemEdit::runEditDialog(const string &caption, string &str)
 	SDL_StopTextInput();
 
 	return ret;
+}
+
+void Menu::adjust() {
+	int w = theme.menuItemWidth;
+	int h = items.size() * theme.menuItemHeight;
+	int x = theme.menuX - w/2;
+	int y = theme.menuY - h/2;
+
+	if (!renderer.isWidescreen())
+		w = 6*w/5; /* add 20% width for 4:3 ratio */
+
+	for (uint i = 0; i < items.size(); i++) {
+		MenuItemSub *sub = dynamic_cast<MenuItemSub*>(items[i].get());
+		items[i]->setGeometry(x, y + i*theme.menuItemHeight,
+					w, theme.menuItemHeight);
+		if (sub)
+			sub->getSubMenu()->adjust();
+	}
 }
 
 int Menu::handleEvent(const SDL_Event &ev)

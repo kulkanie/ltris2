@@ -357,19 +357,7 @@ public:
 			return items[keySelectId].get();
 		return curItem;
 	}
-	void adjust() {
-		int h = items.size() * theme.menuItemHeight;
-		int w = theme.menuItemWidth;
-		int x = theme.menuX - w/2;
-		int y = theme.menuY - h/2;
-		for (uint i = 0; i < items.size(); i++) {
-			MenuItemSub *sub = dynamic_cast<MenuItemSub*>(items[i].get());
-			items[i]->setGeometry(x, y + i*theme.menuItemHeight,
-						w, theme.menuItemHeight);
-			if (sub)
-				sub->getSubMenu()->adjust();
-		}
-	}
+	void adjust();
 	void update(uint ms) {
 		for (auto& i : items)
 			i->update(ms);
