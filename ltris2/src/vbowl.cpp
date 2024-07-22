@@ -58,7 +58,7 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	compactInfo = compact;
 	winner = false;
 
-	_loginfo("  set vbowl %d at (%d,%d), tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
+	_loginfo("  bowl %d: x=%d, y=%d, tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
 	if (!bowl->preview)
 		_loginfo("    preview disabled\n");
 	if (!bowl->hold_active)

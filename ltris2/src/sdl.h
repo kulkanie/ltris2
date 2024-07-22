@@ -82,6 +82,7 @@ public:
 		SDL_SetRenderTarget(mr, NULL);
 	}
 
+	int getDisplayId();
 };
 
 class Texture {

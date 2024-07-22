@@ -70,27 +70,27 @@ View::View() : menuActive(true),
  * t is theme name, f is fullscreen. */
 void View::init(string t, uint f)
 {
-	_loginfo("Initializing View (Theme=%s, Fullscreen=%d)\n",t.c_str(),f);
+	_loginfo("Initializing view (theme=%s, fullscreen=%d)\n",t.c_str(),f);
 
 	/* determine resolution */
+	int idx = renderer.getDisplayId();
 	int sw = 640, sh = 480;
 	SDL_DisplayMode mode;
-	SDL_GetCurrentDisplayMode(0,&mode);
+	SDL_GetCurrentDisplayMode(idx,&mode);
 	if (f) {
 		sw = mode.w;
 		sh = mode.h;
-		_loginfo("Using fullscreen resolution %dx%d\n",mode.w,mode.h);
 	} else {
+		/* window is half screen's width and 4:3 */
 		sw = mode.w / 2;
 		sh = 3 * sw / 4;
-		_loginfo("Using window resolution %dx%d\n",sw,sh);
 	}
 
 	/* (re)create main window */
-	renderer.create("LPairs2", sw, sh, f );
+	renderer.create("LTris2", sw, sh, f );
 
 	/* load theme */
-	theme.load(t,renderer);
+	theme.load(t, renderer);
 
 	/* create menu structure */
 	createMenus();

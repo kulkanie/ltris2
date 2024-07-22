@@ -29,8 +29,9 @@ int Renderer::create(const string &title, int _w, int _h, int _full)
 	destroy();
 
 	if (_w <= 0 || _h <= 0) { /* no width or height, use desktop setting */
+		int idx = getDisplayId();
 		SDL_DisplayMode mode;
-		SDL_GetCurrentDisplayMode(0,&mode);
+		SDL_GetCurrentDisplayMode(idx,&mode);
 		_w = mode.w;
 		_h = mode.h;
 		_full = 1;
@@ -38,7 +39,7 @@ int Renderer::create(const string &title, int _w, int _h, int _full)
 	w = _w;
 	h = _h;
 
-	_loginfo("Creating main window with %dx%d, fullscreen=%d\n",w,h,_full);
+	_loginfo("Creating window with size %dx%d (%s)\n",w,h,_full?"fullscreen":"window");
  	if (_full) {
 		mw = SDL_CreateWindow(title.c_str(), 0,0,0,0,0);
 		if (mw)
@@ -65,6 +66,37 @@ int Renderer::create(const string &title, int _w, int _h, int _full)
 
 void Renderer::setTarget(Texture &t) {
 	SDL_SetRenderTarget(mr, t.get());
+}
+
+/** Return index of display current window is running on or will be created
+ * on. Default to 0 on errors.
+ */
+int Renderer::getDisplayId()
+{
+	int idx = 0; /* default to display 0 */
+
+	/* get current display index or default to 0 */
+	if (mw) {
+		idx = SDL_GetWindowDisplayIndex(mw);
+	} else if (SDL_GetNumVideoDisplays() > 1) {
+		/* XXX first time we open the window, so to properly determine the
+		 * current display we open a small window for multiple monitors */
+		SDL_Window *testwindow;
+		_loginfo("Multiple displays detected... ");
+		if((testwindow = SDL_CreateWindow("LBreakoutHD",
+					SDL_WINDOWPOS_CENTERED,
+					SDL_WINDOWPOS_CENTERED,
+					320, 200, 0)) == NULL) {
+			_logerr("\n  Could not open display test window: %s\n",
+								SDL_GetError());
+			_loginfo("\n  Falling back to settings of display 0\n");
+		} else {
+			idx = SDL_GetWindowDisplayIndex(testwindow);
+			SDL_DestroyWindow(testwindow);
+			_loginfo("using display %d\n",idx);
+		}
+	}
+	return idx;
 }
 
 
