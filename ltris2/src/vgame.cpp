@@ -222,13 +222,19 @@ void VGame::init(bool demo) {
 	tetris_init();
 
 	/* initialize vbowls depending on game type */
+	int vh = renderer.getHeight();
+	if (renderer.getHeight() > renderer.getWidth()) {
+		/* for vertical monitors (who does that???) use 4:3 viewport at
+		 * top of screen */
+		vh = 3*renderer.getWidth()/4;
+	}
 	int tsize; /* actual tile size for bowls */
 	int padding, border; /* for frames: may vary on game type */
 	SDL_Rect rBowl[3], rPreview[3], rHold[3], rScore[3];
 	rHiscores = {0,0,0,0};
 	if (demo || type == GT_NORMAL || type == GT_FIGURES) {
 		/* initialize a single bowl with big score info and hiscores */
-		tsize = (int)(renderer.getHeight() / 42)*2; /* get nearest even value to 21 tiles */
+		tsize = (int)(vh / 42)*2; /* get nearest even value to 21 tiles */
 		int bx = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
 		int panelw = bx; /* space left/right of bowl */
 
@@ -248,7 +254,7 @@ void VGame::init(bool demo) {
 		border = tsize/3;
 	} else if (type == GT_VSHUMAN || type == GT_VSCPU) {
 		/* initialize two bowls with small score info below it */
-		tsize = (int)(renderer.getHeight() / 48)*2; /* get nearest even value to 24 tiles */
+		tsize = (int)(vh / 48)*2; /* get nearest even value to 24 tiles */
 		padding = tsize/6;
 		border = tsize/4;
 		/* get total width of bowl and attached preview and divide rest of
@@ -279,7 +285,7 @@ void VGame::init(bool demo) {
 			vbowls[i].init(i,tsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
 	} else if (type == GT_VSCPU2) {
 		/* have 3 bowls with no preview/hold active */
-		tsize = (int)(renderer.getHeight() / 48)*2; /* get nearest even value to 24 tiles */
+		tsize = (int)(vh / 48)*2; /* get nearest even value to 24 tiles */
 		padding = tsize/6;
 		border = tsize/4;
 		int bw = tsize*BOWL_WIDTH + border*2;
