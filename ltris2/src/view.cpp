@@ -151,15 +151,18 @@ void View::run()
 					gamepad.close();
 					gamepad.open();
 					break;
-				case SDL_SCANCODE_F:
+				case SDL_SCANCODE_F6:
 					if (!menuActive)
 						vconfig.showfps = !vconfig.showfps;
 					break;
 				case SDL_SCANCODE_ESCAPE:
-					if (!noGameYet) {
-						menuActive = !menuActive;
+					if (!noGameYet && !menuActive) {
+						menuActive = true;
 						if (!game.isDemo())
-							game.pause(menuActive);
+							game.pause(true);
+						/* clear event to not screw up
+						 * handleMenuEvent below */
+						ev.type = SDL_NOEVENT;
 					}
 					break;
 				default:
@@ -167,7 +170,11 @@ void View::run()
 				}
 			}
 			if (menuActive)
-				handleMenuEvent(ev);
+				if (handleMenuEvent(ev)) {
+					menuActive = false;
+					if (!game.isDemo())
+						game.pause(false);
+				}
 		}
 
 		/* get passed time */
@@ -567,8 +574,11 @@ void View::waitForInputRelease()
 	SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
 }
 
-void View::handleMenuEvent(SDL_Event &ev)
+/** Handle menu event and update menu items and state.
+ * Return true if leaving root menu requested, false otherwise. */
+bool View::handleMenuEvent(SDL_Event &ev)
 {
+	bool ret = false;
 	int aid = AID_NONE;
 	MenuItemSub *subItem;
 	MenuItemBack *backItem;
@@ -590,10 +600,12 @@ void View::handleMenuEvent(SDL_Event &ev)
 			}
 		}
 	} else if (ev.type == SDL_KEYDOWN &&
-			ev.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
+			ev.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
 		Menu *lm = curMenu->getLastMenu();
 		if (lm)
 			curMenu = lm;
+		else
+			ret = true; /* no previous menu = root menu */
 	} else if ((aid = curMenu->handleEvent(ev))) {
 		if (aid != AID_FOCUSCHANGED)
 			mixer.play(theme.sMenuClick);
@@ -649,6 +661,8 @@ void View::handleMenuEvent(SDL_Event &ev)
 			break;
 		}
 	}
+
+	return ret;
 }
 
 /** Create shrapnells from view bowl info. */
