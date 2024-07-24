@@ -54,6 +54,8 @@ void Theme::load(string name, Renderer &r)
 	fMenuNormal.setColor(fontColorNormal);
 	fMenuFocus.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
 	fMenuFocus.setColor(fontColorHighlight);
+	fMenuCaption.load(testRc(path,"f_bold.otf"), r.ry2sy(0.037));
+	fMenuCaption.setColor(fontColorNormal);
 	fTooltip.load(testRc(path,"f_normal.otf"), r.ry2sy(0.028));
 	sMenuClick.load(testRc(path,"s_menuclick.wav"));
 	sMenuMotion.load(testRc(path,"s_menumotion.wav"));

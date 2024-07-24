@@ -38,7 +38,7 @@ class Theme {
 
 	Texture menuBackground;
 	uint menuX, menuY, menuItemWidth, menuItemHeight;
-	Font fMenuNormal, fMenuFocus, fTooltip;
+	Font fMenuNormal, fMenuFocus, fMenuCaption, fTooltip;
 	Sound sMenuClick, sMenuMotion;
 	SDL_Color fontColorNormal;
 	SDL_Color fontColorHighlight;

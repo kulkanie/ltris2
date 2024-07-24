@@ -365,6 +365,7 @@ void View::createMenus()
 
 	/* XXX too lazy to set fonts for each and every item...
 	 * use static pointers instead */
+	Menu::fCaption = &theme.fMenuCaption;
 	MenuItem::fNormal = &theme.fMenuNormal;
 	MenuItem::fFocus = &theme.fMenuFocus;
 	MenuItem::fTooltip = &theme.fTooltip;
@@ -373,13 +374,13 @@ void View::createMenus()
 	rootMenu.reset(); /* delete any old menu ... */
 
 	rootMenu = unique_ptr<Menu>(new Menu(theme)); /* .. or is assigning a new object doing it? */
-	mNewGame = new Menu(theme);
-	mMultiplayer = new Menu(theme);
-	mControls = new Menu(theme);
-	mPlayer[0] = new Menu(theme);
-	mPlayer[1] = new Menu(theme);
-	mAudio = new Menu(theme);
-	mGraphics = new Menu(theme);
+	mNewGame = new Menu(theme,_("New Game"));
+	mMultiplayer = new Menu(theme,_("Multiplayer Options"));
+	mControls = new Menu(theme,_("Controls"));
+	mPlayer[0] = new Menu(theme,_("Player 1"));
+	mPlayer[1] = new Menu(theme,_("Player 2"));
+	mAudio = new Menu(theme,_("Audio"));
+	mGraphics = new Menu(theme,_("Graphics"));
 	graphicsMenu = mGraphics; /* needed to return after mode/theme change */
 
 	/* new game */

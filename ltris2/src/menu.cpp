@@ -21,6 +21,7 @@
 extern SDL_Renderer *mrc;
 extern Renderer renderer;
 
+Font *Menu::fCaption = NULL;
 Font *MenuItem::fNormal = NULL;
 Font *MenuItem::fFocus = NULL;
 Font *MenuItem::fTooltip = NULL;
@@ -119,6 +120,7 @@ int MenuItemEdit::runEditDialog(const string &caption, string &str)
 	return ret;
 }
 
+/** Adjust all items according to theme settings. */
 void Menu::adjust() {
 	int w = theme.menuItemWidth;
 	int h = items.size() * theme.menuItemHeight;
@@ -126,8 +128,16 @@ void Menu::adjust() {
 	int y = theme.menuY - h/2;
 
 	if (!renderer.isWidescreen())
-		w = 6*w/5; /* add 20% width for 4:3 ratio */
+		w = 11*w/10; /* add 10% width for 4:3 ratio */
 
+	/* caption */
+	if (fCaption && caption != "") {
+		y += fCaption->getLineHeight()/2; /* adjust item start */
+		captionX = x + w/2;
+		captionY = y - fCaption->getLineHeight();
+	}
+
+	/* adjust items and submenus recursively */
 	for (uint i = 0; i < items.size(); i++) {
 		MenuItemSub *sub = dynamic_cast<MenuItemSub*>(items[i].get());
 		items[i]->setGeometry(x, y + i*theme.menuItemHeight,
@@ -137,6 +147,17 @@ void Menu::adjust() {
 	}
 }
 
+/** Render items and caption. */
+void Menu::render()
+{
+	fCaption->setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
+	fCaption->write(captionX,captionY,caption);
+
+	for (auto& i : items)
+		i->render();
+}
+
+/** Focus current item and handle event for current item. */
 int Menu::handleEvent(const SDL_Event &ev)
 {
 	int ret = AID_NONE;

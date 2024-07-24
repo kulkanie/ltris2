@@ -346,8 +346,13 @@ class Menu {
 	MenuItem *curItem;
 	int keySelectId; /* if not -1, id of menu entry selected by keys
 			   * equals selection by mouse if any made */
+	int captionX, captionY;
+	string caption;
 public:
-	Menu(Theme &t) : theme(t), curItem(NULL), keySelectId(-1) {}
+	static Font *fCaption;
+
+	Menu(Theme &t, const string &c = "") : theme(t), curItem(NULL),
+			keySelectId(-1), captionX(0), captionY(0), caption(c) {}
 	~Menu() {}
 	void add(MenuItem *item) {
 		items.push_back(unique_ptr<MenuItem>(item));
@@ -362,10 +367,7 @@ public:
 		for (auto& i : items)
 			i->update(ms);
 	}
-	void render() {
-		for (auto& i : items)
-			i->render();
-	}
+	void render();
 	int handleEvent(const SDL_Event &ev);
 	Menu *getLastMenu() {
 		MenuItemBack *bi = NULL;
