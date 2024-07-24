@@ -163,7 +163,7 @@ void VGame::addFrame(SDL_Rect inner, int padding, int border)
 }
 
 
-VGame::VGame() : type(-1), state(VGS_NOINIT) {
+VGame::VGame() : type(-1), state(VGS_NOINIT), frPadding(0), frBorder(0) {
 	init_sdl(0); // needed to create dummy sdl.screen
 	tetris_create(); // loads figures and init block masks
 }
@@ -175,25 +175,25 @@ VGame::~VGame() {
 	quit_sdl();
 }
 
-/** Initialize a new game. If @demo is true, start a demo game. */
-void VGame::init(bool demo) {
+/** Initialize a new game. @_type is game type as defined in vconfig.h.
+ * If @_type is GT_REINIT keep current game context and settings. */
+void VGame::init(int _type) {
 	/* clear game context */
-	if (state != VGS_NOINIT) {
+	if (state != VGS_NOINIT && _type != GT_REINIT) {
 		tetris_clear();
 		for (auto &vb : vbowls)
 			vb.bowl = NULL;
 		state = VGS_NOINIT;
 	}
 
-	/* set default config values */
-	config_reset();
+	if (_type != GT_REINIT) {
+		/* set default config values */
+		config_reset();
 
-	/* set game type, vconfig.gametype is different and must be translated! */
-	if (demo) {
-		type = -1;
-		config.gametype = GAME_DEMO;
-	} else {
-		switch (vconfig.gametype) {
+		/* set game type, must be translated for config */
+		type = _type;
+		switch (type) {
+		case GT_DEMO: config.gametype = GAME_DEMO; break;
 		case GT_NORMAL: config.gametype = GAME_CLASSIC; break;
 		case GT_FIGURES: config.gametype = GAME_FIGURES; break;
 		case GT_VSHUMAN: config.gametype = GAME_VS_HUMAN; break;
@@ -201,25 +201,28 @@ void VGame::init(bool demo) {
 		case GT_VSCPU2: config.gametype = GAME_VS_CPU_CPU; break;
 		default: config.gametype = GAME_DEMO; break; /* shouldn't happen */
 		}
-		type = vconfig.gametype;
+
+		/* transfer existing vconfig settings */
+		config.modern = vconfig.modern;
+		config.starting_level = vconfig.startinglevel;
+		snprintf(config.player1.name,32,"%s",
+				vconfig.playernames[0].c_str());
+		snprintf(config.player2.name,32,"%s",
+				vconfig.playernames[1].c_str());
+		config.holes = vconfig.mp_numholes;
+		config.rand_holes = vconfig.mp_randholes;
+		config.cpu_style = vconfig.cpu_style;
+		config.cpu_delay = vconfig.cpu_delay;
+		config.cpu_sfactor = vconfig.cpu_sfactor;
+		config.as_delay = vconfig.as_delay;
+		config.as_speed = vconfig.as_speed;
 	}
 
-	/* transfer existing vconfig settings */
-	config.modern = vconfig.modern;
-	config.starting_level = vconfig.startinglevel;
-	snprintf(config.player1.name,32,"%s",vconfig.playernames[0].c_str());
-	config.holes = vconfig.mp_numholes;
-	config.rand_holes = vconfig.mp_randholes;
-	config.cpu_style = vconfig.cpu_style;
-	config.cpu_delay = vconfig.cpu_delay;
-	config.cpu_sfactor = vconfig.cpu_sfactor;
-	config.as_delay = vconfig.as_delay;
-	config.as_speed = vconfig.as_speed;
-
-	_loginfo("Initializing game (type=%d)\n",config.gametype);
+	_loginfo("%sInitializing game (type=%d)\n", _type==GT_REINIT?_("(Re)"):"", type);
 
 	/* initialize actual game context */
-	tetris_init();
+	if (_type != GT_REINIT)
+		tetris_init();
 
 	/* initialize vbowls depending on game type */
 	int vh = renderer.getHeight();
@@ -232,7 +235,7 @@ void VGame::init(bool demo) {
 	int padding, border; /* for frames: may vary on game type */
 	SDL_Rect rBowl[3], rPreview[3], rHold[3], rScore[3];
 	rHiscores = {0,0,0,0};
-	if (demo || type == GT_NORMAL || type == GT_FIGURES) {
+	if (type == GT_DEMO || type == GT_NORMAL || type == GT_FIGURES) {
 		/* initialize a single bowl with big score info and hiscores */
 		tsize = (int)(vh / 42)*2; /* get nearest even value to 21 tiles */
 		int bx = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
@@ -342,7 +345,7 @@ void VGame::init(bool demo) {
 	/* create background */
 	background.create(renderer.getWidth(),renderer.getHeight());
 	background.setBlendMode(0);
-	renderBackground(vconfig.startinglevel % theme.numWallpapers);
+	renderBackground(vbowls[0].bowl->level % theme.numWallpapers);
 
 	state = VGS_RUNNING;
 }

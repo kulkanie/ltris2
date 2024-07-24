@@ -68,9 +68,10 @@ View::View() : menuActive(true),
 
 /** (Re)Initialize window, theme and menu.
  * t is theme name, f is fullscreen. */
-void View::init(string t, uint f)
+void View::init(string t, uint f, bool reinit)
 {
-	_loginfo("Initializing view (theme=%s, fullscreen=%d)\n",t.c_str(),f);
+	_loginfo("%sInitializing view (theme=%s, fullscreen=%d)\n",
+			reinit?_("(Re)"):"",t.c_str(),f);
 
 	/* determine resolution */
 	int idx = renderer.getDisplayId();
@@ -99,8 +100,11 @@ void View::init(string t, uint f)
 	lblCredits1.setText(theme.fTooltip, "http://lgames.sf.net");
 	lblCredits2.setText(theme.fTooltip, string("v")+PACKAGE_VERSION);
 
-	/* start demo game */
-	game.init(true);
+	/* start demo or reinitialize current game */
+	if (reinit)
+		game.init(GT_REINIT);
+	else
+		game.init(GT_DEMO);
 	noGameYet = false;
 }
 
@@ -648,7 +652,7 @@ bool View::handleMenuEvent(SDL_Event &ev)
 			 * loop otherwise left mouse button event is
 			 * screwed for the first click*/
 			waitForInputRelease();
-			init(themeNames[vconfig.themeid],vconfig.fullscreen);
+			init(themeNames[vconfig.themeid],vconfig.fullscreen,true);
 			curMenu = graphicsMenu;
 			break;
 		case AID_HELP:
@@ -657,7 +661,7 @@ bool View::handleMenuEvent(SDL_Event &ev)
 		case AID_STARTGAME:
 			menuActive = false;
 			waitForInputRelease();
-			game.init(false);
+			game.init(vconfig.gametype);
 			break;
 		}
 	}

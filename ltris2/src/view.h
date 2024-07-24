@@ -65,7 +65,7 @@ class View {
 	void renderHiscore(int x, int y, int w, int h, bool detailed);
 public:
 	View();
-	void init(string t, uint f);
+	void init(string t, uint f, bool reinit=false);
 	void run();
 	void render();
 };

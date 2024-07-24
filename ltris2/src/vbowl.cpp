@@ -58,11 +58,9 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	compactInfo = compact;
 	winner = false;
 
-	_loginfo("  bowl %d: x=%d, y=%d, tilesize=%d\n",id,rBowl.x,rBowl.y,tileSize);
-	if (!bowl->preview)
-		_loginfo("    preview disabled\n");
-	if (!bowl->hold_active)
-		_loginfo("    hold disabled\n");
+	_loginfo("  bowl %d: x=%d, y=%d, tilesize=%d, preview=%d, active=%d\n",
+					id, rBowl.x, rBowl.y, tileSize,
+					bowl->preview, bowl->hold_active);
 
 	/* TEST for sprites
 	for (int i = 0; i < 9; i++) {

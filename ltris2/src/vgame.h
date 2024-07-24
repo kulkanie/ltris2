@@ -43,7 +43,7 @@ class VGame {
 public:
 	VGame();
 	~VGame();
-	void init(bool demo);
+	void init(int _type);
 	void render();
 	bool update(uint ms, SDL_Event &ev, const Uint8 *gpstate);
 	void pause(bool p=true);

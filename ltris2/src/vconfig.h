@@ -22,7 +22,9 @@ enum {
 	FPS_60,
 	FPS_200,
 
-	GT_NORMAL = 0,
+	GT_REINIT = -2,
+	GT_DEMO = -1,
+	GT_NORMAL,
 	GT_FIGURES,
 	GT_VSHUMAN,
 	GT_VSCPU,
