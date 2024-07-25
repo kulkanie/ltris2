@@ -315,7 +315,7 @@ class MenuItemEdit : public MenuItemValue {
 	string &str;
 	bool hidval;
 
-	int runEditDialog(const string &caption, string &str);
+	int runEditDialog(const string &caption, string &str, int len=-1);
 public:
 	MenuItemEdit(const string &c, string &s, int aid = AID_NONE,
 				bool hv = false)
@@ -327,7 +327,7 @@ public:
 		if (ev.type == SDL_MOUSEBUTTONDOWN ||
 				(ev.type == SDL_KEYDOWN &&
 				ev.key.keysym.scancode == SDL_SCANCODE_RETURN))
-			if (runEditDialog(_("Enter Name"),str)) {
+			if (runEditDialog(_("Enter Name"),str,12)) {
 				setValue(str);
 				return actionId;
 			}

@@ -1,7 +1,6 @@
 - control menu with gamepad
-
 - font colors in theme.ini
-- undim
+- undim screen and tooltips
 - multiple tile sets that rotate each level
 - reset tooltip delay on opening menu
 - extra menu item to show all hiscores

@@ -55,8 +55,9 @@ void MenuItem::renderPart(Label &ln, Label &lf, int align)
 
 /** Run a dialog for editing a UTF8 string. ESC cancels editing (string
  * is not changed), Enter confirms changes. Return 1 if string was changed,
- * 0 if not changed. */
-int MenuItemEdit::runEditDialog(const string &caption, string &str)
+ * 0 if not changed. @len is the permitted length of input or -1 if
+ * unlimited. */
+int MenuItemEdit::runEditDialog(const string &caption, string &str, int len)
 {
 	int ret = 0;
 	Font *f = MenuItem::fNormal;
@@ -100,7 +101,8 @@ int MenuItemEdit::runEditDialog(const string &caption, string &str)
 				}
 				break;
 			case SDL_TEXTINPUT:
-				str += event.text.text;
+				if (len==-1 || str.length() < (uint)len)
+					str += event.text.text;
 				break;
 			}
 		}
