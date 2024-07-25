@@ -59,6 +59,7 @@ class View {
 	bool showInfo(const string &line, int type);
 	bool showInfo(const vector<string> &text, int type);
 	void dim();
+	bool checkMenuGamepadEvent(const Uint8 *gpadstate, SDL_Event &ev);
 	bool handleMenuEvent(SDL_Event &ev);
 	void createShrapnells(VBowl &vb);
 	void setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &g);

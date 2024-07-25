@@ -60,7 +60,7 @@ View::View() : menuActive(true),
 	if (gamepad.opened()) {
 		printf("  NOTE: Gamepad cannot be configured via menu yet but you\n");
 		printf("  can edit the gp_ entries in config file %s .\n",vconfig.fname.c_str());
-		printf("  In case connection to gamepad gets lost, you can press F5 do reconnect.\n");
+		printf("  In case connection to gamepad gets lost, you can press F5 to reconnect.\n");
 	}
 
 	init(themeNames[vconfig.themeid], vconfig.fullscreen);
@@ -119,6 +119,7 @@ void View::run()
 	Uint32 ms;
 	vector<string> text;
 	string str;
+	bool newEvent;
 
 	state = VS_IDLE;
 	sprites.clear();
@@ -139,8 +140,10 @@ void View::run()
 	while (!quitReceived) {
 		renderTicks.reset();
 
-		/* handle events */
+		/* handle global events */
+		newEvent = false;
 		if (SDL_PollEvent(&ev)) {
+			newEvent = true;
 			if (ev.type == SDL_QUIT)
 				quitReceived = true;
 			else if (ev.type == SDL_JOYBUTTONUP) {
@@ -173,12 +176,6 @@ void View::run()
 					break;
 				}
 			}
-			if (menuActive)
-				if (handleMenuEvent(ev)) {
-					menuActive = false;
-					if (!game.isDemo())
-						game.pause(false);
-				}
 		}
 
 		/* get passed time */
@@ -186,6 +183,26 @@ void View::run()
 
 		/* update gamepad state */
 		const Uint8 *gpadstate = gamepad.update();
+
+		/* handle menu events */
+		if (menuActive) {
+			/* fake keydown event if gamepad is used
+			 * XXX would be better to only check gamepad if no
+			 * event happened but SDL_PollEvent sets ev.type
+			 * to the internal event 0x7f00 SDL_EVENT_POLL_SENTINEL
+			 * instead of leaving NOEVENT. since using this internal
+			 * event might break something in the future we just
+			 * always check for gamepad state and potentially
+			 * overwrite another event. shouldn't hurt to bad. */
+			if (checkMenuGamepadEvent(gpadstate, ev))
+				newEvent = true;
+
+			if (newEvent && handleMenuEvent(ev)) {
+				menuActive = false;
+				if (!game.isDemo())
+					game.pause(false);
+			}
+		}
 
 		/* update menu */
 		if (menuActive)
@@ -578,6 +595,30 @@ void View::waitForInputRelease()
 	SDL_PumpEvents();
 	SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
 }
+
+/** Check if gamepad is used to navigate menu and return as fake
+ * key down event in @ev. */
+bool View::checkMenuGamepadEvent(const Uint8 *gpadstate, SDL_Event &ev)
+{
+	int gp2sc[6][2] = {
+		{GPAD_UP, SDL_SCANCODE_UP},
+		{GPAD_DOWN, SDL_SCANCODE_DOWN},
+		{GPAD_RIGHT, SDL_SCANCODE_RIGHT},
+		{GPAD_LEFT, SDL_SCANCODE_LEFT},
+		{GPAD_BUTTON0 + vconfig.gp_rrot, SDL_SCANCODE_RIGHT},
+		{GPAD_BUTTON0 + vconfig.gp_lrot, SDL_SCANCODE_LEFT}
+	};
+
+	for (int i = 0; i < 6; i++)
+		if (gpadstate[gp2sc[i][0]] == GPBS_DOWN) {
+			ev.type = SDL_KEYDOWN;
+			ev.key.keysym.scancode = (SDL_Scancode)gp2sc[i][1];
+			return true;
+		}
+
+	return false;
+}
+
 
 /** Handle menu event and update menu items and state.
  * Return true if leaving root menu requested, false otherwise. */

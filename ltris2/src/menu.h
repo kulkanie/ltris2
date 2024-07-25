@@ -326,7 +326,8 @@ public:
 	virtual int handleEvent(const SDL_Event &ev) {
 		if (ev.type == SDL_MOUSEBUTTONDOWN ||
 				(ev.type == SDL_KEYDOWN &&
-				ev.key.keysym.scancode == SDL_SCANCODE_RETURN))
+				(ev.key.keysym.scancode == SDL_SCANCODE_RETURN ||
+				ev.key.keysym.scancode == SDL_SCANCODE_RIGHT)) )
 			if (runEditDialog(_("Enter Name"),str,12)) {
 				setValue(str);
 				return actionId;
