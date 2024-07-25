@@ -36,6 +36,7 @@ void Theme::load(string name, Renderer &r)
 	if (fileExists(path + "/theme.ini")) {
 		FileParser fp(path + "/theme.ini");
 		fp.get("numWallPapers",numWallpapers);
+		fp.get("tileSize",tileSize);
 	}
 
 	Texture::setRenderScaleQuality(1);
@@ -73,7 +74,6 @@ void Theme::load(string name, Renderer &r)
 
 	/* tiles -- assume one row of valid tiles */
 	tiles.load(testRc(path,"blocks.png"));
-	tileSize = tiles.getHeight();
 	numTiles = tiles.getWidth() / tileSize;
 	if (numTiles > NUMTILES)
 		numTiles = NUMTILES;
