@@ -62,12 +62,16 @@ void Theme::load(string name, Renderer &r)
 	sMenuMotion.load(testRc(path,"s_menumotion.wav"));
 
 	/* wallpapers */
-	for (uint i = 0; i < numWallpapers; i++) {
-		wallpapers[i].load(path + "/wallpaper" + to_string(i) + ".jpg");
-		wallpapers[i].setBlendMode(0);
+	numWallpapers = 0;
+	string wfname = path + "/wallpaper0.jpg";
+	while (fileExists(wfname)) {
+		wallpapers[numWallpapers].load(wfname);
+		wallpapers[numWallpapers].setBlendMode(0);
+		numWallpapers++;
+		wfname = path + "/wallpaper" + to_string(numWallpapers) + ".jpg";
 	}
 	if (numWallpapers == 0) {
-		wallpapers[0].load(stdPath + "/wallpaper01.jpg");
+		wallpapers[0].load(stdPath + "/wallpaper0.jpg");
 		wallpapers[0].setBlendMode(0);
 		numWallpapers = 1;
 	}
