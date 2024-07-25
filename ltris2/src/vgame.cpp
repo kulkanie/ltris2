@@ -231,112 +231,112 @@ void VGame::init(int _type) {
 		 * top of screen */
 		vh = 3*renderer.getWidth()/4;
 	}
-	int tsize; /* actual tile size for bowls */
+	int bsize; /* actual block size for bowls */
 	int padding, border; /* for frames: may vary on game type */
 	SDL_Rect rBowl[3], rPreview[3], rHold[3], rScore[3];
 	rHiscores = {0,0,0,0};
 	if (type == GT_DEMO || type == GT_NORMAL || type == GT_FIGURES) {
 		/* initialize a single bowl with big score info and hiscores */
-		tsize = (int)(vh / 42)*2; /* get nearest even value to 21 tiles */
-		int bx = (renderer.getWidth() - (tsize*BOWL_WIDTH))/2;
-		int panelw = bx; /* space left/right of bowl */
+		bsize = (int)(vh / 42)*2; /* get nearest even value to 21 blocks */
+		int bwlx = (renderer.getWidth() - (bsize*BOWL_WIDTH))/2;
+		int panelw = bwlx; /* space left/right of bowl */
 
-		rBowl[0] = {bx, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[0] = {bwlx, 0, bsize*BOWL_WIDTH, bsize*BOWL_HEIGHT};
 		if (config.modern)
-			rPreview[0] = {rBowl[0].x + rBowl[0].w + (panelw - 4*tsize)/2,
-					2*tsize,4*tsize,10*tsize};
+			rPreview[0] = {rBowl[0].x + rBowl[0].w + (panelw - 4*bsize)/2,
+					2*bsize,4*bsize,10*bsize};
 		else
-			rPreview[0] = {rBowl[0].x + rBowl[0].w + (panelw - 4*tsize)/2,
-					5*tsize,4*tsize,4*tsize};
-		rHold[0] = {rPreview[0].x, 14*tsize, 4*tsize, 4*tsize};
-		rScore[0] = {(panelw - 6*tsize)/2, 2*tsize, 6*tsize, 7*tsize};
+			rPreview[0] = {rBowl[0].x + rBowl[0].w + (panelw - 4*bsize)/2,
+					5*bsize,4*bsize,4*bsize};
+		rHold[0] = {rPreview[0].x, 14*bsize, 4*bsize, 4*bsize};
+		rScore[0] = {(panelw - 6*bsize)/2, 2*bsize, 6*bsize, 7*bsize};
 
-		vbowls[0].init(0,tsize,rBowl[0],rPreview[0],rHold[0],rScore[0]);
+		vbowls[0].init(0,bsize,rBowl[0],rPreview[0],rHold[0],rScore[0]);
 
-		padding = tsize/4;
-		border = tsize/3;
+		padding = bsize/4;
+		border = bsize/3;
 	} else if (type == GT_VSHUMAN || type == GT_VSCPU) {
 		/* initialize two bowls with small score info below it */
-		tsize = (int)(vh / 48)*2; /* get nearest even value to 24 tiles */
-		padding = tsize/6;
-		border = tsize/4;
+		bsize = (int)(vh / 48)*2; /* get nearest even value to 24 blocks */
+		padding = bsize/6;
+		border = bsize/4;
 		/* get total width of bowl and attached preview and divide rest of
 		 * screen width in three gaps of same size. */
-		int bw = tsize*BOWL_WIDTH + border*2 + 2*padding + 4*tsize;
+		int bw = bsize*BOWL_WIDTH + border*2 + 2*padding + 4*bsize;
 		int bgap = (renderer.getWidth() - 2*bw) / 3;
 
-		rBowl[0] = {bgap, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
-		rBowl[1] = {bgap*2+bw, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[0] = {bgap, 0, bsize*BOWL_WIDTH, bsize*BOWL_HEIGHT};
+		rBowl[1] = {bgap*2+bw, 0, bsize*BOWL_WIDTH, bsize*BOWL_HEIGHT};
 
 		for (int i = 0; i < 2; i++) {
 			if (config.modern)
 				rPreview[i] = {rBowl[i].x + rBowl[i].w + border*2 + padding,
-						rBowl[i].y + 2*tsize,
-						4*tsize,10*tsize};
+						rBowl[i].y + 2*bsize,
+						4*bsize,10*bsize};
 			else
 				rPreview[i] = {rBowl[i].x + rBowl[i].w + border*2 + padding,
-						rBowl[i].y + 5*tsize,
-						4*tsize,4*tsize};
-			rHold[i] = {rPreview[i].x, rBowl[i].y + 14*tsize,
-					4*tsize, 4*tsize};
-			rScore[i] = {rBowl[i].x + tsize,
+						rBowl[i].y + 5*bsize,
+						4*bsize,4*bsize};
+			rHold[i] = {rPreview[i].x, rBowl[i].y + 14*bsize,
+					4*bsize, 4*bsize};
+			rScore[i] = {rBowl[i].x + bsize,
 					rBowl[i].y + rBowl[i].h + border*2 + padding,
-					rBowl[i].w - tsize*2, tsize*3};
+					rBowl[i].w - bsize*2, bsize*3};
 		}
 
 		for (int i = 0; i < 2; i++)
-			vbowls[i].init(i,tsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
+			vbowls[i].init(i,bsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
 	} else if (type == GT_VSCPU2) {
 		/* have 3 bowls with no preview/hold active */
-		tsize = (int)(vh / 48)*2; /* get nearest even value to 24 tiles */
-		padding = tsize/6;
-		border = tsize/4;
-		int bw = tsize*BOWL_WIDTH + border*2;
+		bsize = (int)(vh / 48)*2; /* get nearest even value to 24 blocks */
+		padding = bsize/6;
+		border = bsize/4;
+		int bw = bsize*BOWL_WIDTH + border*2;
 		int bgap = (renderer.getWidth() - 3*bw) / 4;
 
-		rBowl[0] = {bgap+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
-		rBowl[1] = {bgap*2+bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
-		rBowl[2] = {bgap*3+2*bw+border, 0, tsize*BOWL_WIDTH, tsize*BOWL_HEIGHT};
+		rBowl[0] = {bgap+border, 0, bsize*BOWL_WIDTH, bsize*BOWL_HEIGHT};
+		rBowl[1] = {bgap*2+bw+border, 0, bsize*BOWL_WIDTH, bsize*BOWL_HEIGHT};
+		rBowl[2] = {bgap*3+2*bw+border, 0, bsize*BOWL_WIDTH, bsize*BOWL_HEIGHT};
 
 		for (int i = 0; i < 3; i++) {
 			rPreview[i] = {0,0,0,0};
 			rHold[i] = {0,0,0,0};
-			rScore[i] = {rBowl[i].x + tsize,
+			rScore[i] = {rBowl[i].x + bsize,
 					rBowl[i].y + rBowl[i].h + border*2 + padding,
-					rBowl[i].w - tsize*2, tsize*3};
+					rBowl[i].w - bsize*2, bsize*3};
 		}
 
 		for (int i = 0; i < 3; i++)
-			vbowls[i].init(i,tsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
+			vbowls[i].init(i,bsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
 	}
 
 	/* XXX store bowl assets in theme as using a VBowlAssets class in
 	 * bowl does not work. textures get created but are not displayed
 	 * and I can't figure out why... */
-	/* create tiles for pieces */
-	for (int i = 0; i < NUMTILES; i++) {
-		theme.vbaTiles[i].create(tsize,tsize);
-		renderer.setTarget(theme.vbaTiles[i]);
-		theme.tiles.copy(i*theme.tileSize,0,theme.tileSize,theme.tileSize,
-				0,0,tsize,tsize);
+	/* create blocks for pieces */
+	for (int i = 0; i < NUMBLOCKS; i++) {
+		theme.vbaBlocks[i].create(bsize,bsize);
+		renderer.setTarget(theme.vbaBlocks[i]);
+		theme.blocks.copy(i*theme.blockSize,0,theme.blockSize,theme.blockSize,
+				0,0,bsize,bsize);
 	}
 	/* create previews for all pieces */
 	double pxoff[7] = {-0.5,-0.5,-0.5,0,-0.5,-0.5,0};
 	double pyoff[7] = {-2,-2,-2,-2,-2,-2,-1.5};
 	for (int k = 0; k < NUMPIECES; k++) {
 		int pid = block_masks[k].blockid;
-		theme.vbaPreviews[k].create(4*tsize,2*tsize);
+		theme.vbaPreviews[k].create(4*bsize,2*bsize);
 		renderer.setTarget(theme.vbaPreviews[k]);
 		for (int j = 0; j < 4; j++)
 			for (int i = 0; i < 4; i++) {
 				if (!block_masks[k].mask[block_masks[k].rstart][i][j])
 					continue;
-				theme.vbaTiles[pid].copy(pxoff[k]*tsize + i*tsize,
-							pyoff[k]*tsize + j*tsize);
+				theme.vbaBlocks[pid].copy(pxoff[k]*bsize + i*bsize,
+							pyoff[k]*bsize + j*bsize);
 			}
 	}
 	renderer.clearTarget();
-	theme.vbaLoadFonts(tsize);
+	theme.vbaLoadFonts(bsize);
 
 	/* save padding and border for wallpaper changes */
 	frPadding = padding;
@@ -449,7 +449,7 @@ void VGame::renderBackground(uint wid)
 	theme.wallpapers[wid % theme.numWallpapers].copy();
 	renderer.clearTarget();
 
-	int tsize = vbowls[0].tileSize;
+	int tsize = vbowls[0].blockSize;
 	int padding = frPadding;
 	int border = frBorder;
 

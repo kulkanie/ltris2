@@ -32,14 +32,14 @@ extern Config config;
 
 VBowl::VBowl() {
 	bowl = NULL;
-	w = h = tileSize = 0;
+	w = h = blockSize = 0;
 	compactInfo = false;
 	winner = false;
 }
 
 /* Initialize representation of libgame bowl @id at screen position @_sx,@_sy
- * and piece tile size @_tsize. If @compact is true render compact player info. */
-void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
+ * with piece block size @_tsize. If @compact is true render compact player info. */
+void VBowl::init(uint id, uint bsize, SDL_Rect &rb, SDL_Rect &rp,
 				SDL_Rect &rh, SDL_Rect &rs, bool compact)
 {
 	if (id >= MAXNUMPLAYERS || !bowls[id]) {
@@ -50,7 +50,7 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	bowl = bowls[id];
 	w = BOWL_WIDTH;
 	h = BOWL_HEIGHT;
-	tileSize = tsize;
+	blockSize = bsize;
 	rBowl = rb;
 	rPreview = rp;
 	rHold = rh;
@@ -58,8 +58,8 @@ void VBowl::init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp,
 	compactInfo = compact;
 	winner = false;
 
-	_loginfo("  bowl %d: x=%d, y=%d, tilesize=%d, preview=%d, active=%d\n",
-					id, rBowl.x, rBowl.y, tileSize,
+	_loginfo("  bowl %d: x=%d, y=%d, blocksize=%d, preview=%d, active=%d\n",
+					id, rBowl.x, rBowl.y, blockSize,
 					bowl->preview, bowl->hold_active);
 
 	/* TEST for sprites
@@ -80,13 +80,13 @@ void VBowl::render() {
 		return;
 
 	/* player info */
-	int ix = rScore.x + rScore.w/2, iy = rScore.y + tileSize/2;
+	int ix = rScore.x + rScore.w/2, iy = rScore.y + blockSize/2;
 	theme.vbaFontNormal.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
 	theme.vbaFontBold.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
 	theme.vbaFontSmall.setAlign(ALIGN_X_CENTER | ALIGN_Y_CENTER);
 	/* first line is always name, second is score */
 	theme.vbaFontBold.write(ix,iy,bowl->name);
-	iy += tileSize;
+	iy += blockSize;
 	theme.vbaFontNormal.write(ix,iy,to_string((int)counter_get_approach(bowl->score)));
 	/* add limit to line info if no transition yet */
 	if (bowl->firstlevelup_lines > 10 && bowl->lines < bowl->firstlevelup_lines)
@@ -96,7 +96,7 @@ void VBowl::render() {
 	if (compactInfo) {
 		/* have level and lines in one line */
 		string str;
-		iy += tileSize;
+		iy += blockSize;
 		theme.vbaFontSmall.setAlign(ALIGN_X_LEFT | ALIGN_Y_CENTER);
 		str = string(_("Lines"))+": "+strLines;
 		theme.vbaFontSmall.write(rScore.x,iy,str);
@@ -105,13 +105,13 @@ void VBowl::render() {
 		theme.vbaFontSmall.write(rScore.x+rScore.w,iy,str);
 	} else {
 		/* level and lines in separate lines */
-		iy += 1.5*tileSize;
+		iy += 1.5*blockSize;
 		theme.vbaFontBold.write(ix,iy,_("Level"));
-		iy += tileSize;
+		iy += blockSize;
 		theme.vbaFontNormal.write(ix,iy,to_string(bowl->level));
-		iy += 1.5*tileSize;
+		iy += 1.5*blockSize;
 		theme.vbaFontBold.write(ix,iy,_("Lines"));
-		iy += tileSize;
+		iy += blockSize;
 		theme.vbaFontNormal.write(ix,iy,strLines);
 	}
 
@@ -128,7 +128,7 @@ void VBowl::render() {
 		if (winner)
 			theme.vbaFontBold.setColor(theme.fontColorHighlight);
 		theme.vbaFontBold.write(rBowl.x + rBowl.w/2,
-					rBowl.y + 3*tileSize, msg);
+					rBowl.y + 3*blockSize, msg);
 		if (winner)
 			theme.vbaFontBold.setColor(theme.fontColorNormal);
 		renderStats();
@@ -141,9 +141,9 @@ void VBowl::render() {
 			if (bowl->contents[i][j] == -1)
 				continue;
 			pid = bowl->contents[i][j];
-			x = rBowl.x + i*tileSize;
-			y = rBowl.y + j*tileSize;
-			theme.vbaTiles[pid].copy(x,y);
+			x = rBowl.x + i*blockSize;
+			y = rBowl.y + j*blockSize;
+			theme.vbaBlocks[pid].copy(x,y);
 		}
 
 	/* (ghost) piece: block_masks[block.id].blockid is the picture id */
@@ -151,17 +151,17 @@ void VBowl::render() {
 		/* get starting screen position for piece. y is a bit of an issue
 		 * for smooth drop as we need to check here again if we use y or
 		 * cur_y as sy from libgame is 480p and thus too coarse. */
-		x = rBowl.x + bowl->block.x*tileSize;
+		x = rBowl.x + bowl->block.x*blockSize;
 		if (bowl->ldelay_cur > 0 || !vconfig.smoothdrop ||
 				!bowl_piece_can_drop(bowl))
-			y = rBowl.y + bowl->block.y*tileSize;
+			y = rBowl.y + bowl->block.y*blockSize;
 		else
-			y = rBowl.y + bowl->block.cur_y / bowl->block_size * tileSize;
+			y = rBowl.y + bowl->block.cur_y / bowl->block_size * blockSize;
 		int xstart = x;
 
 		/* get starting y for ghost piece, x is same. to interfere as little
 		 * with the original code we just translate the 480p position back */
-		int gy = rBowl.y + ((bowl->help_sy - bowl->sy) / bowl->block_size)*tileSize;
+		int gy = rBowl.y + ((bowl->help_sy - bowl->sy) / bowl->block_size)*blockSize;
 
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 4; i++) {
@@ -170,48 +170,48 @@ void VBowl::render() {
 
 					/* ghost piece */
 					if (config.modern) {
-						theme.vbaTiles[pid].setAlpha(96);
-						theme.vbaTiles[pid].copy(x,gy);
-						theme.vbaTiles[pid].setAlpha(SDL_ALPHA_OPAQUE);
+						theme.vbaBlocks[pid].setAlpha(96);
+						theme.vbaBlocks[pid].copy(x,gy);
+						theme.vbaBlocks[pid].setAlpha(SDL_ALPHA_OPAQUE);
 					}
 
 					/* actual piece */
-					theme.vbaTiles[pid].copy(x,y);
+					theme.vbaBlocks[pid].copy(x,y);
 
-					/* use special tile id layered to indicate lock
+					/* use special block id layered to indicate lock
 					 * delay unless soft drop was used which will
 					 * insert the block on the next cycle */
 					if (bowl->ldelay_cur > 0 && !bowl->sdrop_pressed) {
-						pid = LOCKDELAYTILEID;
-						theme.vbaTiles[pid].setAlpha(128);
-						theme.vbaTiles[pid].copy(x,y);
-						theme.vbaTiles[pid].setAlpha(SDL_ALPHA_OPAQUE);
+						pid = LOCKDELAYBLOCKID;
+						theme.vbaBlocks[pid].setAlpha(128);
+						theme.vbaBlocks[pid].copy(x,y);
+						theme.vbaBlocks[pid].setAlpha(SDL_ALPHA_OPAQUE);
 					}
 
 				}
-				x += tileSize;
+				x += blockSize;
 			}
 			x = xstart;
-			y += tileSize;
-			gy += tileSize;
+			y += blockSize;
+			gy += blockSize;
 		}
 	}
 
 	/* preview */
 	if (rPreview.w > 0 && bowl->preview && bowl->next_block_id >= 0) {
-		theme.vbaPreviews[bowl->next_block_id].copy(rPreview.x,rPreview.y+1.5*tileSize);
+		theme.vbaPreviews[bowl->next_block_id].copy(rPreview.x,rPreview.y+1.5*blockSize);
 
 		/* only for modern: show next two pieces of piece bag */
 		for (int i = 0; i < bowl->preview-1; i++) {
 			pid = next_blocks[bowl->next_blocks_pos+i];
 			theme.vbaPreviews[pid].copy(rPreview.x,
-					rPreview.y+4.5*tileSize+i*3*tileSize);
+					rPreview.y+4.5*blockSize+i*3*blockSize);
 		}
 	}
 
 	/* hold piece */
 	if (rHold.w > 0 && bowl->hold_active && bowl->hold_id != -1)
-		theme.vbaPreviews[bowl->hold_id].copy(rHold.x,rHold.y+1.5*tileSize);
+		theme.vbaPreviews[bowl->hold_id].copy(rHold.x,rHold.y+1.5*blockSize);
 
 }
 
@@ -230,8 +230,8 @@ void VBowl::update(uint ms, BowlControls &bc) {
  * for "not set". */
 void VBowl::renderStatLine(const string &cap, int val, int &y)
 {
-	int cx = rBowl.x + tileSize;
-	int vx = rBowl.x + rBowl.w - tileSize;
+	int cx = rBowl.x + blockSize;
+	int vx = rBowl.x + rBowl.w - blockSize;
 
 	theme.vbaFontSmall.setAlign(ALIGN_X_LEFT | ALIGN_Y_TOP);
 	theme.vbaFontSmall.write(cx, y, cap+":");
@@ -248,7 +248,7 @@ void VBowl::renderStatLine(const string &cap, int val, int &y)
 void VBowl::renderStats()
 {
 	BowlStats *s = &bowl->stats;
-	int sy = rBowl.y + 5.5*tileSize;
+	int sy = rBowl.y + 5.5*blockSize;
 
 	renderStatLine(_("Pieces Placed"), s->pieces, sy);
 	renderStatLine(_("I-Pieces"), s->i_pieces, sy);

@@ -36,7 +36,7 @@ void Theme::load(string name, Renderer &r)
 	if (fileExists(path + "/theme.ini")) {
 		FileParser fp(path + "/theme.ini");
 		fp.get("numWallPapers",numWallpapers);
-		fp.get("tileSize",tileSize);
+		fp.get("blockSize",blockSize);
 	}
 
 	Texture::setRenderScaleQuality(1);
@@ -68,6 +68,8 @@ void Theme::load(string name, Renderer &r)
 		wallpapers[numWallpapers].load(wfname);
 		wallpapers[numWallpapers].setBlendMode(0);
 		numWallpapers++;
+		if (numWallpapers == MAXWALLPAPERS)
+			break;
 		wfname = path + "/wallpaper" + to_string(numWallpapers) + ".jpg";
 	}
 	if (numWallpapers == 0) {
@@ -76,13 +78,13 @@ void Theme::load(string name, Renderer &r)
 		numWallpapers = 1;
 	}
 
-	/* tiles -- assume one row of valid tiles */
-	tiles.load(testRc(path,"blocks.png"));
-	numTiles = tiles.getWidth() / tileSize;
-	if (numTiles > NUMTILES)
-		numTiles = NUMTILES;
-	if (numTiles < NUMTILES)
-		_loginfo("Theme provides only %d tiles instead of %d...\n",numTiles,NUMTILES);
+	/* blocks -- each valid set is in a row */
+	blocks.load(testRc(path,"blocks.png"));
+	numBlocks = blocks.getWidth() / blockSize;
+	if (numBlocks > NUMBLOCKS)
+		numBlocks = NUMBLOCKS;
+	if (numBlocks < NUMBLOCKS)
+		_loginfo("Theme provides only %d blocks instead of %d...\n",numBlocks,NUMBLOCKS);
 
 	/* ingame sounds */
 	sShift.load(testRc(path,"s_shift.wav"));
@@ -92,15 +94,15 @@ void Theme::load(string name, Renderer &r)
 	sTetris.load(testRc(path,"s_tetris.wav"));
 }
 
-/** Load fonts for bowl assets. */
-void Theme::vbaLoadFonts(uint tsize)
+/** Load fonts for bowl assets. @bsize is single block size. */
+void Theme::vbaLoadFonts(uint bsize)
 {
-	vbaFontNormal.load(testRc(path,"f_normal.otf"), 9*tsize/10);
+	vbaFontNormal.load(testRc(path,"f_normal.otf"), 9*bsize/10);
 	vbaFontNormal.setColor(fontColorNormal);
-	vbaFontBold.load(testRc(path,"f_bold.otf"), 9*tsize/10);
+	vbaFontBold.load(testRc(path,"f_bold.otf"), 9*bsize/10);
 	vbaFontBold.setColor(fontColorNormal);
-	vbaFontSmall.load(testRc(path,"f_normal.otf"), 7*tsize/10);
+	vbaFontSmall.load(testRc(path,"f_normal.otf"), 7*bsize/10);
 	vbaFontSmall.setColor(fontColorNormal);
-	vbaFontTiny.load(testRc(path,"f_normal.otf"), 6*tsize/10);
+	vbaFontTiny.load(testRc(path,"f_normal.otf"), 6*bsize/10);
 	vbaFontTiny.setColor(fontColorNormal);
 }

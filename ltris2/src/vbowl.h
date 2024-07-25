@@ -24,8 +24,8 @@ class VBowl {
 	friend VGame;
 
 	Bowl *bowl; /* merely a pointer, memory stuff is handled by VGame */
-	int w, h; /* width/height of bowl (tiles) */
-	int tileSize; /* screen size of a single tile */
+	int w, h; /* width/height of bowl (in blocks) */
+	int blockSize; /* screen size of a single block */
 	SDL_Rect rBowl; /* screen region for bowl content */
 	SDL_Rect rPreview; /* screen region for preview pieces */
 	SDL_Rect rHold; /* screen region for hold piece */
@@ -37,7 +37,7 @@ class VBowl {
 	void renderStats();
 public:
 	VBowl();
-	void init(uint id, uint tsize, SDL_Rect &rb, SDL_Rect &rp, SDL_Rect &rh, SDL_Rect &rs, bool compact=false);
+	void init(uint id, uint bsize, SDL_Rect &rb, SDL_Rect &rp, SDL_Rect &rh, SDL_Rect &rs, bool compact=false);
 	bool initialized() { return (bowl != NULL); }
 	void render();
 	void update(uint ms, BowlControls &bc);

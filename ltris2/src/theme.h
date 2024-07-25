@@ -22,9 +22,9 @@ class Menu;
 
 enum {
 	MAXWALLPAPERS = 10,
-	NUMTILES = 11,
+	NUMBLOCKS = 11,
 	NUMPIECES = 7,
-	LOCKDELAYTILEID = 10
+	LOCKDELAYBLOCKID = 10
 };
 
 class Theme {
@@ -45,16 +45,16 @@ class Theme {
 
 	Texture wallpapers[MAXWALLPAPERS];
 	uint numWallpapers;
-	Texture tiles; /* for pieces */
-	uint numTiles;
-	uint tileSize;
+	Texture blocks; /* for pieces */
+	uint numBlocks;
+	uint blockSize;
 	Sound sShift, sInsert, sExplosion, sNextLevel, sTetris;
 
 	/* XXX vbowl assets, set by vgame.init(). having a vbowl assets
 	 * class does not work. for some reason textures are empty and
 	 * I cannot figure out why. instructions are exactly the same...
 	 * so we just do it this way. */
-	Texture vbaTiles[NUMTILES];
+	Texture vbaBlocks[NUMBLOCKS];
 	Texture vbaPreviews[NUMPIECES];
 	Font vbaFontNormal, vbaFontBold, vbaFontSmall, vbaFontTiny;
 
@@ -68,12 +68,12 @@ class Theme {
 	}
 public:
 	Theme() : menuX(0), menuY(0), menuItemWidth(0), menuItemHeight(0),
-			numWallpapers(0), numTiles(0), tileSize(0)
+			numWallpapers(0), numBlocks(0), blockSize(0)
 	{
 		stdPath = string(DATADIR) + "/themes/Standard";
 	}
 	void load(string name, Renderer &r);
-	void vbaLoadFonts(uint tsize);
+	void vbaLoadFonts(uint bsize);
 };
 
 #endif /* SRC_THEME_H_ */

@@ -23,7 +23,7 @@ public:
 	virtual void render() = 0;
 };
 
-/* A fading tile with a position and movement vector influenced by gravity. */
+/* A fading block with a position and movement vector influenced by gravity. */
 class Shrapnell : public Sprite {
 	Texture &texture; /* reference to an existing texture */
 	int w, h; /* size of texture */

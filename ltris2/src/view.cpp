@@ -354,7 +354,7 @@ void View::createMenus()
 			"If not 0 the first level transition will require more lines "\
 			"to be cleared (the higher the starting level the more lines).");
 	string hGameMode = _("Normal: Starts with an empty bowl. Try to survive as long as possible.\n\n"\
-			"Figures: Clear a different figure each level. Later on single tiles (level 7+) or lines (level 13+) will appear.\n\n"\
+			"Figures: Clear a different figure each level. Later on single blocks (level 7+) or lines (level 13+) will appear.\n\n"\
 			"Vs Human/CPU/2xCPU: Play against another human or one or two CPU opponents.");
 	string hGameStyle = _("Modern: Enables all that stuff that makes tetris "\
 			"casual like ghost piece, wall-kicks, hold, "\
@@ -465,7 +465,7 @@ void View::createMenus()
 	mGraphics->add(new MenuItemSwitch(_("Animations"),"",AID_NONE,
 			vconfig.animations));
 	mGraphics->add(new MenuItemSwitch(_("Smooth Drop"),
-			_("Drop piece tile-by-tile or smoothly. Does not affect drop speed."),
+			_("Drop piece block-by-block or smoothly. Does not affect drop speed."),
 			AID_NONE,vconfig.smoothdrop));
 	mGraphics->add(new MenuItemList(_("Frame Limit"),
 			"Maximum number of frames per second.",
@@ -684,24 +684,24 @@ void View::createShrapnells(VBowl &vb)
 
 	for (int j = 0; j < b->vbi.cleared_line_count; j++) {
 		int ly = b->vbi.cleared_line_y[j];
-		Vector pos(vb.rBowl.x, vb.rBowl.y + vb.tileSize*ly);
+		Vector pos(vb.rBowl.x, vb.rBowl.y + vb.blockSize*ly);
 		Vector vel, grav;
 
 		for (int i = 0; i < vb.w; i++) {
 			if (b->vbi.cleared_lines[j][i] == -1) {
 				/* game over animation may have gaps */
-				pos.setX(pos.getX() + vb.tileSize);
+				pos.setX(pos.getX() + vb.blockSize);
 				continue;
 			}
 
 			setShrapnellVelGrav(vb, anim, i, vel, grav);
 
 			Shrapnell *s = new Shrapnell(
-				theme.vbaTiles[b->vbi.cleared_lines[j][i]],
+				theme.vbaBlocks[b->vbi.cleared_lines[j][i]],
 				pos, vel, grav, 192, 0.64);
 			sprites.push_back(unique_ptr<Sprite>(s));
 
-			pos.setX(pos.getX() + vb.tileSize);
+			pos.setX(pos.getX() + vb.blockSize);
 		}
 	}
 }
@@ -727,8 +727,8 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 	switch (type) {
 	case 0:
 		/* simple sideways animation:
-		 * move tiles 0-4 to the left side and 5-9 to the right
-		 * each tile takes 300 ms to get to the side (px/ms = i*20/300)
+		 * move blocks 0-4 to the left side and 5-9 to the right
+		 * each block takes 300 ms to get to the side (px/ms = i*20/300)
 		 */
 		if (xid < vb.w/2)
 			v.setX(ratio * (-xid) * 0.0667);
@@ -737,7 +737,7 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 		break;
 	case 1:
 	case 2:
-		/* move tiles up with in/decreasing speed and some gravity */
+		/* move blocks up with in/decreasing speed and some gravity */
 		if (type == 1)
 			v.setY(ratio * (vb.w - xid) * -0.015);
 		else
@@ -746,7 +746,7 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 		break;
 	case 3:
 	case 4:
-		/* similiar to last effect but this time the fastest tiles are
+		/* similiar to last effect but this time the fastest blocks are
 		 * in the middle (4) or at the sides (5)
 		 */
 		if (type == 3) {
@@ -763,7 +763,7 @@ void View::setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &
 		g.set(0,ratio*0.0002);
 		break;
 	case 5:
-		/* opposite of 1: move tiles horizontally to the middle */
+		/* opposite of 1: move blocks horizontally to the middle */
 		if (xid < vb.w/2)
 			v.setX(ratio * (vb.w/2 - xid - 1) * 0.0667);
 		else
