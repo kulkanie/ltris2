@@ -38,6 +38,7 @@ class View {
 	Label lblCredits1, lblCredits2;
 	bool noGameYet;
 	bool changingKey;
+	SmoothCounter gpDelay;
 
 	/* game */
 	vector<string> gameTypeNames;
@@ -59,7 +60,7 @@ class View {
 	bool showInfo(const string &line, int type);
 	bool showInfo(const vector<string> &text, int type);
 	void dim();
-	bool checkMenuGamepadEvent(const Uint8 *gpadstate, SDL_Event &ev);
+	bool checkMenuGamepadEvent(int ms, const Uint8 *gpadstate, SDL_Event &ev);
 	bool handleMenuEvent(SDL_Event &ev);
 	void createShrapnells(VBowl &vb);
 	void setShrapnellVelGrav(VBowl &vb, int type, int xid, Vector &v, Vector &g);

@@ -194,7 +194,7 @@ void View::run()
 			 * event might break something in the future we just
 			 * always check for gamepad state and potentially
 			 * overwrite another event. shouldn't hurt to bad. */
-			if (checkMenuGamepadEvent(gpadstate, ev))
+			if (checkMenuGamepadEvent(ms, gpadstate, ev))
 				newEvent = true;
 
 			if (newEvent && handleMenuEvent(ev)) {
@@ -598,7 +598,7 @@ void View::waitForInputRelease()
 
 /** Check if gamepad is used to navigate menu and return as fake
  * key down event in @ev. */
-bool View::checkMenuGamepadEvent(const Uint8 *gpadstate, SDL_Event &ev)
+bool View::checkMenuGamepadEvent(int ms, const Uint8 *gpadstate, SDL_Event &ev)
 {
 	int gp2sc[6][2] = {
 		{GPAD_UP, SDL_SCANCODE_UP},
@@ -611,6 +611,14 @@ bool View::checkMenuGamepadEvent(const Uint8 *gpadstate, SDL_Event &ev)
 
 	for (int i = 0; i < 6; i++)
 		if (gpadstate[gp2sc[i][0]] == GPBS_DOWN) {
+			/* initial button press */
+			ev.type = SDL_KEYDOWN;
+			ev.key.keysym.scancode = (SDL_Scancode)gp2sc[i][1];
+			gpDelay.init(SCT_REPEAT, 0, 1, 250);
+			return true;
+		} else if (gpadstate[gp2sc[i][0]] == GPBS_PRESSED &&
+							gpDelay.update(ms)) {
+			/* button is continuously down, so have some delay */
 			ev.type = SDL_KEYDOWN;
 			ev.key.keysym.scancode = (SDL_Scancode)gp2sc[i][1];
 			return true;
