@@ -2,6 +2,7 @@
 *~
 *.tar.gz
 libgame.a
+*.zip
 
 Makefile.in
 Makefile

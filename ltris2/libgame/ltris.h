@@ -39,7 +39,7 @@ Global includes.
 #ifdef HAVE_CONFIG_H
 #include "../config.h"
 #endif
-#include "gettext.h"
+#include "../gettext.h"
 #if ENABLE_NLS
 #define _(str) gettext (str)
 #else

@@ -1,6 +1,7 @@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = po libgame src 
-EXTRA_DIST = COPYING README INSTALL TODO ltris2.desktop ltris2.png
+SUBDIRS = m4 po libgame src 
+EXTRA_DIST = COPYING INSTALL ABOUT-NLS README TODO CROSSCOMPILE \
+	Changelog ltris2.desktop ltris2.png gettext.h config.rpath
 
 desktopdir = $(datadir)/applications
 desktop_DATA = ltris2.desktop

@@ -6,5 +6,5 @@ libgame_a_SOURCES = \
   
 EXTRA_DIST = \
   list.h tools.h parser.h config.h chart.h cpu.h \
-  sdl.h event.h shrapnells.h bowl.h tetris.h
+  sdl.h event.h shrapnells.h bowl.h tetris.h ltris.h
 
