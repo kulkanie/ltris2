@@ -231,8 +231,8 @@ void VGame::init(int _type) {
 		 * top of screen */
 		vh = 3*renderer.getWidth()/4;
 	}
-	int bsize; /* actual block size for bowls */
-	int padding, border; /* for frames: may vary on game type */
+	int bsize = 0; /* actual block size for bowls */
+	int padding = 0, border = 0; /* for frames: may vary on game type */
 	SDL_Rect rBowl[3], rPreview[3], rHold[3], rScore[3];
 	rHiscores = {0,0,0,0};
 	if (type == GT_DEMO || type == GT_NORMAL || type == GT_FIGURES) {
@@ -308,6 +308,9 @@ void VGame::init(int _type) {
 
 		for (int i = 0; i < 3; i++)
 			vbowls[i].init(i,bsize,rBowl[i],rPreview[i],rHold[i],rScore[i],true);
+	} else {
+		/* should never get here ... */
+		_logerr("ERROR: Illegal game type %d!\n", type);
 	}
 
 	/* XXX store bowl assets in theme as using a VBowlAssets class in

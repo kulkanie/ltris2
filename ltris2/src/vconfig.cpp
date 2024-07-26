@@ -18,7 +18,7 @@
 VConfig::VConfig() // @suppress("Class members should be properly initialized")
 {
 	/* game */
-	gametype = 1; /* demo, classic, ... */
+	gametype = 0; /* normal, figures, ... */
 	modern = 1; /* ghost piece, 3-piece-preview, ... */
 	startinglevel = 0;
 	playernames[0] = "Mike";
