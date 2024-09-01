@@ -13,10 +13,11 @@ libgame/.deps
 .settings/
 aclocal.m4
 autom4te.cache/
-config.h
+./config.h
 config.log
 config.status
 configure
+stamp-h1
 
 po/POTFILES
 po/remove-potcdate.sed
