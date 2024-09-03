@@ -58,8 +58,9 @@ AC_SUBST(datdir)
 AC_SUBST(hiscoredir)
 
 # set c/c++ flags
-CFLAGS="$CFLAGS -Wno-int-conversion -Wno-format -Wno-implicit-function-declaration"
+CFLAGS="$CFLAGS -Wreturn-type -Wno-int-conversion -Wno-format -Wno-implicit-function-declaration"
 CFLAGS="$CFLAGS $debugflags -DSRC_DIR=\\\"$datdir\\\" -DCONFIG_DIR_NAME=\\\"$configdir\\\" -DHI_DIR=\\\"$hiscoredir\\\""
+CXXFLAGS="$CXXFLAGS -Wreturn-type -Wno-format"
 CXXFLAGS="$CXXFLAGS -std=c++11 -Wall $debugflags -DLOCALEDIR=\\\"$localedir\\\" -DCONFIGDIR=\\\"$configdir\\\" -DDATADIR=\\\"$datdir\\\" -DHISCOREDIR=\\\"$hiscoredir\\\""
 
 # allow setting SDL2_CONFIG externally for crosscompiling

@@ -343,6 +343,7 @@ void set_surf_clip( SDL_Surface *surf, int x, int y, int w, int h )
 /* set pixel */
 Uint32 set_pixel( SDL_Surface *surf, int x, int y, int pixel )
 {
+	return 0;
 }
 
 /* get pixel */
@@ -574,6 +575,7 @@ void undim_screen(int steps, int delay, int trp)
 */
 int wait_for_key()
 {
+	return 0;
 }
 
 /*
@@ -609,6 +611,7 @@ void flip_screen()
 /* creates cursor */
 SDL_Cursor* create_cursor( int width, int height, int hot_x, int hot_y, char *source )
 {
+	return NULL;
 }
 
 /*
