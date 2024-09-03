@@ -1,5 +1,4 @@
 - count score faster (irregular, 10% per step, but min 1000)
-- sent lines always same color
 
 - font colors in theme.ini
 - undim screen and tooltips

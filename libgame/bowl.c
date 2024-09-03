@@ -423,10 +423,10 @@ void bowl_add_tile( Bowl *bowl )
 static void set_line(int *line, int numholes) {
 	int holes[BOWL_WIDTH];
 
-	/* set indices and random tiles */
+	/* set indices and garbage tiles */
 	for (int i = 0; i < BOWL_WIDTH; i++) {
 		holes[i] = i;
-		line[i] = rand() % BLOCK_TILE_COUNT;
+		line[i] = BLOCK_GARBAGE_ID;
 	}
 	/* shuffle indices */
 	for (int i = 0; i < BOWL_WIDTH*100; i++) {

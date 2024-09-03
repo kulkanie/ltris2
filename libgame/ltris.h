@@ -56,7 +56,8 @@ enum {
     BOWL_HEIGHT = 20,
     BLOCK_COUNT = 7,
     BLOCK_TILE_COUNT = 10,
-    BLOCK_BAG_COUNT = 100
+    BLOCK_BAG_COUNT = 100,
+    BLOCK_GARBAGE_ID = 11
 };
 
 /* block mask for the block types */
