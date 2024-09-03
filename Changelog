@@ -1,4 +1,5 @@
 2.0.1:
+- count score faster (2024/09/03 MS)
 - use special block for sent garbage lines (2024/09/03 MS)
 - allow changing fps during game (2024/09/03 MS)
 - fixed crash due to bad pixel mask for dummy surfaces (2024/09/03 MS)

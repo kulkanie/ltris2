@@ -1,7 +1,5 @@
-- count score faster (irregular, 10% per step, but min 1000)
-
-- font colors in theme.ini
 - undim screen and tooltips
+- font colors in theme.ini
 - multiple block sets that rotate each level
 - reset tooltip delay on opening menu
 - extra menu item to show all hiscores

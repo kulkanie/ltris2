@@ -332,10 +332,12 @@ void counter_set( Counter *counter, double value )
 {
     counter->value = value;
     counter->approach = value;
+    counter->cpms =0;
 }
 void counter_add( Counter *counter, double add )
 {
     counter->value += add;
+    counter->cpms = 0.002*(counter->value - counter->approach); /* in 500 ms */
 }
 double counter_get_approach( Counter counter )
 {
@@ -347,15 +349,19 @@ double counter_get( Counter counter )
 }
 void counter_update( Counter *counter, int ms )
 {
-    double change;
-    if ( counter->approach == counter->value ) return;
-    /* change relative as for big scores we must count faster */
-    change = ( counter->value - counter->approach ) / 2000;
-    if ( change > 0 && change < 0.6 ) change = 0.6;
-    if ( change < 0 && change > -0.6 ) change = -0.6;
-    counter->approach += change * ms;
-    if ( change > 0 && counter->approach > counter->value ) counter->approach= counter->value;
-    if ( change < 0 && counter->approach < counter->value ) counter->approach = counter->value;
+	if (counter->approach == counter->value)
+		return;
+	if (counter->cpms == 0) {
+		if (counter->approach != counter->value)
+			counter->approach = counter->value; /* should not happen, just be safe */
+		return;
+	}
+	counter->approach += counter->cpms * ms;
+	if ((counter->cpms > 0 && counter->approach > counter->value) ||
+		(counter->cpms < 0 && counter->approach < counter->value)) {
+		counter->approach = counter->value;
+		counter->cpms = 0;
+	}
 }
 
 /* fill part of an array with random values */

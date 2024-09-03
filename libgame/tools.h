@@ -100,6 +100,7 @@ the target value until reached when counter_update() is called.
 typedef struct {
     double approach; /* approaching value usually used for a smooth counter display */
     double value; /* actual value */
+    double cpms; /* change per ms */
 } Counter;
 void counter_set( Counter *counter, double value );
 void counter_add( Counter *counter, double add );
