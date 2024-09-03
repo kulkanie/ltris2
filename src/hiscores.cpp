@@ -106,7 +106,9 @@ Hiscores::Hiscores()
 		/* if not found or no write access we can't use global
 		 * highscores file so fallback to home directory */
 		_loginfo("No permission to access global highscores\n");
-		fname = getHomeDir() + "/" + CONFIGDIR + "/ltris2.hscr";
+		fname = string(CONFIGDIR) + "/ltris2.hscr";
+		if (fname[0] == '~')
+			fname = getHomeDir() + "/" + fname.substr(1);
 		_loginfo("Falling back to %s\n",fname.c_str());
 	}
 
