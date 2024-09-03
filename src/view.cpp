@@ -128,13 +128,6 @@ void View::run()
 	fpsStart = SDL_GetTicks();
 	fpsCycles = 0;
 
-	if (vconfig.fps == FPS_50)
-		maxDelay = 20;
-	else if (vconfig.fps == FPS_60)
-		maxDelay = 17;
-	else
-		maxDelay = 5;
-
 	render();
 
 	while (!quitReceived) {
@@ -260,6 +253,14 @@ void View::run()
 			fpsCycles = 0;
 			fpsStart = SDL_GetTicks();
 		}
+
+		/* get time for one cycle */
+		if (vconfig.fps == FPS_50)
+			maxDelay = 20;
+		else if (vconfig.fps == FPS_60)
+			maxDelay = 17;
+		else
+			maxDelay = 5; /* 200 fps */
 
 		/* limit frame rate */
 		delay = maxDelay - renderTicks.get(true);

@@ -1,4 +1,3 @@
-- fix frame rate (always 60? transfer from vconfig to config?)
 - count score faster (irregular, 10% per step, but min 1000)
 - sent lines always same color
 
