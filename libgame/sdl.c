@@ -272,7 +272,10 @@ void get_full_bmp_path( char *full_path, char *file_name )
 SDL_Surface* load_surf(char *fname, int f)
 {
 	/** create small dummy surface to allow access of surface->w/h */
-	return SDL_CreateRGBSurface(0,10,10,24,0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
+	SDL_Surface *surf = SDL_CreateRGBSurface(0,16,16,32,0,0,0,0);
+	if (surf == 0)
+		fprintf(stderr, "ERROR: load_surf: %s\n", SDL_GetError());
+	return surf;
 }
 
 /*
@@ -282,7 +285,10 @@ SDL_Surface* load_surf(char *fname, int f)
 SDL_Surface* create_surf(int w, int h, int f)
 {
 	/** create small dummy surface to allow access of surface->w/h */
-	return SDL_CreateRGBSurface(0,10,10,24,0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
+	SDL_Surface *surf = SDL_CreateRGBSurface(0,16,16,32,0,0,0,0);
+	if (surf == 0)
+		fprintf(stderr, "ERROR: create_surf: %s\n", SDL_GetError());
+	return surf;
 }
 
 /*
@@ -432,8 +438,9 @@ int text_width(OldFont *fnt, char *str)
 void init_sdl( int f )
 {
 	/* create dummy surface for "screen" access by libgame */
-	sdl.screen = SDL_CreateRGBSurface(0,10,10,24,0xff000000,0x00ff0000,0x0000ff00,0x000000ff);
-	video_surface = sdl.screen;
+	sdl.screen = SDL_CreateRGBSurface(0,16,16,32,0,0,0,0);
+	if (sdl.screen == 0)
+		fprintf(stderr, "ERROR: init_sdl: %s\n", SDL_GetError());
 }
 
 /*
