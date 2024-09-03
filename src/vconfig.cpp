@@ -91,58 +91,62 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 	if (dname[0] == '~')
 		dname = getHomeDir() + "/" + dname.substr(1);
 	fname = dname + "/ltris2.conf";
-	if (!dirExists(dname))
+	if (!dirExists(dname)) {
+		_loginfo("Config directory %s not found, creating it...\n",dname.c_str());
 		makeDir(dname);
-
-	/* load */
-	_loginfo("Loading configuration %s\n",fname.c_str());
-	FileParser fp(fname);
-
-	fp.get("gametype", gametype);
-	fp.get("modern", modern);
-	fp.get("startinglevel", startinglevel);
-
-	for (int i = 0; i < 3; i++) {
-		fp.get("player"+to_string(i+1)+".name",playernames[i]);
-		fp.get("player"+to_string(i+1)+".lshift",controls[i].lshift);
-		fp.get("player"+to_string(i+1)+".rshift",controls[i].rshift);
-		fp.get("player"+to_string(i+1)+".lrot",controls[i].lrot);
-		fp.get("player"+to_string(i+1)+".rrot",controls[i].rrot);
-		fp.get("player"+to_string(i+1)+".sdrop",controls[i].sdrop);
-		fp.get("player"+to_string(i+1)+".hdrop",controls[i].hdrop);
-		fp.get("player"+to_string(i+1)+".hold",controls[i].hold);
 	}
 
-	fp.get("gp_enabled",gp_enabled);
-	fp.get("gp_lrot",gp_lrot);
-	fp.get("gp_rrot",gp_rrot);
-	fp.get("gp_hdrop",gp_hdrop);
-	fp.get("gp_pause",gp_pause);
-	fp.get("gp_hold",gp_hold);
+	/* load */
+	if (fileExists(fname)) {
+		_loginfo("Loading configuration %s\n",fname.c_str());
+		FileParser fp(fname);
 
-	fp.get("mp_numholes",mp_numholes);
-	fp.get("mp_randholes",mp_randholes);
+		fp.get("gametype", gametype);
+		fp.get("modern", modern);
+		fp.get("startinglevel", startinglevel);
 
-	fp.get("cpu_style",cpu_style);
-	fp.get("cpu_delay",cpu_delay);
-	fp.get("cpu_sfactor",cpu_sfactor);
+		for (int i = 0; i < 3; i++) {
+			fp.get("player"+to_string(i+1)+".name",playernames[i]);
+			fp.get("player"+to_string(i+1)+".lshift",controls[i].lshift);
+			fp.get("player"+to_string(i+1)+".rshift",controls[i].rshift);
+			fp.get("player"+to_string(i+1)+".lrot",controls[i].lrot);
+			fp.get("player"+to_string(i+1)+".rrot",controls[i].rrot);
+			fp.get("player"+to_string(i+1)+".sdrop",controls[i].sdrop);
+			fp.get("player"+to_string(i+1)+".hdrop",controls[i].hdrop);
+			fp.get("player"+to_string(i+1)+".hold",controls[i].hold);
+		}
 
-	fp.get("as_delay",as_delay);
-	fp.get("as_speed",as_speed);
+		fp.get("gp_enabled",gp_enabled);
+		fp.get("gp_lrot",gp_lrot);
+		fp.get("gp_rrot",gp_rrot);
+		fp.get("gp_hdrop",gp_hdrop);
+		fp.get("gp_pause",gp_pause);
+		fp.get("gp_hold",gp_hold);
 
-	fp.get("sound", sound);
-	fp.get("volume", volume);
-	fp.get("audiobuffersize", audiobuffersize);
-	fp.get("channels", channels);
+		fp.get("mp_numholes",mp_numholes);
+		fp.get("mp_randholes",mp_randholes);
 
-	fp.get("animations", animations);
-	fp.get("fullscreen", fullscreen);
-	fp.get("fps", fps);
-	fp.get("showfps", showfps);
-	fp.get("smoothdrop", smoothdrop);
+		fp.get("cpu_style",cpu_style);
+		fp.get("cpu_delay",cpu_delay);
+		fp.get("cpu_sfactor",cpu_sfactor);
 
-	fp.get("themeid", themeid);
-	fp.get("themecount", themecount);
+		fp.get("as_delay",as_delay);
+		fp.get("as_speed",as_speed);
+
+		fp.get("sound", sound);
+		fp.get("volume", volume);
+		fp.get("audiobuffersize", audiobuffersize);
+		fp.get("channels", channels);
+
+		fp.get("animations", animations);
+		fp.get("fullscreen", fullscreen);
+		fp.get("fps", fps);
+		fp.get("showfps", showfps);
+		fp.get("smoothdrop", smoothdrop);
+
+		fp.get("themeid", themeid);
+		fp.get("themecount", themecount);
+	}
 }
 
 void VConfig::save()
