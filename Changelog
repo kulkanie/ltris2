@@ -1,2 +1,7 @@
-2.0
+2.0.1:
+- fixed crash due to bad pixel mask for dummy surfaces (2024/09/03 MS)
+- fixed return type warnings (2024/09/03 Atri)
+- fixed path for local hiscore file (2024/09/03 Atri)
+
+2.0:
 - initial public release
