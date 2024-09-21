@@ -36,19 +36,17 @@ void VGame::setBowlControls(uint bid, BowlControls &bc, const Uint8 *keystate,
 	/* clear input state */
 	memset(&bc,0,sizeof(bc));
 
-	/* prioritize directions: down, left, right */
 	if (keystate[pctrl.sdrop] == KS_PRESSED || keystate[pctrl.sdrop] == KS_DOWN)
 		bc.sdrop = CS_PRESSED;
 	if (keystate[pctrl.lshift] == KS_PRESSED)
 		bc.lshift = CS_PRESSED;
-	if (keystate[pctrl.lshift] == KS_DOWN)
+	else if (keystate[pctrl.lshift] == KS_DOWN)
 		bc.lshift = CS_DOWN;
 	if (keystate[pctrl.rshift] == KS_PRESSED)
 		bc.rshift = CS_PRESSED;
-	if (keystate[pctrl.rshift] == KS_DOWN)
+	else if (keystate[pctrl.rshift] == KS_DOWN)
 		bc.rshift = CS_DOWN;
 
-	/* check remaining keys */
 	if (keystate[pctrl.lrot] == KS_DOWN)
 		bc.lrot = CS_DOWN;
 	if (keystate[pctrl.rrot] == KS_DOWN)
