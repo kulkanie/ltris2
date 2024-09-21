@@ -310,6 +310,13 @@ updated to use the fade effect.
 */
 int  tetris_init()
 {
+	char cpu_base[32], cpu_name[32], cpu_name2[32];
+	snprintf(cpu_base,32,"CPU-%c%d",
+			config.cpu_style==CS_DEFENSIVE?'D':
+			config.cpu_style==CS_NORMAL?'N':'A',config.cpu_sfactor);
+	snprintf(cpu_name,32,"%s-1",cpu_base);
+	snprintf(cpu_name2,32,"%s-2",cpu_base);
+
 	/* create block buffer with several bags each containing all 7 
 	 * tetrominoes permuted randomly */
 	last_generated_block = -1;
@@ -338,7 +345,7 @@ int  tetris_init()
 					&config.player2.controls );
         	else
         		bowls[1] = bowl_create( 420, 0, 327, config.modern?100:160,
-        				327,290, blocks, qmark, "CPU-1", 0 );
+        				327,290, blocks, qmark, cpu_name, 0 );
             break;
         case GAME_VS_HUMAN_HUMAN:
         case GAME_VS_HUMAN_CPU:
@@ -347,11 +354,11 @@ int  tetris_init()
             if ( config.gametype != GAME_VS_CPU_CPU )
                 bowls[1] = bowl_create( 220, 0, -1, -1, -1,-1, blocks, qmark, config.player2.name, &config.player2.controls );
             else
-                bowls[1] = bowl_create( 220, 0, -1, -1, -1,-1, blocks, qmark, "CPU-1", 0 );
+                bowls[1] = bowl_create( 220, 0, -1, -1, -1,-1, blocks, qmark, cpu_name, 0 );
             if ( config.gametype == GAME_VS_HUMAN_HUMAN )
                 bowls[2] = bowl_create( 430, 0, -1, -1, -1,-1, blocks, qmark, config.player3.name, &config.player3.controls );
             else
-                bowls[2] = bowl_create( 430, 0, -1, -1, -1,-1, blocks, qmark, "CPU-2", 0 );
+                bowls[2] = bowl_create( 430, 0, -1, -1, -1,-1, blocks, qmark, cpu_name2, 0 );
             break;
     }
     /* enable stats for one bowl games */
