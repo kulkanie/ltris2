@@ -437,7 +437,7 @@ void View::createMenus()
 			AID_NONE,vconfig.cpu_delay,0,2000,100));
 	mMultiplayer->add(new MenuItemRange(_("CPU Speed"),
 			"Multiplier in percent for dropping speed of pieces, e.g.,\n50% = half the regular speed\n100% = regular speed\n200% = doubled speed\nCan range between 50% and 400%.",
-			AID_NONE,vconfig.cpu_sfactor,50,400,25));
+			AID_NONE,vconfig.cpu_sfactor,50,300,10));
 	mMultiplayer->add(new MenuItemSep());
 	mMultiplayer->add(new MenuItemBack(mNewGame));
 

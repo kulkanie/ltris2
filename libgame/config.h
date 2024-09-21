@@ -86,7 +86,7 @@ typedef struct {
     int cpu_style; /* cpu style */
     int cpu_delay; /* delay in ms before CPU soft drops */
     int cpu_rot_delay; /* delay between rotation steps */
-    int cpu_sfactor; /* multiplier for dropping speed in 0.25 steps */
+    int cpu_sfactor; /* multiplier for dropping speed in percent */
     /* controls */
     int	as_delay;
     int	as_speed;
