@@ -130,6 +130,10 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 		fp.get("cpu_delay",cpu_delay);
 		fp.get("cpu_sfactor",cpu_sfactor);
 
+		/* fix non 10% setting for cpu_sfactor since we changed the step */
+		if ((cpu_sfactor % 10) != 0)
+			cpu_sfactor = 100;
+
 		fp.get("as_delay",as_delay);
 		fp.get("as_speed",as_speed);
 
