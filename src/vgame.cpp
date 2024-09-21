@@ -30,60 +30,55 @@ extern Config config;
 extern Block_Mask block_masks[BLOCK_COUNT];
 
 /** Translate current event/input states into bowl controls for human player. */
-void VGame::setBowlControls(uint bid, BowlControls &bc, SDL_Event &ev,
+void VGame::setBowlControls(uint bid, BowlControls &bc, const Uint8 *keystate,
 				const Uint8 *gpstate, PControls &pctrl)
 {
-	/* get key state */
-	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-
 	/* clear input state */
 	memset(&bc,0,sizeof(bc));
 
-	if (keystate[pctrl.lshift])
-		bc.lshift = CS_PRESSED;
-	if (keystate[pctrl.rshift])
-		bc.rshift = CS_PRESSED;
-	if (keystate[pctrl.sdrop])
+	/* prioritize directions: down, left, right */
+	if (keystate[pctrl.sdrop] == KS_PRESSED || keystate[pctrl.sdrop] == KS_DOWN)
 		bc.sdrop = CS_PRESSED;
+	if (keystate[pctrl.lshift] == KS_PRESSED)
+		bc.lshift = CS_PRESSED;
+	if (keystate[pctrl.lshift] == KS_DOWN)
+		bc.lshift = CS_DOWN;
+	if (keystate[pctrl.rshift] == KS_PRESSED)
+		bc.rshift = CS_PRESSED;
+	if (keystate[pctrl.rshift] == KS_DOWN)
+		bc.rshift = CS_DOWN;
 
-	if (ev.type == SDL_KEYDOWN) {
-		if (ev.key.keysym.scancode == pctrl.lshift)
-			bc.lshift = CS_DOWN;
-		if (ev.key.keysym.scancode == pctrl.rshift)
-			bc.rshift = CS_DOWN;
-		if (ev.key.keysym.scancode == pctrl.lrot)
-			bc.lrot = CS_DOWN;
-		if (ev.key.keysym.scancode == pctrl.rrot)
-			bc.rrot = CS_DOWN;
-		if (ev.key.keysym.scancode == pctrl.hdrop)
-			bc.hdrop = CS_DOWN;
-		if (ev.key.keysym.scancode == pctrl.hold)
-			bc.hold = CS_DOWN;
-	}
+	/* check remaining keys */
+	if (keystate[pctrl.lrot] == KS_DOWN)
+		bc.lrot = CS_DOWN;
+	if (keystate[pctrl.rrot] == KS_DOWN)
+		bc.rrot = CS_DOWN;
+	if (keystate[pctrl.hdrop] == KS_DOWN)
+		bc.hdrop = CS_DOWN;
+	if (keystate[pctrl.hold] == KS_DOWN)
+		bc.hold = CS_DOWN;
 
 	/* allow gamepad for bowl 0 */
 	if (bid == 0 && vconfig.gp_enabled) {
-		if (gpstate[GPAD_DOWN] == CS_PRESSED || gpstate[GPAD_DOWN] == CS_DOWN)
+		if (gpstate[GPAD_DOWN] == GPBS_PRESSED || gpstate[GPAD_DOWN] == GPBS_DOWN)
 			bc.sdrop = CS_PRESSED;
-		else if (gpstate[GPAD_LEFT] == CS_PRESSED)
+		else if (gpstate[GPAD_LEFT] == GPBS_PRESSED)
 			bc.lshift = CS_PRESSED;
-		else if (gpstate[GPAD_LEFT] == CS_DOWN)
+		else if (gpstate[GPAD_LEFT] == GPBS_DOWN)
 			bc.lshift = CS_DOWN;
-		else if (gpstate[GPAD_RIGHT] == CS_PRESSED)
+		else if (gpstate[GPAD_RIGHT] == GPBS_PRESSED)
 			bc.rshift = CS_PRESSED;
-		else if (gpstate[GPAD_RIGHT] == CS_DOWN)
+		else if (gpstate[GPAD_RIGHT] == GPBS_DOWN)
 			bc.rshift = CS_DOWN;
 
-		if (ev.type == SDL_JOYBUTTONDOWN) {
-			if (ev.jbutton.button == vconfig.gp_lrot)
-				bc.lrot = CS_DOWN;
-			if (ev.jbutton.button == vconfig.gp_rrot)
-				bc.rrot = CS_DOWN;
-			if (ev.jbutton.button == vconfig.gp_hdrop)
-				bc.hdrop = CS_DOWN;
-			if (ev.jbutton.button == vconfig.gp_hold)
-				bc.hold = CS_DOWN;
-		}
+		if (gpstate[GPAD_BUTTON0 + vconfig.gp_lrot] == GPBS_DOWN)
+			bc.lrot = CS_DOWN;
+		if (gpstate[GPAD_BUTTON0 + vconfig.gp_rrot] == GPBS_DOWN)
+			bc.rrot = CS_DOWN;
+		if (gpstate[GPAD_BUTTON0 + vconfig.gp_hdrop] == GPBS_DOWN)
+			bc.hdrop = CS_DOWN;
+		if (gpstate[GPAD_BUTTON0 + vconfig.gp_hold] == GPBS_DOWN)
+			bc.hold = CS_DOWN;
 	}
 }
 
@@ -368,7 +363,7 @@ void VGame::render() {
 
 /** Update bowls according to passed time @ms in milliseconds and input.
  * Return 1 if state switches to game over, 0 otherwise. */
-bool VGame::update(uint ms, SDL_Event &ev, const Uint8 *gpstate) {
+bool VGame::update(uint ms, const Uint8 *keystate, const Uint8 *gpstate) {
 	BowlControls bc;
 	int oldlev;
 
@@ -382,7 +377,7 @@ bool VGame::update(uint ms, SDL_Event &ev, const Uint8 *gpstate) {
 			if (vbowls[i].bowl->cpu_player)
 				setBowlControlsCPU(bc,vbowls[i]);
 			else
-				setBowlControls(i, bc, ev, gpstate, vconfig.controls[i]);
+				setBowlControls(i, bc, keystate, gpstate, vconfig.controls[i]);
 			vbowls[i].update(ms,bc);
 		}
 

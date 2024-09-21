@@ -29,6 +29,7 @@ class View {
 	/* general */
 	Mixer mixer;
 	Gamepad gamepad;
+	Keystate keystate;
 
 	/* menu */
 	bool menuActive;

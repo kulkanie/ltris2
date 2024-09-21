@@ -35,7 +35,7 @@ class VGame {
 	SDL_Rect rHiscores; /* screen region for hiscore chart */
 	int frPadding, frBorder; /* padding and border for all frames */
 
-	void setBowlControls(uint bid, BowlControls &bc, SDL_Event &ev,
+	void setBowlControls(uint bid, BowlControls &bc, const Uint8 *keystate,
 					const Uint8 *gpstate, PControls &pctrl);
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
 	void addFrame(SDL_Rect inner, int padding = 0, int border = 0);
@@ -45,7 +45,7 @@ public:
 	~VGame();
 	void init(int _type);
 	void render();
-	bool update(uint ms, SDL_Event &ev, const Uint8 *gpstate);
+	bool update(uint ms, const Uint8 *keystate, const Uint8 *gpstate);
 	void pause(bool p=true);
 	bool isDemo();
 };

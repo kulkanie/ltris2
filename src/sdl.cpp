@@ -534,3 +534,32 @@ const Uint8 *Gamepad::update() {
 
 	return state;
 }
+
+/** Update key states and return state array.
+ * (0=released,1=permanently pressed,2=down,3=up) */
+const Uint8 *Keystate::update()
+{
+	int numkeys;
+	const Uint8 *ks = SDL_GetKeyboardState(&numkeys);
+
+	if (numkeys > SDL_NUM_SCANCODES)
+		numkeys = SDL_NUM_SCANCODES; /* should not happen, for safety */
+
+	memcpy(oldstate,curstate,sizeof(curstate));
+	memset(curstate,GPBS_RELEASED,sizeof(curstate));
+
+	for (int id = 0; id < numkeys; id++) {
+		if (ks[id]) {
+			if (oldstate[id]==KS_DOWN || oldstate[id]==KS_PRESSED)
+				curstate[id] = KS_PRESSED;
+			else
+				curstate[id] = GPBS_DOWN;
+
+		} else {
+			if (oldstate[id]==KS_DOWN || oldstate[id]==KS_PRESSED)
+				curstate[id] = KS_UP;
+		}
+	}
+
+	return curstate;
+}

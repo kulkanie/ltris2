@@ -357,4 +357,28 @@ public:
 	const Uint8 *update();
 };
 
+/** Similiar to gamepad we need an object properly keystates.
+ * Using SDL_KEYDOWN for (first) DOWN event doesn't work as
+ * it gets auto repeated... */
+enum {
+	KS_RELEASED = 0, /* not pressed */
+	KS_PRESSED, /* continously pressed */
+	KS_DOWN, /* freshly pressed in this cycle */
+	KS_UP /* just released in this cycle */
+
+};
+class Keystate {
+	Uint8 oldstate[SDL_NUM_SCANCODES];
+	Uint8 curstate[SDL_NUM_SCANCODES];
+public:
+	Keystate() {
+		reset();
+	}
+	void reset() {
+		memset(oldstate,KS_RELEASED,sizeof(oldstate));
+		memset(curstate,KS_RELEASED,sizeof(curstate));
+	}
+	const Uint8 *update();
+};
+
 #endif /* SDL_H_ */

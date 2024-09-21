@@ -124,6 +124,7 @@ void View::run()
 	state = VS_IDLE;
 	sprites.clear();
 	changingKey = false;
+	keystate.reset();
 
 	fpsStart = SDL_GetTicks();
 	fpsCycles = 0;
@@ -202,7 +203,8 @@ void View::run()
 			curMenu->update(ms);
 
 		/* update game */
-		if (game.update(ms,ev,gpadstate)) {
+		const Uint8 *ks = keystate.update();
+		if (game.update(ms,ks,gpadstate)) {
 			/* game over, save hiscores, only for single player */
 			if (game.type == GT_NORMAL || game.type == GT_FIGURES) {
 				HiscoreChart *hc = hiscores.get(gameTypeNames[game.type]);
@@ -713,6 +715,7 @@ bool View::handleMenuEvent(SDL_Event &ev)
 			menuActive = false;
 			waitForInputRelease();
 			game.init(vconfig.gametype);
+			keystate.reset();
 			break;
 		}
 	}
