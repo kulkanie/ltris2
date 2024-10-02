@@ -345,7 +345,7 @@ int  tetris_init()
 					&config.player2.controls );
         	else
         		bowls[1] = bowl_create( 420, 0, 327, config.modern?100:160,
-        				327,290, blocks, qmark, cpu_name, 0 );
+        				327,290, blocks, qmark, cpu_base, 0 );
             break;
         case GAME_VS_HUMAN_HUMAN:
         case GAME_VS_HUMAN_CPU:
