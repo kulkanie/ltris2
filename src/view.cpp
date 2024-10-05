@@ -175,6 +175,18 @@ void View::run()
 		/* get passed time */
 		ms = ticks.get();
 
+		/* update key state */
+		const Uint8 *ks = keystate.update();
+		if (!menuActive && newEvent && ev.type == SDL_KEYDOWN) {
+			/* XXX we seem to loose key inputs on just checking
+			 * keystate from cycle to cycle (see comment for
+			 * Keystate::update()) so as a workaround we force
+			 * a keydown for keys not currently pressed in
+			 * keystate so at least key down events should never
+			 * get lost... */
+			keystate.forceKeyDown(ev.key.keysym.scancode);
+		}
+
 		/* update gamepad state */
 		const Uint8 *gpadstate = gamepad.update();
 
@@ -203,7 +215,6 @@ void View::run()
 			curMenu->update(ms);
 
 		/* update game */
-		const Uint8 *ks = keystate.update();
 		if (game.update(ms,ks,gpadstate)) {
 			/* game over, save hiscores, only for single player */
 			if (game.type == GT_NORMAL || game.type == GT_FIGURES) {

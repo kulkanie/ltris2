@@ -1450,7 +1450,8 @@ void bowl_update( Bowl *bowl, int ms, BowlControls *bc, int game_over )
 			    hori_movement = 1;
 			    bowl_check_lockdelay(bowl);
 		    }
-	    } else if (bc->lrot == CS_DOWN || bc->rrot == CS_DOWN) {
+	    }
+	    if (bc->lrot == CS_DOWN || bc->rrot == CS_DOWN) {
 		    /* test if we actually can rotate
 		     * if not shift block if modern and rotate anyways */
 		    if (bc->lrot == CS_DOWN) {
@@ -1501,7 +1502,8 @@ void bowl_update( Bowl *bowl, int ms, BowlControls *bc, int game_over )
 			    bowl_compute_help_pos(bowl);
 			    bowl_check_lockdelay(bowl);
 		    }
-	    } else if (bc->hdrop == CS_DOWN) {
+	    }
+	    if (bc->hdrop == CS_DOWN) {
 		    if (config.gametype == GAME_TRAINING)
 			    bowl_toggle_gravity(bowl);
 		    else {
@@ -1511,7 +1513,8 @@ void bowl_update( Bowl *bowl, int ms, BowlControls *bc, int game_over )
 			    if (bowl->ldelay_cur > 0)
 				    bowl->ldelay_cur = 1;
 		    }
-	    } else if (bc->hold == CS_DOWN && bowl->hold_active && !bowl->hold_used) {
+	    }
+	    if (bc->hold == CS_DOWN && bowl->hold_active && !bowl->hold_used) {
 		    /* put current piece to hold, use piece in hold or next block */
 		    bowl->ldelay_cur = 0; /* reset lock delay if any */
 		    bowl_use_hold(bowl);

@@ -379,6 +379,15 @@ public:
 		memset(curstate,KS_RELEASED,sizeof(curstate));
 	}
 	const Uint8 *update();
+	void forceKeyDown(int scancode) {
+		if (scancode < 0 || scancode >= SDL_NUM_SCANCODES)
+			return;
+		if (curstate[scancode] == KS_RELEASED || curstate[scancode] == KS_UP) {
+			oldstate[scancode] = KS_RELEASED;
+			curstate[scancode] = KS_DOWN;
+			printf("oops need to force key down: %d\n",scancode);
+		}
+	}
 };
 
 #endif /* SDL_H_ */

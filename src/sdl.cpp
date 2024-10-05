@@ -536,24 +536,31 @@ const Uint8 *Gamepad::update() {
 }
 
 /** Update key states and return state array.
- * (0=released,1=permanently pressed,2=down,3=up) */
+ * (0=released,1=permanently pressed,2=down,3=up)
+ * FIXME? Theoretically, if a cycle takes too long and during a key
+ * press a key up/down occurs (or during key release a key down/up)
+ * it is not registered which although at high frame rates it should
+ * be impossible to hit keys that fast? */
 const Uint8 *Keystate::update()
 {
 	int numkeys;
-	const Uint8 *ks = SDL_GetKeyboardState(&numkeys);
+	const Uint8 *ks;
+
+	SDL_PumpEvents();
+	ks = SDL_GetKeyboardState(&numkeys);
 
 	if (numkeys > SDL_NUM_SCANCODES)
 		numkeys = SDL_NUM_SCANCODES; /* should not happen, for safety */
 
 	memcpy(oldstate,curstate,sizeof(curstate));
-	memset(curstate,GPBS_RELEASED,sizeof(curstate));
+	memset(curstate,KS_RELEASED,sizeof(curstate));
 
 	for (int id = 0; id < numkeys; id++) {
 		if (ks[id]) {
 			if (oldstate[id]==KS_DOWN || oldstate[id]==KS_PRESSED)
 				curstate[id] = KS_PRESSED;
 			else
-				curstate[id] = GPBS_DOWN;
+				curstate[id] = KS_DOWN;
 
 		} else {
 			if (oldstate[id]==KS_DOWN || oldstate[id]==KS_PRESSED)
