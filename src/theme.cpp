@@ -61,6 +61,12 @@ void Theme::load(string name, Renderer &r)
 	sMenuClick.load(testRc(path,"s_menuclick.wav"));
 	sMenuMotion.load(testRc(path,"s_menumotion.wav"));
 
+	/* cursor - scale to 0.036 of screen height */
+	cursor.load(testRc(path,"cursor.png"));
+	uint ch = r.ry2sy(0.036);
+	uint cw = cursor.getWidth() * ch / cursor.getHeight();
+	cursor.scale(cw,ch);
+
 	/* wallpapers */
 	numWallpapers = 0;
 	string wfname = path + "/wallpaper0.jpg";

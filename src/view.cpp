@@ -131,6 +131,8 @@ void View::run()
 
 	render();
 
+	SDL_ShowCursor(0);
+
 	while (!quitReceived) {
 		renderTicks.reset();
 
@@ -282,6 +284,8 @@ void View::run()
 		SDL_FlushEvent(SDL_MOUSEMOTION); /* prevent event loop from dying */
 	}
 
+	SDL_ShowCursor(1);
+
 	if (!quitReceived)
 		dim();
 }
@@ -309,6 +313,10 @@ void View::render()
 		lblCredits2.copy(renderer.getWidth()-2,renderer.getHeight() - theme.fTooltip.getLineHeight(),
 					ALIGN_X_RIGHT | ALIGN_Y_BOTTOM);
 		curMenu->render();
+
+		int cx, cy;
+		SDL_GetMouseState(&cx, &cy);
+		theme.cursor.copy(cx,cy);
 	}
 
 	/* stats */

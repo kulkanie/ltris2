@@ -42,6 +42,7 @@ class Theme {
 	Sound sMenuClick, sMenuMotion;
 	SDL_Color fontColorNormal;
 	SDL_Color fontColorHighlight;
+	Texture cursor;
 
 	Texture wallpapers[MAXWALLPAPERS];
 	uint numWallpapers;
