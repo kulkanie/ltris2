@@ -67,7 +67,8 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 
 	/* controls */
 	as_delay = 170;
-	as_speed = 50;
+	as_speed = 70;
+	keystatefix = 0;
 
 	/* sounds */
 	sound = 1;
@@ -136,6 +137,7 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 
 		fp.get("as_delay",as_delay);
 		fp.get("as_speed",as_speed);
+		fp.get("keystatefix",keystatefix);
 
 		fp.get("sound", sound);
 		fp.get("volume", volume);
@@ -194,6 +196,7 @@ void VConfig::save()
 
 	ofs << "as_delay=" << as_delay << "\n";
 	ofs << "as_speed=" << as_speed << "\n";
+	ofs << "keystatefix=" << keystatefix << "\n";
 
 	ofs << "sound=" << sound << "\n";
 	ofs << "volume=" << volume << "\n";

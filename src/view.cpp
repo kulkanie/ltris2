@@ -177,13 +177,13 @@ void View::run()
 
 		/* update key state */
 		const Uint8 *ks = keystate.update();
-		if (!menuActive && newEvent && ev.type == SDL_KEYDOWN) {
-			/* XXX we seem to loose key inputs on just checking
-			 * keystate from cycle to cycle (see comment for
-			 * Keystate::update()) so as a workaround we force
-			 * a keydown for keys not currently pressed in
-			 * keystate so at least key down events should never
-			 * get lost... */
+		if (vconfig.keystatefix && !menuActive && newEvent
+						&& ev.type == SDL_KEYDOWN) {
+			/* in low frame rates we might lose key downs from
+			 * cycle to cycle (see comment for Keystate::update())
+			 * so as a workaround we force a keydown for keys
+			 * not currently pressed in keystate so at least
+			 * key down events should never get lost... */
 			keystate.forceKeyDown(ev.key.keysym.scancode);
 		}
 

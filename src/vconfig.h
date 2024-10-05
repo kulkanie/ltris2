@@ -74,6 +74,7 @@ public:
 	/* controls */
 	int as_delay;
 	int as_speed;
+	int keystatefix;
 
 	/* sound */
 	int sound;
