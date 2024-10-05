@@ -385,7 +385,7 @@ public:
 		if (curstate[scancode] == KS_RELEASED || curstate[scancode] == KS_UP) {
 			oldstate[scancode] = KS_RELEASED;
 			curstate[scancode] = KS_DOWN;
-			printf("oops need to force key down: %d\n",scancode);
+			_loginfo("Oops, need to force key down: %d\n",scancode);
 		}
 	}
 };
