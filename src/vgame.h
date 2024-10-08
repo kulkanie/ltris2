@@ -40,6 +40,7 @@ class VGame {
 	void setBowlControlsCPU(BowlControls &bc, VBowl &bowl);
 	void addFrame(SDL_Rect inner, int padding = 0, int border = 0);
 	void renderBackground(uint wid);
+	void setAutoShift(int delay, int speed);
 public:
 	VGame();
 	~VGame();

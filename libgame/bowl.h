@@ -254,6 +254,8 @@ void bowl_toggle_gravity(Bowl *bowl);
 
 int bowl_piece_can_drop(Bowl *bowl);
 
+void bowl_set_autoshift(Bowl *bowl, int delay, int speed);
+
 #ifdef __cplusplus
 };
 #endif

@@ -482,3 +482,16 @@ void VGame::renderBackground(uint wid)
 			renderer.clearTarget();
 		}
 }
+
+/** Set autoshift settings for all active bowls. */
+void VGame::setAutoShift(int delay, int speed)
+{
+	/* technically setting config is not needed as only used
+	 * in tetris_init. bowls itself use das_maxcharge and das_drop. */
+	config.as_delay = delay;
+	config.as_speed = speed;
+
+	for (auto &vb : vbowls)
+		if (vb.initialized())
+			bowl_set_autoshift(vb.bowl, delay, speed);
+}

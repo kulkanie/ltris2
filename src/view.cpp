@@ -466,10 +466,10 @@ void View::createMenus()
 	mControls->add(new MenuItemSep());
 	mControls->add(new MenuItemRange(_("Auto-Shift Delay"),
 			_("Initial delay before auto shift starts. Classic DAS has 270."),
-			AID_NONE,vconfig.as_delay,20,300,10));
+			AID_AUTOSHIFT,vconfig.as_delay,20,300,10));
 	mControls->add(new MenuItemRange(_("Auto-Shift Speed"),
 			_("Delay between auto shift steps. Classic DAS has 100."),
-			AID_NONE,vconfig.as_speed,20,200,10));
+			AID_AUTOSHIFT,vconfig.as_speed,20,200,10));
 	mControls->add(new MenuItemSep());
 	mControls->add(new MenuItemBack(rootMenu.get()));
 
@@ -735,6 +735,9 @@ bool View::handleMenuEvent(SDL_Event &ev)
 			waitForInputRelease();
 			game.init(vconfig.gametype);
 			keystate.reset();
+			break;
+		case AID_AUTOSHIFT:
+			game.setAutoShift(vconfig.as_delay, vconfig.as_speed);
 			break;
 		}
 	}

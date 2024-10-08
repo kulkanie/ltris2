@@ -1967,3 +1967,11 @@ void bowl_toggle_gravity(Bowl *bowl)
 		return;
 	bowl->zero_gravity = !bowl->zero_gravity;
 }
+
+void bowl_set_autoshift(Bowl *bowl, int delay, int speed)
+{
+	bowl->das_maxcharge = config.as_delay;
+	bowl->das_drop = config.as_speed;
+	if (bowl->das_charge > bowl->das_maxcharge)
+		bowl->das_charge = bowl->das_maxcharge;
+}
