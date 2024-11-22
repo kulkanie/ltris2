@@ -63,32 +63,45 @@ View::View() : menuActive(true),
 		printf("  In case connection to gamepad gets lost, you can press F5 to reconnect.\n");
 	}
 
-	init(themeNames[vconfig.themeid], vconfig.fullscreen);
+	init(themeNames[vconfig.themeid], vconfig.windowmode);
 }
 
 /** (Re)Initialize window, theme and menu.
- * t is theme name, f is fullscreen. */
-void View::init(string t, uint f, bool reinit)
+ * t is theme name, wmode is window mode. */
+void View::init(string t, uint wmode, bool reinit)
 {
-	_loginfo("%sInitializing view (theme=%s, fullscreen=%d)\n",
-			reinit?_("(Re)"):"",t.c_str(),f);
+	_loginfo("%sInitializing view (theme=%s, windowmode=%d)\n",
+			reinit?_("(Re)"):"",t.c_str(),wmode);
 
 	/* determine resolution */
 	int idx = renderer.getDisplayId();
 	int sw = 640, sh = 480;
 	SDL_DisplayMode mode;
 	SDL_GetCurrentDisplayMode(idx,&mode);
-	if (f) {
+	switch (wmode) {
+	case WM_FULLSCREEN:
 		sw = mode.w;
 		sh = mode.h;
-	} else {
-		/* window is half screen's width and 4:3 */
-		sw = mode.w / 2;
-		sh = 3 * sw / 4;
+		break;
+	case WM_SMALL:
+		sh = mode.h / 4;
+		break;
+	case WM_MEDIUM:
+		sh = mode.h / 2;
+		break;
+	case WM_LARGE:
+		sh = mode.h * 2 / 3;
+		break;
+	}
+	if (wmode != WM_FULLSCREEN) {
+		/* finalize window resolution */
+		if (sh < 360)
+			sh = 360;
+		sw = sh / 3 * 4;
 	}
 
 	/* (re)create main window */
-	renderer.create("LTris2", sw, sh, f );
+	renderer.create("LTris2", sw, sh, wmode == WM_FULLSCREEN);
 
 	/* load theme */
 	theme.load(t, renderer);
@@ -386,6 +399,9 @@ void View::createMenus()
 	const int bufSizes[] = { 256, 512, 1024, 2048, 4096 };
 	const int channelNums[] = { 8, 16, 32 };
 	const char *cpuStyleNames[] = {_("Defensive"), _("Normal"), _("Aggressive")};
+	const char *windowModeNames[] = { _("Fullscreen"),
+			_("Small Window"), _("Medium Window"), _("Large Window")
+	};
 
 	/* longer hints */
 	string hStartingLevel = _("This is your starting level which will be ignored " \
@@ -497,7 +513,7 @@ void View::createMenus()
 			AID_NONE,vconfig.themeid,themeNames));
 	mGraphics->add(new MenuItemList(_("Mode"),
 			_("Select mode. (not applied yet)"),
-			AID_NONE,vconfig.fullscreen,_("Window"),_("Fullscreen")));
+			AID_NONE,vconfig.windowmode,windowModeNames,4));
 	mGraphics->add(new MenuItem(_("Apply Theme&Mode"),
 			_("Apply the above settings."),AID_APPLYTHEMEMODE));
 	mGraphics->add(new MenuItemSep());
@@ -724,7 +740,7 @@ bool View::handleMenuEvent(SDL_Event &ev)
 			 * loop otherwise left mouse button event is
 			 * screwed for the first click*/
 			waitForInputRelease();
-			init(themeNames[vconfig.themeid],vconfig.fullscreen,true);
+			init(themeNames[vconfig.themeid],vconfig.windowmode,true);
 			curMenu = graphicsMenu;
 			break;
 		case AID_HELP:

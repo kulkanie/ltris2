@@ -29,7 +29,12 @@ enum {
 	GT_VSHUMAN,
 	GT_VSCPU,
 	GT_VSCPU2,
-	GT_NUM
+	GT_NUM,
+
+	WM_FULLSCREEN = 0,
+	WM_SMALL,
+	WM_MEDIUM,
+	WM_LARGE
 };
 
 typedef struct {
@@ -84,7 +89,7 @@ public:
 
 	/* graphics */
 	int animations;
-	int fullscreen; /* 0 = window, 1 = fullscreen */
+	int windowmode; /* 0 = fullscreen, see WM_* above */
 	int fps; /* frames per second: 0 - no limit, 1 - 100, 2 - 200 */
 	int showfps;
 	int smoothdrop;

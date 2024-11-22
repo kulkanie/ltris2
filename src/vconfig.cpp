@@ -78,7 +78,7 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 
 	/* graphics */
 	animations = 1;
-	fullscreen = 1;
+	windowmode = WM_FULLSCREEN;
 	fps = 1;
 	showfps = 0;
 	smoothdrop = 1;
@@ -145,7 +145,7 @@ VConfig::VConfig() // @suppress("Class members should be properly initialized")
 		fp.get("channels", channels);
 
 		fp.get("animations", animations);
-		fp.get("fullscreen", fullscreen);
+		fp.get("windowmode", windowmode);
 		fp.get("fps", fps);
 		fp.get("showfps", showfps);
 		fp.get("smoothdrop", smoothdrop);
@@ -204,7 +204,7 @@ void VConfig::save()
 	ofs << "channels=" << channels << "\n";
 
 	ofs << "animations=" << animations << "\n";
-	ofs << "fullscreen=" << fullscreen << "\n";
+	ofs << "windowmode=" << windowmode << "\n";
 	ofs << "fps=" << fps << "\n";
 	ofs << "showfps=" << showfps << "\n";
 	ofs << "smoothdrop=" << smoothdrop << "\n";
