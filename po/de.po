@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltris2 2.0\n"
 "Report-Msgid-Bugs-To: kulkanie@gmx.net\n"
-"POT-Creation-Date: 2024-10-12 11:11+0200\n"
+"POT-Creation-Date: 2024-11-24 17:46+0100\n"
 "PO-Revision-Date: 2024-07-13 11:10+0200\n"
 "Last-Translator: Michael <kulkanie@gmx.net>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid "Enter Name"
 msgstr ""
 
-#: src/view.cpp:46 src/view.cpp:388
+#: src/view.cpp:46 src/view.cpp:401
 msgid "Normal"
 msgstr ""
 
@@ -58,27 +58,43 @@ msgstr ""
 msgid "(Re)"
 msgstr ""
 
-#: src/view.cpp:385
+#: src/view.cpp:398
 msgid "50 FPS"
 msgstr ""
 
-#: src/view.cpp:385
+#: src/view.cpp:398
 msgid "60 FPS"
 msgstr ""
 
-#: src/view.cpp:385
+#: src/view.cpp:398
 msgid "200 FPS"
 msgstr ""
 
-#: src/view.cpp:388
+#: src/view.cpp:401
 msgid "Defensive"
 msgstr ""
 
-#: src/view.cpp:388
+#: src/view.cpp:401
 msgid "Aggressive"
 msgstr ""
 
-#: src/view.cpp:391
+#: src/view.cpp:402
+msgid "Fullscreen"
+msgstr ""
+
+#: src/view.cpp:403
+msgid "Small Window"
+msgstr ""
+
+#: src/view.cpp:403
+msgid "Medium Window"
+msgstr ""
+
+#: src/view.cpp:403
+msgid "Large Window"
+msgstr ""
+
+#: src/view.cpp:407
 msgid ""
 "This is your starting level which will be ignored for mode 'Figures' (always "
 "starts at level 0).\n"
@@ -87,7 +103,7 @@ msgid ""
 "(the higher the starting level the more lines)."
 msgstr ""
 
-#: src/view.cpp:395
+#: src/view.cpp:411
 msgid ""
 "Normal: Starts with an empty bowl. Try to survive as long as possible.\n"
 "\n"
@@ -97,7 +113,7 @@ msgid ""
 "Vs Human/CPU/2xCPU: Play against another human or one or two CPU opponents."
 msgstr ""
 
-#: src/view.cpp:398
+#: src/view.cpp:414
 msgid ""
 "Modern: Enables all that stuff that makes tetris casual like ghost piece, "
 "wall-kicks, hold, DAS charge during ARE (allows to shift next piece faster), "
@@ -107,79 +123,79 @@ msgid ""
 "very interesting."
 msgstr ""
 
-#: src/view.cpp:416 src/view.cpp:529
+#: src/view.cpp:432 src/view.cpp:545
 msgid "New Game"
 msgstr ""
 
-#: src/view.cpp:417 src/view.cpp:439
+#: src/view.cpp:433 src/view.cpp:455
 msgid "Multiplayer Options"
 msgstr ""
 
-#: src/view.cpp:418 src/view.cpp:531
+#: src/view.cpp:434 src/view.cpp:547
 msgid "Controls"
 msgstr ""
 
-#: src/view.cpp:419 src/view.cpp:428 src/view.cpp:464
+#: src/view.cpp:435 src/view.cpp:444 src/view.cpp:480
 msgid "Player 1"
 msgstr ""
 
-#: src/view.cpp:420 src/view.cpp:429 src/view.cpp:465
+#: src/view.cpp:436 src/view.cpp:445 src/view.cpp:481
 msgid "Player 2"
 msgstr ""
 
-#: src/view.cpp:421 src/view.cpp:533
+#: src/view.cpp:437 src/view.cpp:549
 msgid "Audio"
 msgstr ""
 
-#: src/view.cpp:422 src/view.cpp:532
+#: src/view.cpp:438 src/view.cpp:548
 msgid "Graphics"
 msgstr ""
 
-#: src/view.cpp:426
+#: src/view.cpp:442
 msgid "Start Game"
 msgstr ""
 
-#: src/view.cpp:432
+#: src/view.cpp:448
 msgid "Game Mode"
 msgstr ""
 
-#: src/view.cpp:434
+#: src/view.cpp:450
 msgid "Game Style"
 msgstr ""
 
-#: src/view.cpp:435
+#: src/view.cpp:451
 msgid "Classic"
 msgstr ""
 
-#: src/view.cpp:435
+#: src/view.cpp:451
 msgid "Modern"
 msgstr ""
 
-#: src/view.cpp:436
+#: src/view.cpp:452
 msgid "Starting Level"
 msgstr ""
 
-#: src/view.cpp:444
+#: src/view.cpp:460
 msgid "Holes"
 msgstr ""
 
-#: src/view.cpp:445
+#: src/view.cpp:461
 msgid "Number of holes in sent lines."
 msgstr ""
 
-#: src/view.cpp:447
+#: src/view.cpp:463
 msgid "Random Holes"
 msgstr ""
 
-#: src/view.cpp:448
+#: src/view.cpp:464
 msgid "If multiple lines are sent, each line has different holes."
 msgstr ""
 
-#: src/view.cpp:451
+#: src/view.cpp:467
 msgid "CPU Style"
 msgstr ""
 
-#: src/view.cpp:452
+#: src/view.cpp:468
 msgid ""
 "Defensive: Clears any lines.\n"
 "Normal: Mostly goes for two lines.\n"
@@ -189,31 +205,31 @@ msgid ""
 "completing multiple lines at the expense of a balanced bowl contents."
 msgstr ""
 
-#: src/view.cpp:454
+#: src/view.cpp:470
 msgid "CPU Drop Delay"
 msgstr ""
 
-#: src/view.cpp:457
+#: src/view.cpp:473
 msgid "CPU Speed"
 msgstr ""
 
-#: src/view.cpp:467
+#: src/view.cpp:483
 msgid "Auto-Shift Delay"
 msgstr ""
 
-#: src/view.cpp:468
+#: src/view.cpp:484
 msgid "Initial delay before auto shift starts. Classic DAS has 270."
 msgstr ""
 
-#: src/view.cpp:470
+#: src/view.cpp:486
 msgid "Auto-Shift Speed"
 msgstr ""
 
-#: src/view.cpp:471
+#: src/view.cpp:487
 msgid "Delay between auto shift steps. Classic DAS has 100."
 msgstr ""
 
-#: src/view.cpp:478
+#: src/view.cpp:494
 msgid ""
 "Left/Right: horizontal movement\n"
 "Rotate Left/Right: piece rotation\n"
@@ -222,122 +238,114 @@ msgid ""
 "Hold: put current piece to hold (only for modern style)"
 msgstr ""
 
-#: src/view.cpp:483
+#: src/view.cpp:499
 msgid "Left"
 msgstr ""
 
-#: src/view.cpp:484
+#: src/view.cpp:500
 msgid "Right"
 msgstr ""
 
-#: src/view.cpp:485
+#: src/view.cpp:501
 msgid "Rotate Left"
 msgstr ""
 
-#: src/view.cpp:486
+#: src/view.cpp:502
 msgid "Rotate Right"
 msgstr ""
 
-#: src/view.cpp:487
+#: src/view.cpp:503
 msgid "Down"
 msgstr ""
 
-#: src/view.cpp:488
+#: src/view.cpp:504
 msgid "Drop"
 msgstr ""
 
-#: src/view.cpp:489 src/vgame.cpp:481
+#: src/view.cpp:505 src/vgame.cpp:481
 msgid "Hold"
 msgstr ""
 
-#: src/view.cpp:495
+#: src/view.cpp:511
 msgid "Theme"
 msgstr ""
 
-#: src/view.cpp:496
+#: src/view.cpp:512
 msgid "Select theme. (not applied yet)"
 msgstr ""
 
-#: src/view.cpp:498
+#: src/view.cpp:514
 msgid "Mode"
 msgstr ""
 
-#: src/view.cpp:499
+#: src/view.cpp:515
 msgid "Select mode. (not applied yet)"
 msgstr ""
 
-#: src/view.cpp:500
-msgid "Window"
-msgstr ""
-
-#: src/view.cpp:500
-msgid "Fullscreen"
-msgstr ""
-
-#: src/view.cpp:501
+#: src/view.cpp:517
 msgid "Apply Theme&Mode"
 msgstr ""
 
-#: src/view.cpp:502
+#: src/view.cpp:518
 msgid "Apply the above settings."
 msgstr ""
 
-#: src/view.cpp:504
+#: src/view.cpp:520
 msgid "Animations"
 msgstr ""
 
-#: src/view.cpp:506
+#: src/view.cpp:522
 msgid "Smooth Drop"
 msgstr ""
 
-#: src/view.cpp:507
+#: src/view.cpp:523
 msgid "Drop piece block-by-block or smoothly. Does not affect drop speed."
 msgstr ""
 
-#: src/view.cpp:509
+#: src/view.cpp:525
 msgid "Frame Limit"
 msgstr ""
 
-#: src/view.cpp:515
+#: src/view.cpp:531
 msgid "Sound"
 msgstr ""
 
-#: src/view.cpp:516
+#: src/view.cpp:532
 msgid "Volume"
 msgstr ""
 
-#: src/view.cpp:518
+#: src/view.cpp:534
 msgid "Buffer Size"
 msgstr ""
 
-#: src/view.cpp:519
+#: src/view.cpp:535
 msgid ""
 "Reduce buffer size if you experience sound delays. Might have more CPU "
 "impact though. (not applied yet)"
 msgstr ""
 
-#: src/view.cpp:521
+#: src/view.cpp:537
 msgid "Channels"
 msgstr ""
 
-#: src/view.cpp:522
+#: src/view.cpp:538
 msgid ""
 "More channels gives more sound variety, less channels less (not applied yet)"
 msgstr ""
 
-#: src/view.cpp:524
+#: src/view.cpp:540
 msgid "Apply Size&Channels"
 msgstr ""
 
-#: src/view.cpp:525
+#: src/view.cpp:541
 msgid "Apply above settings"
 msgstr ""
 
-#: src/view.cpp:535
+#: src/view.cpp:551
 msgid "Quit"
 msgstr ""
 
-#: src/view.cpp:878
+#: src/view.cpp:894
 msgid "Hiscores"
 msgstr ""
 
