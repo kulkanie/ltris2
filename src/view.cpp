@@ -143,6 +143,7 @@ void View::run()
 	fpsCycles = 0;
 
 	render();
+	fade(FADE_IN);
 
 	SDL_ShowCursor(0);
 
@@ -299,8 +300,7 @@ void View::run()
 
 	SDL_ShowCursor(1);
 
-	if (!quitReceived)
-		dim();
+	fade();
 }
 
 /** Render current game state. */
@@ -339,20 +339,23 @@ void View::render()
 	}
 }
 
-/* Dim screen to black. As game engine is already set for new state
- * we cannot use render() but need current screen state. */
-void View::dim()
+/* Fade in or out current screen content. For fading in
+ * SDL_RenderPresent must not have been called yet. */
+void View::fade(int style)
 {
-	Texture img;
-	img.createFromScreen();
+	Texture tex;
+	tex.createFromScreen();
 
-	for (uint8_t a = 250; a > 0; a -= 10) {
+	for (uint8_t alpha = 255; alpha > 0; alpha -= 5) {
 		SDL_SetRenderDrawColor(mrc,0,0,0,255);
 		SDL_RenderClear(mrc);
-		img.setAlpha(a);
-		img.copy();
+		if (style == FADE_OUT)
+			tex.setAlpha(alpha);
+		else
+			tex.setAlpha(255 - alpha);
+		tex.copy();
 		SDL_RenderPresent(mrc);
-		SDL_Delay(10);
+		SDL_Delay(5);
 	}
 
 	/* make sure no input is given yet for next state */

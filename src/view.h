@@ -60,7 +60,7 @@ class View {
 	void darkenScreen(int alpha = 32);
 	bool showInfo(const string &line, int type);
 	bool showInfo(const vector<string> &text, int type);
-	void dim();
+	void fade(int style = FADE_OUT);
 	bool checkMenuGamepadEvent(int ms, const Uint8 *gpadstate, SDL_Event &ev);
 	bool handleMenuEvent(SDL_Event &ev);
 	void createShrapnells(VBowl &vb);
