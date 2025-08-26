@@ -523,7 +523,7 @@ void View::createMenus()
 			_("Select theme. (not applied yet)"),
 			AID_NONE,vconfig.themeid,themeNames));
 	mGraphics->add(new MenuItemList(_("Mode"),
-			_("Select mode. (not applied yet)"),
+			_("Select mode. (not applied yet)\n\nSmall window: 25% of screen height\nMedium window: 50% of screen height\nLarge window: 67% of screen height"),
 			AID_NONE,vconfig.windowmode,windowModeNames,4));
 	mGraphics->add(new MenuItem(_("Apply Theme&Mode"),
 			_("Apply the above settings."),AID_APPLYTHEMEMODE));
