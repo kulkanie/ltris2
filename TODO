@@ -1,10 +1,8 @@
-- undim screen and tooltips
+- reset tooltip delay on opening menu
+- fade in tooltips
 - font colors in theme.ini
 - multiple block sets that rotate each level
-- reset tooltip delay on opening menu
 - extra menu item to show all hiscores
-- split logo from menu.png to avoid stretching in window mode
-- in widescreen show preview/hold for human player in 2xcpu
 
 Changes to make ltris1 core work:
 - disable all SDL.h includes, except in sdl.h: change SDL.h include to SDL2.h

@@ -221,8 +221,16 @@ void View::run()
 
 			if (newEvent && handleMenuEvent(ev)) {
 				menuActive = false;
-				if (!game.isDemo())
+				if (game.state == VGS_PAUSED) {
 					game.pause(false);
+				} else if (!game.isDemo()){
+					/* new game, fade in */
+					render();
+					fade(FADE_IN);
+					/* reset passed time */
+					ticks.reset();
+					ms = 1;
+				}
 			}
 		}
 
@@ -750,7 +758,8 @@ bool View::handleMenuEvent(SDL_Event &ev)
 			//showHelp();
 			break;
 		case AID_STARTGAME:
-			menuActive = false;
+			fade();
+			ret = true; /* leave root menu */
 			waitForInputRelease();
 			game.init(vconfig.gametype);
 			keystate.reset();
