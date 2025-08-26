@@ -50,9 +50,19 @@ protected:
 
 	void renderPart(Label &ln, Label &lf, int align);
 	void renderTooltip() {
-		if (focus && !tooltipTimeout.running())
-			tooltip.copy(x+1.1*w, y+h/2-tooltip.getHeight()/2,
-						ALIGN_X_LEFT | ALIGN_Y_TOP);
+		if (!focus)
+			return;
+		int tx = x+1.1*w;
+		int ty = y+h/2-tooltip.getHeight()/2;
+		if (tooltipTimeout.running()) {
+			if (tooltipTimeout.get() < 255) {
+				tooltip.setAlpha(255-tooltipTimeout.get());
+				tooltip.copy(tx, ty, ALIGN_X_LEFT | ALIGN_Y_TOP);
+			}
+		} else {
+			tooltip.setAlpha(255);
+			tooltip.copy(tx, ty, ALIGN_X_LEFT | ALIGN_Y_TOP);
+		}
 	}
 public:
 	static Font *fNormal, *fFocus, *fTooltip;
@@ -92,7 +102,7 @@ public:
 		focus = on;
 		if (focus) {
 			fadingAlpha = 255;
-			tooltipTimeout.set(500);
+			tooltipTimeout.set(700);
 		}
 
 	}
