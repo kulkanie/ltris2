@@ -19,10 +19,14 @@ using namespace std;
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #ifdef WIN32
   #include <time.h>
-  #include <stdint.h>
   typedef uint32_t uint;
+#else
+  #ifndef __GLIBC__
+    typedef uint32_t uint;
+  #endif
 #endif
 #include <math.h>
 #include <dirent.h>
