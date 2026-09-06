@@ -148,6 +148,7 @@ int Texture::load(const string& fname)
 		return 0;
 	}
 	if ((tex = SDL_CreateTextureFromSurface(mrc, surf)) == NULL) {
+		SDL_FreeSurface(surf);
 		_logsdlerr();
 		return 0;
 	}
